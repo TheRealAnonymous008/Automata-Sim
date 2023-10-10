@@ -1,5 +1,7 @@
 import Memory from "./memory"
 
+export const OUTPUT_TAPE_NAME = ""
+
 export default class Tape implements Memory{
     readonly name : string
     constructor(name : string){

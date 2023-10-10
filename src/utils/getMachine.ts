@@ -1,8 +1,8 @@
-import { Machine } from "~/models/machine"
+import { Machine, MemoryList } from "~/models/machine"
 import Memory from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
-import Tape from "~/models/memory/tape"
+import Tape, { OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import State from "~/models/states/state"
 
 export default function getMachine(code : string) : Machine | null{
@@ -62,18 +62,29 @@ function tokenize(code : string){
     }
 }
 
-function parseDataSection(lines : string[]) : Memory[] {
-    var memory : Memory[] = []
+function parseDataSection(lines : string[]) : MemoryList {
+    var memory : MemoryList = {}
 
     for (let index = 0; index < lines.length; index++) {
         const element = lines[index];
         const toks = element.split(' ')
+        const name = toks[1]
+
         switch(toks[0]) {
-            case "STACK": memory.push(new Stack(toks[1])); break;
-            case "QUEUE": memory.push(new Queue(toks[1])); break;
-            case "TAPE": memory.push(new Tape(toks[1])); break;
+            case "STACK": 
+                memory[name] = new Stack(name); 
+                break;
+            case "QUEUE": 
+                memory[name] = new Queue(name); 
+                break;
+            case "TAPE": 
+                memory[name] = new Tape(name); 
+                break;
         }
     }
+
+    // We insert a special tape called the output tape. 
+    memory[OUTPUT_TAPE_NAME] = new Tape("Output Tape")
 
     return memory
 }
