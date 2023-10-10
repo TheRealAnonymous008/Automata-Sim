@@ -8,9 +8,9 @@ export default class Queue implements Memory{
     }
 
     read  = () => {
-        return "Hello"
+        return "X"
     }
-    
+
     write = (a: String) => {
         
     }
