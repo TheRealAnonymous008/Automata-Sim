@@ -1,9 +1,7 @@
-import Queue from "./memory/queue"
-import Stack from "./memory/stack"
-import Tape from "./memory/tape"
+import Memory from "./memory/memory"
+import State from "./states/state";
 
-export type Memory = Stack | Queue | Tape
-
-export type Machine = {
-    memory : Memory[]
+export interface Machine {
+    memory : Memory[],
+    states : State[],
 }

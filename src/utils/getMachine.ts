@@ -1,20 +1,22 @@
-import { Machine, Memory } from "~/models/machine"
+import { Machine } from "~/models/machine"
+import Memory from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
 import Tape from "~/models/memory/tape"
+import State from "~/models/states/state"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
         return null
     }
     var sections = tokenize(code)
-    // Get memory
-    var memory = parseDataSection(sections.data)
 
-    // Get logic
+    var memory = parseDataSection(sections.data)
+    var states = parseLogicSection(sections.logic)
 
     return {
-        memory : memory
+        memory : memory,
+        states: states
     }
 }
 
@@ -74,4 +76,8 @@ function parseDataSection(lines : string[]) : Memory[] {
     }
 
     return memory
+}
+
+function parseLogicSection(lines : string[]) : State[] {
+    return []
 }
