@@ -2,7 +2,7 @@ import { Machine, MemoryList } from "~/models/machine"
 import Memory from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
-import Tape, { OUTPUT_TAPE_NAME } from "~/models/memory/tape"
+import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import State from "~/models/states/state"
 
 export default function getMachine(code : string) : Machine | null{
@@ -15,7 +15,7 @@ export default function getMachine(code : string) : Machine | null{
     var states = parseLogicSection(sections.logic)
 
     return {
-        memory : memory,
+        memory : memory.memory,
         states: states
     }
 }
@@ -62,31 +62,53 @@ function tokenize(code : string){
     }
 }
 
-function parseDataSection(lines : string[]) : MemoryList {
+function parseDataSection(lines : string[]) : {
+    memory : MemoryList,
+    input : Memory
+}
+{
     var memory : MemoryList = {}
+    var input : Memory | null = null
 
     for (let index = 0; index < lines.length; index++) {
         const element = lines[index];
         const toks = element.split(' ')
         const name = toks[1]
+        
+        var memoryUnit : Memory
 
         switch(toks[0]) {
             case "STACK": 
-                memory[name] = new Stack(name); 
+                memoryUnit = new Stack(name); 
                 break;
             case "QUEUE": 
-                memory[name] = new Queue(name); 
+                memoryUnit = new Queue(name); 
                 break;
             case "TAPE": 
-                memory[name] = new Tape(name); 
+                memoryUnit = new Tape(name); 
                 break;
+        }
+        
+        memory[name] = memoryUnit!
+
+        if (input == null){
+            input = memoryUnit!
         }
     }
 
     // We insert a special tape called the output tape. 
     memory[OUTPUT_TAPE_NAME] = new Tape("Output Tape")
 
-    return memory
+    // Assert input is not null. If it is, simply add a tape.
+    if (input == null){
+        input = new Tape("Input Tape")
+        memory[INPUT_TAPE_NAME] = input
+    }
+
+    return {
+        memory : memory,
+        input : input!
+    }
 }
 
 function parseLogicSection(lines : string[]) : State[] {

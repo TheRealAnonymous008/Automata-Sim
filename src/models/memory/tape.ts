@@ -1,5 +1,6 @@
 import Memory from "./memory"
 
+export const INPUT_TAPE_NAME = "$"
 export const OUTPUT_TAPE_NAME = ""
 
 export default class Tape implements Memory{
