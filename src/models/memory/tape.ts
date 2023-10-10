@@ -1,4 +1,4 @@
-import Memory from "./memory"
+import Memory, { Symbol } from "./memory"
 
 export const INPUT_TAPE_NAME = "$"
 export const OUTPUT_TAPE_NAME = ""
@@ -9,11 +9,11 @@ export default class Tape implements Memory{
         this.name = name
     }
 
-    read  = () : string => {
+    read  = () => {
         return "X"
     }
 
-    write = (a: string) => {
+    write = (a: Symbol) => {
         
     }
 }

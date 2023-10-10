@@ -1,4 +1,4 @@
-import Memory from "./memory"
+import Memory, { Symbol } from "./memory"
 
 export default class Stack implements Memory{
     readonly name : string
@@ -6,11 +6,11 @@ export default class Stack implements Memory{
         this.name = name
     }
     
-    read  = () : string => {
+    read  = () : Symbol => {
         return "X"
     }
 
-    write = (a: string) => {
+    write = (a: Symbol) : void => {
         
     }
 }
