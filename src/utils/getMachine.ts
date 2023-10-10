@@ -1,19 +1,20 @@
-import { Machine } from "~/models/machine"
+import { Machine, Memory } from "~/models/machine"
+import Queue from "~/models/memory/queue"
+import Stack from "~/models/memory/stack"
+import Tape from "~/models/memory/tape"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
         return null
     }
-    var tokens = tokenize(code)
-    var ctr = 0
-
-    console.log(tokens)
+    var sections = tokenize(code)
     // Get memory
+    var memory = parseDataSection(sections.data)
 
     // Get logic
 
     return {
-        memory : []
+        memory : memory
     }
 }
 
@@ -57,4 +58,20 @@ function tokenize(code : string){
         data : dataSection,
         logic : logicSection
     }
+}
+
+function parseDataSection(lines : string[]) : Memory[] {
+    var memory : Memory[] = []
+
+    for (let index = 0; index < lines.length; index++) {
+        const element = lines[index];
+        const toks = element.split(' ')
+        switch(toks[0]) {
+            case "STACK": memory.push(new Stack(toks[1])); break;
+            case "QUEUE": memory.push(new Queue(toks[1])); break;
+            case "TAPE": memory.push(new Tape(toks[1])); break;
+        }
+    }
+
+    return memory
 }
