@@ -1,5 +1,9 @@
-export default function MachineDiagram() {
+export default function MachineDiagram(props : {
+    machineSpec : string
+}) {
     return (
-        <h1> Hello </h1>
+        <>
+            <h2> Machine </h2>
+        </>
     )
 }
