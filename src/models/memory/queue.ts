@@ -7,11 +7,11 @@ export default class Queue implements Memory{
         this.name = name
     }
 
-    read  = () => {
+    read  = () : string => {
         return "X"
     }
 
-    write = (a: String) => {
+    write = (a: string) => {
         
     }
 }

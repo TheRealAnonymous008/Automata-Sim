@@ -6,11 +6,11 @@ export default class Tape implements Memory{
         this.name = name
     }
 
-    read  = () => {
+    read  = () : string => {
         return "X"
     }
 
-    write = (a: String) => {
+    write = (a: string) => {
         
     }
 }

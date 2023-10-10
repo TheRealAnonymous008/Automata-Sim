@@ -1,7 +1,5 @@
 export default interface Memory {
     name : string,
-    read: () => Symbol,
-    write: (a : Symbol) => void
+    read: () => string,
+    write: (a : string) => void
 }
-
-export type Symbol = String
