@@ -1,19 +1,19 @@
 import { Symbol } from "~/models/memory/memory";
-import "../styles/tape.css"
+import "../styles/memory.css"
 
-function TapeCell(props : { symbol : Symbol, isCurrent : boolean}) {
+function MemoryCell(props : { symbol : Symbol, isCurrent : boolean}) {
     return (
-      <div class={`tape-cell ${props.isCurrent ? "current" : ""}`}>
+      <div class={`memory-cell ${props.isCurrent ? "current" : ""}`}>
         {props.symbol !== null ? props.symbol : " "}
       </div>
     );
   }
   
-export default function Tape(props: { contents : Symbol[], head: number }) {
+export default function MemoryComponent(props: { contents : Symbol[], head: number }) {
 return (
-    <div class="tape">
+    <div class="memory">
     {props.contents.map((symbol, index) => (
-        <TapeCell
+        <MemoryCell
             symbol={symbol}
             isCurrent={index === props.head}
         />
