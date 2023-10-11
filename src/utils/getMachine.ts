@@ -98,14 +98,14 @@ function parseDataSection(lines : string[]) : {
         memory[name] = memoryUnit!
     }
 
-    // We insert a special tape called the output tape. 
-    memory[OUTPUT_TAPE_NAME] = new Tape("Output Tape")
-
     // Assert input is not null. If it is, simply add a tape.
     if (input == null){
         input = new Tape("Input Tape")
         memory[INPUT_TAPE_NAME] = input
     }
+
+    // We insert a special tape called the output tape. 
+    memory[OUTPUT_TAPE_NAME] = new Tape("Output Tape")
 
     return {
         memory : memory,
