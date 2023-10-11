@@ -15,7 +15,5 @@ export default class ScanState implements State{
         this.mem = mem
     }
 
-    command = () => {
-        return "S"
-    }
+    command = "S"
 }

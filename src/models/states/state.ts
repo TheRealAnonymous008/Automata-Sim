@@ -4,7 +4,7 @@ export default interface State {
     name : string,
     transitions : {[key : string]: State[]},
     mem? : Memory,
-    command : () => string,
+    command : string,
     accept : boolean,
     initial : boolean,
 }

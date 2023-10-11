@@ -1,35 +1,45 @@
 import State from "~/models/states/state";
 import "../styles/state.css"
-import { AcceptState } from "~/models/states/dummy";
+import Coordinate from "./Coordinate";
 
-export default function StateComponent(props : {state : State, x : number, y : number}){
+export const STATE_CIRCRADIUS = 40
+export const STATE_RECTWIDTH = 80
+export const STATE_RECTHEIGHT = 30
 
-    let circleClass = "regular-state" 
-    circleClass += props.state instanceof AcceptState ? " accept-state" : ""; // For the accept state
+const STATE_RECTOFFSET = {x : -40, y: 30}
 
-    console.log(circleClass)
+export default function StateComponent(props : {state : State, loc : Coordinate}){
+
+    let state = props.state
+    let loc = props.loc
+
     return (
-      <div style={`left: ${props.x}px; top: ${props.y}px; position:absolute; display: float`}>
-        <div class="state" >
+      <>
+        {
+          state.initial &&
+          <path d={getTrianglePath(loc)} fill="#333" />
+        }
 
-          <span class ="state-container">
-            {props.state.initial && 
-              <svg width="30" height="40">
-                <path d="M0 0 L30 20 L0 40 Z" fill="#333" />
-              </svg>
-            } 
-
-            <div>
-              <span class={circleClass}>
-                  <div class="state-command">
-                      {props.state.command()}
-                  </div>
-              </span>
-              
-              {props.state.name.length > 0 && <div class="state-label">{props.state.name}</div>}
-            </div>
-          </span>
-        </div>
-      </div>
+        <circle cx={loc.x} cy={loc.y} r={STATE_CIRCRADIUS} class="state-circle" />
+        {
+          state.accept && 
+          <circle cx={loc.x} cy={loc.y} r={STATE_CIRCRADIUS * 0.85} class="state-circle" />
+        }
+        
+        <text x={loc.x} y={loc.y} text-anchor="middle" dominant-baseline="middle" class="state-text">{state.command}</text>
+        {
+          state.name.length > 0 && 
+          <>
+          <text x={loc.x + STATE_RECTOFFSET.x + STATE_RECTWIDTH / 2} y= {loc.y + STATE_RECTOFFSET.y + STATE_RECTHEIGHT / 2} text-anchor="middle" dominant-baseline="middle" class="label-text">{state.name}</text>
+          </>
+        }
+      </>
     );
+}
+
+function getTrianglePath(loc : Coordinate){
+  const x = loc.x - STATE_CIRCRADIUS - 20
+  const y = loc.y - STATE_CIRCRADIUS + 20
+
+  return `M${x} ${y} L${x + 30} ${y + 20} L${x} ${y + 40} Z`
 }

@@ -1,48 +1,25 @@
-.state {
-    display: flex;
-    flex-direction: column;
+/* Styling for the state circle */
+.state-circle {
+  fill: #ffec99;
+  stroke: #000; 
+  stroke-width: 4; 
 }
 
-.state-container {
-  display: flex;
-  align-items: center;
-}
-
-.state-label {
-    background-color: #f5f5f5;
-    text-align: center;
-    padding-inline-start: 10px;
-    padding-inline-end: 10px;
-    margin-top: -5px;
-
-}
-
-.state-command {
-    background-color: #ffec99;
-    text-align: center;
-    padding: 5px;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    font-weight: bold;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+/* Styling for the state name text */
+.state-text {
+  fill: #000;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
 }
 
 
-.regular-state{
-    background-color: #ffec99; /* Light yellow background color */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 2px solid #333; /* Double border for accept state */
-    border-radius: 50%;
-    padding: 10px;
-}
-
-.accept-state {
-  border: 10px double #333; /* Double border for accept state */
-  padding: 5px;
+/* Styling for the label text */
+.label-text {
+  stroke: white;
+  stroke-width: 0.5em;
+  fill: #000;
+  font-family: Arial, sans-serif;
+  font-size: 18px;
+  paint-order:stroke; 
+  stroke-linejoin:round
 }

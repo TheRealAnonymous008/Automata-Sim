@@ -15,9 +15,7 @@ export default class DummyState implements State{
         this.transitions = {}
     }
 
-    command = () => {
-        return ""
-    }
+    command = ""
 }
 
 export class AcceptState extends DummyState {
@@ -25,19 +23,13 @@ export class AcceptState extends DummyState {
     constructor() {
         super("")
         this.accept = true
-    }
-
-    override command = () => {
-        return ACCEPT_STATE_NAME
+        this.command = ACCEPT_STATE_NAME
     }
 }
 
 export class RejectState extends DummyState{
     constructor() {
         super("")
-    }
-
-    override command = () => {
-        return REJECT_STATE_NAME
+        this.command = REJECT_STATE_NAME
     }
 }
