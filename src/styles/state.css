@@ -3,7 +3,11 @@
     flex-direction: column;
     align-items: center;
 }
-  
+
+.state-container {
+  display: flex;
+  align-items: center;
+}
 
 .state-label {
     background-color: #f5f5f5;
@@ -42,15 +46,4 @@
 .accept-state {
   border: 10px double #333; /* Double border for accept state */
   padding: 5px;
-}
-
-.initial-triangle {
-  width: 0;
-  height: 0;
-  border-top: 30px solid transparent;
-  border-bottom: 30px solid transparent;
-  border-left: 30px solid #333;
-  align-content: center;
-  transform: translate(-150%, 120%);
-  position: relative;
 }

@@ -10,14 +10,24 @@ export default function StateComponent(props : {state : State}){
     console.log(circleClass)
     return (
       <span class="state">
-        {props.state.initial && <span class="initial-triangle"></span>} 
-        <div class={circleClass}>
-            <div class="state-command">
-                {props.state.command()}
-            </div>
-        </div>
 
-        {props.state.name.length > 0 && <div class="state-label">{props.state.name}</div>}
+        <span class ="state-container">
+          {props.state.initial && 
+            <svg width="30" height="40">
+              <path d="M0 0 L30 20 L0 40 Z" fill="#333" />
+            </svg>
+          } 
+
+          <div>
+            <span class={circleClass}>
+                <div class="state-command">
+                    {props.state.command()}
+                </div>
+            </span>
+            
+            {props.state.name.length > 0 && <div class="state-label">{props.state.name}</div>}
+          </div>
+        </span>
       </span>
     );
 }
