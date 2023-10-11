@@ -2,7 +2,7 @@ import { For } from "solid-js"
 import { Machine, MemoryList } from "~/models/machine"
 import Memory from "~/models/memory/memory"
 import { getValuesInDict } from "~/utils/dictToList"
-import MemoryComponent from "./Memory"
+import MemoryComponent from "./MemoryComponent"
 
 export default function MemorySegment(props : {
     machine : Machine

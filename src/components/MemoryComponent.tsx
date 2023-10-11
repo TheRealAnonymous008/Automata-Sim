@@ -3,14 +3,6 @@ import "../styles/memory.css"
 
 const MEMORY_CELLWIDTH = 50
 const MEMORY_CELLHEIGHT = 50
-
-function MemoryCell(props : { symbol : Symbol, isCurrent : boolean}) {
-    return (
-      <div class={`memory-cell ${props.isCurrent ? "current" : ""}`}>
-        {props.symbol !== null ? props.symbol : " "}
-      </div>
-    );
-  }
   
 export default function MemoryComponent(props: { contents : Symbol[], head: number }) {
 return (
