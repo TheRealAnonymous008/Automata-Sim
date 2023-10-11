@@ -1,9 +1,12 @@
-import { Machine, MemoryList } from "~/models/machine"
-import Memory from "~/models/memory/memory"
+import { Transition } from "solid-js/types/reactive/signal"
+import { Machine, MemoryList, StateList } from "~/models/machine"
+import Memory, { Symbol } from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
 import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
-import State from "~/models/states/state"
+import DummyState from "~/models/states/dummy"
+import ScanState from "~/models/states/scan"
+import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -12,11 +15,12 @@ export default function getMachine(code : string) : Machine | null{
     var sections = tokenize(code)
 
     var memory = parseDataSection(sections.data)
-    var states = parseLogicSection(sections.logic)
+    var logic = parseLogicSection(sections.logic, memory.memory, memory.input)
 
     return {
         memory : memory.memory,
-        states: states
+        states: logic.states,
+        input : memory.input
     }
 }
 
@@ -85,15 +89,13 @@ function parseDataSection(lines : string[]) : {
                 memoryUnit = new Queue(name); 
                 break;
             case "TAPE": 
-                memoryUnit = new Tape(name); 
+                memoryUnit = new Tape(name);   
+                if (input == null){
+                    input = memoryUnit!
+                }
                 break;
-        }
-        
+        }     
         memory[name] = memoryUnit!
-
-        if (input == null){
-            input = memoryUnit!
-        }
     }
 
     // We insert a special tape called the output tape. 
@@ -111,6 +113,73 @@ function parseDataSection(lines : string[]) : {
     }
 }
 
-function parseLogicSection(lines : string[]) : State[] {
-    return []
-}
+function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Memory) : {
+    states: StateList,
+    alphabet : Symbol[],
+    initial: State | null
+ }
+ {
+    var states : StateList = {}
+    var alphabet : Symbol[] = []
+    var initial : State | null = null
+    var transitions : {start : State, symbol : string, end : string}[] = []
+
+    // Add special accept and reject state
+    states[ACCEPT_STATE_NAME] = new DummyState(ACCEPT_STATE_NAME)
+    states[REJECT_STATE_NAME] = new DummyState(REJECT_STATE_NAME)
+
+    // Identify all the states in the logic segment and set up transition parsing.
+    for (let index = 0; index < lines.length; index++) {
+        const element = lines[index];
+        const toks = element.split(' ')
+
+        // Perform parsing here using the tokens
+        let name = toks[0].slice(0, -1)
+        let command = toks[1]
+
+        // TODO: Initialize state here using a switch statement. For now we use a temporary scan state.
+        let state = new ScanState(name, inputTape)
+        states[name] = state
+
+        // Each subsequent tok after command is of the form (,)
+        for (let j = 2; j < toks.length; j++) {
+            const tp = toks[j].replace('(', '').replace(')', '').split(',');
+            const sym : string = tp[0] // temporary fix.
+            let dest = tp[1]
+            
+            if (dest.toLowerCase() == ACCEPT_STATE_NAME.toLowerCase()){
+                dest = ACCEPT_STATE_NAME
+            } else if (dest.toLowerCase() == REJECT_STATE_NAME.toLowerCase()){
+                dest = REJECT_STATE_NAME
+            }
+
+            transitions.push({
+                start: state,
+                symbol: sym, 
+                end: dest
+            })
+        }
+    }
+
+    // Loop through each intermediate transition and add them to the states.
+    // also formulate the alphabet
+    transitions.forEach(element => {
+        const trans = element.start.transitions
+        const sym = element.symbol
+        const dest = states[element.end]
+        if (sym in trans)
+            trans[sym].push(dest)
+        else
+            trans[sym] = [dest]
+
+        if(!(sym in alphabet)){
+            alphabet.push(sym as Symbol)
+        }
+    });
+
+    return {
+        states : states,
+        alphabet: alphabet,
+        initial: initial
+    }
+ }
