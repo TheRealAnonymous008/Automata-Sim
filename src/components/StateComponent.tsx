@@ -17,20 +17,48 @@ export default function StateComponent(props : {state : State, loc : Coordinate}
       <>
         {
           state.initial &&
-          <path d={getTrianglePath(loc)} fill="#333" />
+          <path 
+            d={getTrianglePath(loc)} 
+            fill="#333" 
+          />
         }
 
-        <circle cx={loc.x} cy={loc.y} r={STATE_CIRCRADIUS} class="state-circle" />
+        <circle 
+          cx={loc.x} 
+          cy={loc.y} 
+          r={STATE_CIRCRADIUS} 
+          class="state-circle" 
+        />
         {
           state.accept && 
-          <circle cx={loc.x} cy={loc.y} r={STATE_CIRCRADIUS * 0.85} class="state-circle" />
+          <circle 
+            cx={loc.x} 
+            cy={loc.y} 
+            r={STATE_CIRCRADIUS * 0.85} 
+            class="state-circle" 
+          />
         }
         
-        <text x={loc.x} y={loc.y} text-anchor="middle" dominant-baseline="middle" class="state-text">{state.command}</text>
+        <text 
+          x={loc.x} 
+          y={loc.y} 
+          text-anchor="middle" 
+          dominant-baseline="middle" 
+          class="state-text">
+            {state.command}
+        </text>
+
         {
           state.name.length > 0 && 
           <>
-          <text x={loc.x + STATE_RECTOFFSET.x + STATE_RECTWIDTH / 2} y= {loc.y + STATE_RECTOFFSET.y + STATE_RECTHEIGHT / 2} text-anchor="middle" dominant-baseline="middle" class="label-text">{state.name}</text>
+            <text 
+              x={loc.x + STATE_RECTOFFSET.x + STATE_RECTWIDTH / 2} 
+              y= {loc.y + STATE_RECTOFFSET.y + STATE_RECTHEIGHT / 2} 
+              text-anchor="middle" 
+              dominant-baseline="middle" 
+              class="label-text">
+                {state.name}
+            </text>
           </>
         }
       </>

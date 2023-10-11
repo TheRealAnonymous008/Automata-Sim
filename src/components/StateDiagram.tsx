@@ -1,5 +1,5 @@
 import { Machine } from "~/models/machine";
-import StateComponent from "./StateComponent";
+import StateComponent, { STATE_CIRCRADIUS } from "./StateComponent";
 import State from "~/models/states/state";
 import { For, Ref } from "solid-js";
 import { getValuesInDict } from "~/utils/dictToList";
@@ -22,8 +22,8 @@ export default function StateDiagram(props :{
                         <StateComponent 
                             state={item} 
                             loc = {{
-                                x : (cw - 50) * Math.random(),
-                                y : (ch - 50) * Math.random()
+                                x : (cw - 2 * STATE_CIRCRADIUS) * Math.random() + STATE_CIRCRADIUS,
+                                y : (ch - 2 * STATE_CIRCRADIUS) * Math.random() + STATE_CIRCRADIUS
                             }}
                         />
                     }

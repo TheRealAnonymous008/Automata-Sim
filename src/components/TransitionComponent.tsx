@@ -10,8 +10,8 @@ export default function TransitionComponent(props: {
             y1={props.src.y} 
             x2={props.dest.x} 
             y2={props.dest.y} 
-            stroke="blue" 
-            stroke-width="2" 
+            stroke="black" 
+            stroke-width="3" 
         />
     )
 }
