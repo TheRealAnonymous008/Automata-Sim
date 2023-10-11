@@ -7,6 +7,7 @@ import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import DummyState, { ACCEPT_STATE_NAME, AcceptState, REJECT_STATE_NAME, RejectState } from "~/models/states/dummy"
 import ScanState from "~/models/states/scan"
 import State from "~/models/states/state"
+import { getKeysInMap } from "./dictToList"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -122,7 +123,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
     var states : StateList = new Map<string, State>()
     var alphabet : Symbol[] = []
     var initial : State | null = null
-    var transitions : {start : State, symbol : Symbol, end : string}[] = []
+    var transitions : {start : string, symbol : Symbol, end : string}[] = []
 
     // Add special accept and reject state
     states.set(ACCEPT_STATE_NAME, new AcceptState())
@@ -159,7 +160,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
             }
 
             transitions.push({
-                start: state,
+                start: name,
                 symbol: sym, 
                 end: dest
             })
@@ -168,15 +169,21 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
 
     // Loop through each intermediate transition and add them to the states.
     // also formulate the alphabet
+
     transitions.forEach(element => {
-        const trans = element.start.transitions
+        const trans = states.get(element.start)!.transitions
         const _sym = element.symbol
         const dest = states.get(element.end)!
 
-        if (_sym in trans.keys() )
-            trans.get(_sym)!.push(dest)
-        else
-            trans.set(_sym, [])
+        if (getKeysInMap(trans).includes(_sym)) {
+        //  Assert no duplicate transitions.
+            if (! (trans.get(_sym)?.includes(dest))) {
+                trans.get(_sym)!.push(dest)
+            }
+        }
+        else {
+            trans.set(_sym, [dest])
+        }
 
         if(!(_sym in alphabet)){
             alphabet.push(_sym)

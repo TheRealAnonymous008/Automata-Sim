@@ -14,3 +14,29 @@ export interface Transition {
     symbol : Symbol,
     dest : State
 }
+
+export function getAllTransitions(src: State, dest: State) : {forward : Symbol[], backward: Symbol[]}{
+    const forward : Symbol[] = []
+    const backward : Symbol[] = []
+
+    for(let _sym of src.transitions.keys()){
+        let T = src.transitions.get(_sym)!
+        if (T.includes(dest)){
+            forward.push(_sym)
+        }
+    }
+
+    if (src !== dest) {
+        for(let _sym of dest.transitions.keys()){
+            let T = dest.transitions.get(_sym)!
+            if (T.includes(src)){
+                backward.push(_sym)
+            }
+        }
+    }
+
+    return {
+        forward: forward,
+        backward: backward
+    }
+}

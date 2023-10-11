@@ -7,3 +7,13 @@ export function getValuesInMap<K, V>(map : Map<K, V>) : V[]{
 
     return values
 }
+
+export function getKeysInMap<K, V>(map : Map<K, V>) : K[]{
+    const keys : K[] = []
+
+    for(let k of map.keys()){
+        keys.push(k)
+    }
+
+    return keys
+}
