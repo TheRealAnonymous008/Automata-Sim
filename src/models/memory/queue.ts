@@ -14,4 +14,12 @@ export default class Queue implements Memory{
     write = (a: Symbol) : void => {
         
     }
+
+    contents = () => {
+        return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'A', 'A', 'A', 'A']
+    }
+
+    getHead = () => {
+        return 0
+    }
 }

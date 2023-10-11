@@ -13,4 +13,12 @@ export default class Stack implements Memory{
     write = (a: Symbol) : void => {
         
     }
+
+    contents = () => {
+        return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'A', 'A', 'A', 'A']
+    }
+
+    getHead = () => {
+        return this.contents().length - 1
+    }
 }

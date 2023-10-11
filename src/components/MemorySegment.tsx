@@ -14,7 +14,7 @@ export default function MemorySegment(props : {
                 {(item : Memory, index) => 
                     <div data-index={index()}>
                         <h4> {item.name} </h4>
-                        <MemoryComponent contents={['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'A', 'A', 'A', 'A']} head={1}/>
+                        <MemoryComponent contents={item.contents()} head={item.getHead()}/>
                     </div>
                 }
             </For>
