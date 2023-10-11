@@ -4,9 +4,9 @@ import Memory, { Symbol } from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
 import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
-import DummyState from "~/models/states/dummy"
+import DummyState, { ACCEPT_STATE_NAME, AcceptState, REJECT_STATE_NAME, RejectState } from "~/models/states/dummy"
 import ScanState from "~/models/states/scan"
-import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
+import State from "~/models/states/state"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -125,8 +125,8 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
     var transitions : {start : State, symbol : string, end : string}[] = []
 
     // Add special accept and reject state
-    states[ACCEPT_STATE_NAME] = new DummyState(ACCEPT_STATE_NAME)
-    states[REJECT_STATE_NAME] = new DummyState(REJECT_STATE_NAME)
+    states[ACCEPT_STATE_NAME] = new AcceptState()
+    states[REJECT_STATE_NAME] = new RejectState()
 
     // Identify all the states in the logic segment and set up transition parsing.
     for (let index = 0; index < lines.length; index++) {

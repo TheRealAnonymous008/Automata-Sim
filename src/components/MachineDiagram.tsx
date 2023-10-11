@@ -2,6 +2,7 @@ import { Show, Switch, createEffect, createSignal } from "solid-js"
 import { Machine } from "~/models/machine"
 import getMachine from "~/utils/getMachine"
 import MemorySegment from "./MemorySegment"
+import StateDiagram from "./StateDiagram"
 
 export default function MachineDiagram(props : {
     machineSpec : string
@@ -16,7 +17,8 @@ export default function MachineDiagram(props : {
     return (
         <>
             <Show when={machine() != null}>
-                <MemorySegment memory={machine()?.memory!}/>
+                <MemorySegment machine={machine()!}/>
+                <StateDiagram machine={machine()!}/>
             </Show>
         </>
     )

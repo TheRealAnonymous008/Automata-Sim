@@ -1,6 +1,7 @@
 import Memory from "../memory/memory";
 import State from "./state";
 
+
 export default class ScanState implements State{
     name: string;
     transitions: { [key: string]: State[]; };
@@ -10,5 +11,9 @@ export default class ScanState implements State{
         this.name = name
         this.transitions = {}
         this.mem = mem
+    }
+
+    command = () => {
+        return "S"
     }
 }
