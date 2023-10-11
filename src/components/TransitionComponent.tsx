@@ -1,4 +1,7 @@
+import State, { getAllTransitions } from "~/models/states/state";
 import Coordinate from "./Coordinate";
+import { Machine } from "~/models/machine";
+import { getValuesInMap } from "~/utils/dictToList";
 
 export default function TransitionComponent(props: {
     src : Coordinate,
@@ -12,6 +15,40 @@ export default function TransitionComponent(props: {
             y2={props.dest.y} 
             stroke="black" 
             stroke-width="3" 
+            marker-mid="url(#arrowhead)"
         />
     )
+}
+
+export type TransitionUIHelper = {
+    forward : Symbol[],
+    backward : Symbol[],
+    source : State,
+    dest: State,
+}
+
+export function getAllTransitionUIs(machine : Machine) : TransitionUIHelper[]{
+    const S = getValuesInMap(machine.states)
+    const TU : TransitionUIHelper[] = []
+
+    S.forEach((src, idx) => {
+        S.forEach((dest, jdx) => {
+            if (jdx >= idx) {
+                const tlist = getAllTransitions(src, dest)
+                const forward = tlist.forward
+                const backward = tlist.backward
+
+                if (forward.length > 0 || backward.length > 0) {
+                    TU.push({
+                        source: src,
+                        dest: dest, 
+                        backward: backward as unknown as Symbol[],
+                        forward: forward as unknown as Symbol[]
+                    })
+                }
+            }  
+        })
+    });
+
+    return TU
 }

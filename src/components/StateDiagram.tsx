@@ -4,7 +4,7 @@ import State, { getAllTransitions } from "~/models/states/state";
 import { For, Ref } from "solid-js";
 import { getValuesInMap } from "~/utils/dictToList";
 import { Symbol } from "~/models/memory/memory";
-import TransitionComponent from "./TransitionComponent";
+import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
 import Coordinate from "./Coordinate";
 
 export default function StateDiagram(props :{
@@ -30,7 +30,6 @@ export default function StateDiagram(props :{
                 <For each={transitionUIs}>
                     {
                         (item : TransitionUIHelper) => {
-                            console.log(item)
                             return <TransitionComponent 
                                 src={stateCoordMap.get(item.source)!}
                                 dest={stateCoordMap.get(item.dest)!}
@@ -54,38 +53,6 @@ export default function StateDiagram(props :{
 }   
 
 type StateCoordMap = Map<State, Coordinate>
-type TransitionUIHelper = {
-    forward : Symbol[],
-    backward : Symbol[],
-    source : State,
-    dest: State,
-}
-
-function getAllTransitionUIs(machine : Machine) : TransitionUIHelper[]{
-    const S = getValuesInMap(machine.states)
-    const TU : TransitionUIHelper[] = []
-
-    S.forEach((src, idx) => {
-        S.forEach((dest, jdx) => {
-            if (jdx >= idx) {
-                const tlist = getAllTransitions(src, dest)
-                const forward = tlist.forward
-                const backward = tlist.backward
-
-                if (forward.length > 0 || backward.length > 0) {
-                    TU.push({
-                        source: src,
-                        dest: dest, 
-                        backward: backward,
-                        forward: forward
-                    })
-                }
-            }  
-        })
-    });
-
-    return TU
-}
 
 function generateRandomCoord(mw : number, mh : number) : Coordinate{
     return {
