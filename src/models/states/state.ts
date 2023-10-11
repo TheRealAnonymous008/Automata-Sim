@@ -1,8 +1,8 @@
-import Memory from "../memory/memory";
+import Memory, { Symbol } from "../memory/memory";
 
 export default interface State {
     name : string,
-    transitions : {[key : string]: State[]},
+    transitions : Map<Symbol, State[]>,
     mem? : Memory,
     command : string,
     accept : boolean,

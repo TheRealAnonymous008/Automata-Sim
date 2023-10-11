@@ -1,4 +1,4 @@
-export type Symbol = string | null
+export type Symbol = string 
 
 export default interface Memory {
     name : string,

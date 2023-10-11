@@ -1,10 +1,8 @@
-export function getValuesInDict(dictionary : {[key: string] : any}) : any[]{
-    const values = []
-    for (const key in dictionary) {
-        if (key in dictionary) {
-            let value = dictionary[key];
-            values.push(value)
-        }
+export function getValuesInMap<K, V>(map : Map<K, V>) : V[]{
+    const values : V[] = []
+
+    for(let v of map.values()){
+        values.push(v)
     }
 
     return values

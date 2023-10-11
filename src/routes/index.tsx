@@ -8,7 +8,7 @@ export default function Home() {
 
   return (
     <main>
-      <Title>Not JFlap</Title>
+      <Title>Not J Flap</Title>
 
       <SpecificationInput specObserver={setMachineSpec}/>
       <MachineDiagram machineSpec={machineSpec()}/>

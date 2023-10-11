@@ -71,7 +71,7 @@ function parseDataSection(lines : string[]) : {
     input : Memory
 }
 {
-    var memory : MemoryList = {}
+    var memory : MemoryList = new Map<string, Memory>()
     var input : Memory | null = null
 
     for (let index = 0; index < lines.length; index++) {
@@ -95,17 +95,17 @@ function parseDataSection(lines : string[]) : {
                 }
                 break;
         }     
-        memory[name] = memoryUnit!
+        memory.set(name, memoryUnit!)
     }
 
     // Assert input is not null. If it is, simply add a tape.
     if (input == null){
         input = new Tape("Input Tape")
-        memory[INPUT_TAPE_NAME] = input
+        memory.set(INPUT_TAPE_NAME, input)
     }
 
     // We insert a special tape called the output tape. 
-    memory[OUTPUT_TAPE_NAME] = new Tape("Output Tape")
+    memory.set(OUTPUT_TAPE_NAME, new Tape("Output Tape"))
 
     return {
         memory : memory,
@@ -119,14 +119,14 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
     initial: State | null
  }
  {
-    var states : StateList = {}
+    var states : StateList = new Map<string, State>()
     var alphabet : Symbol[] = []
     var initial : State | null = null
-    var transitions : {start : State, symbol : string, end : string}[] = []
+    var transitions : {start : State, symbol : Symbol, end : string}[] = []
 
     // Add special accept and reject state
-    states[ACCEPT_STATE_NAME] = new AcceptState()
-    states[REJECT_STATE_NAME] = new RejectState()
+    states.set(ACCEPT_STATE_NAME, new AcceptState())
+    states.set(REJECT_STATE_NAME, new RejectState())
 
     // Identify all the states in the logic segment and set up transition parsing.
     for (let index = 0; index < lines.length; index++) {
@@ -139,7 +139,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
 
         // TODO: Initialize state here using a switch statement. For now we use a temporary scan state.
         let state = new ScanState(name, inputTape)
-        states[name] = state
+        states.set(name, state)
 
         if (initial == null){
             initial = state
@@ -149,7 +149,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
         // Each subsequent tok after command is of the form (,)
         for (let j = 2; j < toks.length; j++) {
             const tp = toks[j].replace('(', '').replace(')', '').split(',');
-            const sym : string = tp[0] // temporary fix.
+            const sym : Symbol = tp[0] as Symbol
             let dest = tp[1]
             
             if (dest.toLowerCase() == ACCEPT_STATE_NAME.toLowerCase()){
@@ -170,15 +170,16 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
     // also formulate the alphabet
     transitions.forEach(element => {
         const trans = element.start.transitions
-        const sym = element.symbol
-        const dest = states[element.end]
-        if (sym in trans)
-            trans[sym].push(dest)
-        else
-            trans[sym] = [dest]
+        const _sym = element.symbol
+        const dest = states.get(element.end)!
 
-        if(!(sym in alphabet)){
-            alphabet.push(sym as Symbol)
+        if (_sym in trans.keys() )
+            trans.get(_sym)!.push(dest)
+        else
+            trans.set(_sym, [])
+
+        if(!(_sym in alphabet)){
+            alphabet.push(_sym)
         }
     });
 
