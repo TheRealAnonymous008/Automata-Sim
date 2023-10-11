@@ -141,6 +141,11 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
         let state = new ScanState(name, inputTape)
         states[name] = state
 
+        if (initial == null){
+            initial = state
+            state.initial = true
+        }
+
         // Each subsequent tok after command is of the form (,)
         for (let j = 2; j < toks.length; j++) {
             const tp = toks[j].replace('(', '').replace(')', '').split(',');

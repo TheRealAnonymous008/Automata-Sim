@@ -7,6 +7,8 @@ export const REJECT_STATE_NAME = "reject"
 export default class DummyState implements State{
     name: string;
     transitions: { [key: string]: State[]; };
+    initial : boolean = false;
+    accept: boolean = false;
 
     constructor(name : string){
         this.name = name
@@ -18,9 +20,11 @@ export default class DummyState implements State{
     }
 }
 
-export class AcceptState extends DummyState{
+export class AcceptState extends DummyState {
+
     constructor() {
         super("")
+        this.accept = true
     }
 
     override command = () => {

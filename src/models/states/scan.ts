@@ -6,6 +6,8 @@ export default class ScanState implements State{
     name: string;
     transitions: { [key: string]: State[]; };
     mem: Memory;
+    initial : boolean = false
+    accept: boolean = false
 
     constructor(name : string, mem : Memory){
         this.name = name

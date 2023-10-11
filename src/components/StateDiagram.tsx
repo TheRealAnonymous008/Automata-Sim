@@ -10,6 +10,7 @@ export default function StateDiagram(props :{
             <h2> State Diagram </h2>
             <StateComponent state={props.machine.states[ACCEPT_STATE_NAME]}/>
             <StateComponent state={props.machine.states[REJECT_STATE_NAME]}/>
+            <StateComponent state={props.machine.states["A"]}/>
 
         </>
     )
