@@ -23,3 +23,10 @@
   paint-order:stroke; 
   stroke-linejoin:round
 }
+
+.transition-text {
+  font-family: "Arial";
+  font-size: 20px; 
+  fill: "black";
+  text-anchor: "start"
+}

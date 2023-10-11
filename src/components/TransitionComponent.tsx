@@ -3,13 +3,15 @@ import Coordinate, { getDistance } from "./Coordinate";
 import { Machine } from "~/models/machine";
 import { getValuesInMap } from "~/utils/dictToList";
 import { STATE_CIRCRADIUS } from "./StateComponent";
+import "../styles/state.css"
+import { For } from "solid-js";
 
 export default function TransitionComponent(props: {
     src : Coordinate,
-    dest : Coordinate
+    dest : Coordinate,
+    forward: Symbol[],
+    backward: Symbol[]
 }){
-    const offx =  props.dest.x - props.src.x
-    const offy = props.dest.y - props.src.y
     return (
         <>
             <defs>
@@ -23,7 +25,27 @@ export default function TransitionComponent(props: {
                     <polygon points="0 0, 10 3.5, 0 7" />
                 </marker>
             </defs>
+            {
+                props.forward.length > 0 && 
+                <TransitionLine src={props.src} dest={props.dest} symbols={props.forward}/>
+            }
 
+            {
+                props.backward.length > 0 && 
+                <TransitionLine src={props.dest} dest={props.src} symbols={props.backward}/>
+            }
+        </>
+    )
+}
+
+function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Symbol[]}){
+    const midpoint : Coordinate =  {
+        x: (props.src.x + props.dest.x) / 2,
+        y: (props.src.y + props.dest.y) / 2
+    }
+
+    return (
+        <>
             <line 
                 x1={props.src.x} 
                 y1={props.src.y} 
@@ -33,7 +55,19 @@ export default function TransitionComponent(props: {
                 stroke-width="3" 
                 marker-end="url(#arrowhead)"
             />
-        </>
+            <path
+                d={getPath(props.src, props.dest)}
+                fill="transparent"
+                stroke="green"
+                stroke-width="2"
+                marker-end="url(#middle-marker)"
+            />
+            <For each={props.symbols}> 
+                {(item : Symbol) => {
+                    return <text x={midpoint.x} y={midpoint.y} class = "transition-text">{item.toString()}</text>
+                }
+            }</For>
+    </>
     )
 }
 
@@ -69,3 +103,20 @@ export function getAllTransitionUIs(machine : Machine) : TransitionUIHelper[]{
 
     return TU
 }
+
+function getPath(src: Coordinate, dest : Coordinate) {
+    // Calculate control points for the Bezier curve
+    const c1 : Coordinate= {
+        x: src.x + (dest.x - src.x) * 0.25,
+        y: src.y + 1.0 / (dest.y - src.y)
+    }
+    const c2 : Coordinate= {
+        x: src.x + (dest.x - src.x) * 0.75,
+        y: src.y + 1.0 /(dest.y - src.y)
+    }
+
+    // Construct the path data string
+    const path = `M${src.x} ${src.y} C${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${dest.x} ${dest.y}`;
+  
+    return path;
+  }

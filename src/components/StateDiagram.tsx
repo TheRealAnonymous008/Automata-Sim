@@ -33,6 +33,8 @@ export default function StateDiagram(props :{
                             return <TransitionComponent 
                                 src={stateCoordMap.get(item.source)!}
                                 dest={stateCoordMap.get(item.dest)!}
+                                forward={item.forward}
+                                backward={item.backward}
                             />
                         }
                     }
