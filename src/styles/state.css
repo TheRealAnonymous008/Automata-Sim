@@ -38,3 +38,23 @@
   fill: "black";
   text-anchor: "start"
 }
+
+.hoverable {
+  transition: fill 0.3s; /* Smooth transition on hover */
+}
+
+/* Hover styles */
+.hoverable:hover {
+  stroke: blue; /* Change the fill color on hover */
+}
+
+.tooltip {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  z-index: 999;
+  pointer-events: none; /* This allows the mouse events to pass through the tooltip */
+  font-size: 14px;
+}

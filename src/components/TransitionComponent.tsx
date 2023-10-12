@@ -42,6 +42,7 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
                 fill="transparent"
                 stroke="black"
                 stroke-width="3"
+                class = "hoverable"
             />
 
             <text dy={0} class ="transition-arrow">
