@@ -1,8 +1,8 @@
 import { Machine } from "~/models/machine";
 import StateComponent, { STATE_CIRCRADIUS } from "./StateComponent";
 import State, { getAllTransitions } from "~/models/states/state";
-import { For, Ref } from "solid-js";
-import { getValuesInMap } from "~/utils/dictToList";
+import { For, Ref, createEffect, createSignal } from "solid-js";
+import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import { Symbol } from "~/models/memory/memory";
 import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
 import Coordinate from "./Coordinate";
@@ -14,25 +14,30 @@ export default function StateDiagram(props :{
     let ch = 1000
 
     // Layout the states
-    let stateCoordMap : StateCoordMap = new Map<State, Coordinate>()
-    getValuesInMap(props.machine.states).forEach((val, idx) => {
-        stateCoordMap.set(val, generateRandomCoord(cw, ch))
-    })
+    const [stateCoordMap, setStateCoordMap] = createSignal(new Map<State, Coordinate>())
+    const [transitionUIs, setTransitionUIs] = createSignal<TransitionUIHelper[]>([])
 
-    // Layout the transitions
-    let transitionUIs : TransitionUIHelper[] = getAllTransitionUIs(props.machine)
+    createEffect(() => {
+        const map = new Map<State, Coordinate>()
+        getValuesInMap(props.machine.states).forEach((val, idx) => {
+            map.set(val, generateRandomCoord(cw, ch))
+        })
+        setStateCoordMap(map)
+
+        setTransitionUIs(getAllTransitionUIs(props.machine))
+    }, [props.machine])
 
     return (
         <>
             <h2> State Diagram </h2>
             <svg width={ch} height={ch}>
                 {/* Plot transitions. Plot them first so that they are at the bottom */}
-                <For each={transitionUIs}>
+                <For each={transitionUIs()}>
                     {
                         (item : TransitionUIHelper) => {
                             return <TransitionComponent 
-                                src={stateCoordMap.get(item.source)!}
-                                dest={stateCoordMap.get(item.dest)!}
+                                src={stateCoordMap().get(item.source)!}
+                                dest={stateCoordMap().get(item.dest)!}
                                 forward={item.forward}
                                 backward={item.backward}
                             />
@@ -41,11 +46,11 @@ export default function StateDiagram(props :{
                 </For>
 
                 {/* Plot states */}
-                <For each={getValuesInMap(props.machine.states)}>
+                <For each={getKeysInMap(stateCoordMap())}>
                     {(item : State, index) => 
                         <StateComponent 
                             state={item} 
-                            loc = {stateCoordMap.get(item)!}
+                            loc = {stateCoordMap().get(item)!}
                         />
                     }
                 </For>  
