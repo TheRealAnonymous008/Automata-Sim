@@ -6,8 +6,6 @@ export const OUTPUT_TAPE_NAME = ""
 export default class Tape implements Memory{
     readonly name : string
     readonly storage : Symbol[] = []
-    updated : boolean = false
-
     head: number = 0
 
     constructor(name : string){
@@ -15,7 +13,6 @@ export default class Tape implements Memory{
     }
 
     read = () : Symbol => {
-        this.toggle()
         if (this.head < 0 || this.head >= this.storage.length){
             return DELIMITER
         }
@@ -23,7 +20,6 @@ export default class Tape implements Memory{
     }
 
     write = (a: Symbol) => {
-        this.toggle()
         let i = this.head 
         if (i < 0) {
             while(i < 0){
@@ -43,12 +39,10 @@ export default class Tape implements Memory{
     }
 
     left = () => {
-        this.toggle()
         this.head--
     }
 
     right = () => {
-        this.toggle()
         this.head++
     }
 
@@ -58,9 +52,5 @@ export default class Tape implements Memory{
 
     getHead = () => {
         return this.head
-    }
-
-    toggle = () => {
-        this.updated = !this.updated
     }
 }
