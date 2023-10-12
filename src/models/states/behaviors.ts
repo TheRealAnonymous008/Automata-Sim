@@ -30,3 +30,14 @@ export function rejectState() : State{
 
     return state
 }
+
+export function makeStateInitial(state : State): State {
+    state.initial = true 
+    return state
+}
+
+export function scanState(name : string) : State {
+    const state = defaultState("", name)
+
+    return state
+}

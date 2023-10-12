@@ -85,8 +85,6 @@ function getGraph(states: State[]) : Graph{
         })
     })
 
-    console.log(BOUNDS)
-
     states.forEach((src, i) => {
         states.forEach((dest, j) => {
             if (i < j){

@@ -7,7 +7,7 @@ import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
 import { getKeysInMap } from "./dictToList"
 import Tape2D from "~/models/memory/tape2d"
-import { acceptState, defaultState, rejectState } from "~/models/states/behaviors"
+import { acceptState, defaultState, makeStateInitial, rejectState } from "~/models/states/behaviors"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -148,8 +148,8 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
         states.set(name, state)
 
         if (initial == null){
-            initial = state
-            state.initial = true
+            initial = state 
+            makeStateInitial(state)
         }
 
         // Each subsequent tok after command is of the form (,)
