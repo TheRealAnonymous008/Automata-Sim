@@ -5,7 +5,7 @@ import { For, createEffect, createSignal } from "solid-js";
 import { MEMORY_CELLWIDTH, MEMORY_CELLHEIGHT } from "~/styles/constants";
 import Coordinate, { isEqual } from "../utils/Coordinate";
 
-interface IMemoryComponent { contents : Symbol[] | Symbol[][], head: number | Coordinate }
+export interface IMemoryComponent { name: string, contents : Symbol[] | Symbol[][], head: number | Coordinate }
 
 export default function MemoryComponent(props : IMemoryComponent) {
 
@@ -24,6 +24,8 @@ export default function MemoryComponent(props : IMemoryComponent) {
     } else {
       setHead(props.head)
     }  
+
+    console.log(props.contents)
   }, [props.contents])
 
 
