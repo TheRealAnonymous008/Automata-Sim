@@ -54,6 +54,10 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
 
 function GEMLayout(graph : Graph, tl: Coordinate, br: Coordinate){
     // Run the algorithm
+    if (graph.nodes.length === 0) {
+        return 
+    }
+    
     const nVertices = graph.nodes.length
     const targetLength = TARGET_TRANSITION_LENGTH
     let barycenter = {x : 0, y: 0}

@@ -2,7 +2,7 @@ import { Machine } from "~/models/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
 
-export default function InputBoard(props: {machine : Machine | undefined}){
+export default function InputBoard(props: {machine : Machine | undefined, machineObserver: (machine : Machine) => void}){
   const [inputString, setInputString] = createSignal("")
   const [machine, setMachine] = createSignal<Machine>()
 
@@ -18,11 +18,12 @@ export default function InputBoard(props: {machine : Machine | undefined}){
         symbols.forEach((val : string) => {
             machine()?.input.write(val)
         })
-        setMachine(machine())
-
-        console.log(machine())
     }
   }, [inputString()])
+
+  const handleSubmit = () => {
+    props.machineObserver(machine()!)
+  }
 
   return (
     <>
@@ -34,6 +35,9 @@ export default function InputBoard(props: {machine : Machine | undefined}){
             onInput={(event) => {setInputString(event.target.value)}}
             class="user-input"
         />
+
+        
+        <button onClick={handleSubmit} class="submit-button">Submit</button>
     </>
   )
 }
