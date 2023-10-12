@@ -40,3 +40,23 @@ export function getAllTransitions(src: State, dest: State) : {forward : Symbol[]
         backward: backward
     }
 }
+
+export function hasTransitions(src: State, dest: State) : boolean {
+    for(let _sym of src.transitions.keys()){
+        let T = src.transitions.get(_sym)!
+        if (T.includes(dest)){
+            return true
+        }
+    }
+
+    if (src !== dest) {
+        for(let _sym of dest.transitions.keys()){
+            let T = dest.transitions.get(_sym)!
+            if (T.includes(src)){
+                return true
+            }
+        }
+    }
+
+    return false
+}

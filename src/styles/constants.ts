@@ -12,3 +12,5 @@ export const EDGE_OFFSET = Math.max(
     STATE_CIRCRADIUS,
     TRANSITION_LOOP_DISTANCE
 )
+
+export const TARGET_TRANSITION_LENGTH = 300
