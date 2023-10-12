@@ -2,12 +2,9 @@ import State, { getAllTransitions } from "~/models/states/state";
 import Coordinate, { getDistance } from "./Coordinate";
 import { Machine } from "~/models/machine";
 import { getValuesInMap } from "~/utils/dictToList";
-import { STATE_CIRCRADIUS } from "./StateComponent";
 import "../styles/state.css"
 import { For } from "solid-js";
-
-const ANCHOR_DISTANCE = 50
-const LOOP_DISTANCE = 150
+import { STATE_CIRCRADIUS, TRANSITION_ANCHOR_DISTANCE, TRANSITION_LOOP_DISTANCE, TRANSITION_LOOP_OFFSET } from "~/styles/constants";
 
 export default function TransitionComponent(props: {
     src : Coordinate,
@@ -68,7 +65,7 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
                         <textPath 
                             startOffset="50%" 
                             dominant-baseline="central" 
-                            alignment-baseline="middle"
+                            alignment-baseline="central"
                             text-anchor="middle" 
                             href={`#path${props.id}`} 
                         >
@@ -122,9 +119,11 @@ enum CurveType {
 }
 
 function getPath(src: Coordinate, dest : Coordinate, curveType : CurveType) {
+    // Note: start at dest so that the text is placed outside and not inside.
+
     switch(curveType) {
         case CurveType.STRAIGHT: 
-            return `M${src.x} ${src.y} L${dest.x} ${dest.y}`
+            return `M${dest.x} ${dest.y} L${src.x} ${src.y}`
         case CurveType.DOUBLE: {
             // Render as a quadratic bezier curve. The anchor point is perpendicular to the midpoint
             const midpoint : Coordinate= { x: (src.x + dest.x) / 2, y: (src.y + dest.y) / 2}
@@ -133,21 +132,21 @@ function getPath(src: Coordinate, dest : Coordinate, curveType : CurveType) {
             const vec : Coordinate = { x: (dest.x - midpoint.x) / veclength , y: (dest.y - midpoint.y) / veclength}
             const perpvec : Coordinate = { x: -vec.y , y: vec.x}
         
-            const c : Coordinate = { x : midpoint.x + ANCHOR_DISTANCE * perpvec.x, y : midpoint.y + ANCHOR_DISTANCE * perpvec.y}
-            return `M${src.x} ${src.y} Q${c.x} ${c.y}, ${dest.x} ${dest.y}`;
+            const c : Coordinate = { x : midpoint.x + TRANSITION_ANCHOR_DISTANCE * perpvec.x, y : midpoint.y + TRANSITION_ANCHOR_DISTANCE * perpvec.y}
+            return `M${dest.x} ${dest.y} Q${c.x} ${c.y}, ${src.x} ${src.y}`;
         }
         case CurveType.LOOP: {
             // Render as a quadratic bezier curve. The anchor points up
-            const c : Coordinate = { x : src.x, y: src.y - LOOP_DISTANCE}
-            return `M${src.x - STATE_CIRCRADIUS} ${src.y} Q${c.x} ${c.y}, ${dest.x + STATE_CIRCRADIUS} ${dest.y}`;
+            const c : Coordinate = { x : src.x, y: src.y - TRANSITION_LOOP_DISTANCE}
+            return `M${dest.x - TRANSITION_LOOP_OFFSET} ${dest.y} Q${c.x} ${c.y}, ${src.x + TRANSITION_LOOP_OFFSET} ${src.y}`;
         }
     }
 }
 
 function getTextOffset(curveType : CurveType, index : number ){
     switch(curveType){
-        case CurveType.STRAIGHT: return 10 * (1 + index)
-        case CurveType.DOUBLE: return 10 * (1 + index)
+        case CurveType.STRAIGHT: return -10 * (1 + index) -5
+        case CurveType.DOUBLE: return -10 * (1 + index) - 5
         case CurveType.LOOP: return -10 * (1 + index)
     }
 }

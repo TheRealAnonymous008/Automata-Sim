@@ -1,11 +1,11 @@
 import { Machine } from "~/models/machine";
-import StateComponent, { STATE_CIRCRADIUS } from "./StateComponent";
-import State, { getAllTransitions } from "~/models/states/state";
-import { For, Ref, createEffect, createSignal } from "solid-js";
+import StateComponent from "./StateComponent";
+import State from "~/models/states/state";
+import { For, createEffect, createSignal } from "solid-js";
 import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
-import { Symbol } from "~/models/memory/memory";
 import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
 import Coordinate from "./Coordinate";
+import { EDGE_OFFSET } from "~/styles/constants";
 
 export default function StateDiagram(props :{
     machine : Machine
@@ -64,7 +64,7 @@ type StateCoordMap = Map<State, Coordinate>
 
 function generateRandomCoord(mw : number, mh : number) : Coordinate{
     return {
-        x : (mw - 2 * STATE_CIRCRADIUS) * Math.random() + STATE_CIRCRADIUS,
-        y : (mh - 2 * STATE_CIRCRADIUS) * Math.random() + STATE_CIRCRADIUS
+        x : (mw - 2 * EDGE_OFFSET) * Math.random() + EDGE_OFFSET,
+        y : (mh - 2 * EDGE_OFFSET) * Math.random() + EDGE_OFFSET
     }
 }

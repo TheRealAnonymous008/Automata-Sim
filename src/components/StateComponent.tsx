@@ -1,12 +1,7 @@
 import State from "~/models/states/state";
 import "../styles/state.css"
 import Coordinate from "./Coordinate";
-
-export const STATE_CIRCRADIUS = 40
-export const STATE_RECTWIDTH = 80
-export const STATE_RECTHEIGHT = 30
-
-const STATE_RECTOFFSET = {x : -40, y: 30}
+import { STATE_CIRCRADIUS, STATE_RECTOFFSET, STATE_RECTWIDTH, STATE_RECTHEIGHT } from "~/styles/constants";
 
 export default function StateComponent(props : {state : State, loc : Coordinate}){
 

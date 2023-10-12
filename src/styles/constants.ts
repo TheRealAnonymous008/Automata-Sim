@@ -1,0 +1,14 @@
+
+export const STATE_CIRCRADIUS = 40
+export const STATE_RECTWIDTH = 80
+export const STATE_RECTHEIGHT = 30
+export const STATE_RECTOFFSET = {x : -40, y: 30}
+
+export const TRANSITION_ANCHOR_DISTANCE = 50
+export const TRANSITION_LOOP_DISTANCE = 180
+export const TRANSITION_LOOP_OFFSET = STATE_CIRCRADIUS * 0.9
+
+export const EDGE_OFFSET = Math.max(
+    STATE_CIRCRADIUS,
+    TRANSITION_LOOP_DISTANCE
+)
