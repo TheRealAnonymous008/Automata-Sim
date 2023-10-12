@@ -11,6 +11,11 @@ export default class Tape2D implements Memory{
         this.name = name
     }
 
+    flush = () => {
+        this.contents = [['A', 'B', 'C', 'D', 'E', 'F'], ['G', 'H', 'I', 'A', 'A', 'A', 'A']]
+    }
+
+
     read  = () => {
         return "X"
     }

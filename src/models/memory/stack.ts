@@ -8,6 +8,10 @@ export default class Stack implements Memory{
         this.name = name
     }
     
+    flush = () => {
+        this.contents = []
+    }
+
     read  = () : Symbol => {
         return "X"
     }

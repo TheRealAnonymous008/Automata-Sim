@@ -9,6 +9,10 @@ export default class Queue implements Memory{
         this.name = name
     }
 
+    flush = () => {
+        this.contents = []
+    }
+
     getHead = () => {
         return 0
     }

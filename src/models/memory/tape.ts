@@ -12,6 +12,11 @@ export default class Tape implements Memory{
         this.name = name
     }
 
+    flush = () => {
+        this.contents = []
+        this.head = 0
+    }
+
     read = () : Symbol => {
         if (this.head < 0 || this.head >= this.contents.length){
             return DELIMITER
@@ -20,6 +25,7 @@ export default class Tape implements Memory{
     }
 
     write = (a: Symbol) => {
+        this.right()
         let i = this.head 
         if (i < 0) {
             while(i < 0){
@@ -32,7 +38,6 @@ export default class Tape implements Memory{
                 this.contents.push(DELIMITER)
                 i--
             }
-            this.head = this.contents.length - 1
         } 
 
         this.contents[this.head] = a

@@ -12,16 +12,13 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     }
   }, [props.machine])
 
-  createEffect(() => {
-    if (machine()){
-        let symbols = inputString().split('')
-        symbols.forEach((val : string) => {
-            machine()?.input.write(val)
-        })
-    }
-  }, [inputString()])
-
   const handleSubmit = () => {
+    machine()?.input.flush()
+    let symbols = inputString().split('')
+    symbols.forEach((val : string) => {
+      console.log(val)
+        machine()?.input.write(val)
+    })
     props.machineObserver(machine()!)
   }
 
