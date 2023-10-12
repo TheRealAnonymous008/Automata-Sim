@@ -7,6 +7,7 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
     const map = new Map<State, Coordinate>()
     const graph = getGraph(states)
     const K = Math.sqrt(1 / graph.nodes.length);
+    const N = graph.nodes.length
 
     // Initialize all nodes' coords
     graph.nodes.forEach((node) => {
@@ -16,6 +17,8 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
     // define bounds
     const topLeft : Coordinate = {x : BOUNDS.left, y : BOUNDS.top}
     const bottomRight : Coordinate = {x : viewWidth - BOUNDS.right, y : viewWidth - BOUNDS.bottom}
+
+    const avgLength = Math.max(getDistance(topLeft,  bottomRight) / (Math.sqrt(N)), TARGET_TRANSITION_LENGTH)
 
     // Run algorithm 
     for(let i = 0; i < 100; ++i){
@@ -28,7 +31,7 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
             const distance = Math.max(0.1, getDistance(src.coord, dest.coord))
             const offset = sub(edge.dest.coord, edge.src.coord)
 
-            const force = (distance - TARGET_TRANSITION_LENGTH) * K * edge.weight;
+            const force = (distance - avgLength) * K * edge.weight;
             const delta = mul(offset, force /distance)
 
             src.coord = add(src.coord, delta)
@@ -81,6 +84,8 @@ function getGraph(states: State[]) : Graph{
         })
     })
 
+    console.log(BOUNDS)
+
     states.forEach((src, i) => {
         states.forEach((dest, j) => {
             if (i < j){
@@ -94,7 +99,7 @@ function getGraph(states: State[]) : Graph{
                     edges.push({
                         src: nodes[i],
                         dest: nodes[j],
-                        weight: 0.1
+                        weight: 0.5
                     })
                 }
             }
