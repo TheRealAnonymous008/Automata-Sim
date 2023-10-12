@@ -1,4 +1,4 @@
-import Coordinate, { add, clampToBounds, getDistance, mul, sub } from "~/components/Coordinate";
+import Coordinate, { add, clampToBounds, getDistance, mul, sub } from "~/utils/Coordinate";
 import State, { getAllTransitions, hasTransitions } from "~/models/states/state";
 import { BOUNDS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
 import { shuffle } from "./shuffle";

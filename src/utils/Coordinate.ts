@@ -36,3 +36,7 @@ export function clampToBounds(p : Coordinate, tl: Coordinate, br : Coordinate) {
         y: Math.max(tl.y, Math.min(p.y, br.y))
     }
 }
+
+export function isEqual(p : Coordinate, q: Coordinate) {
+    return p.x == q.x && p.y == q.y
+}

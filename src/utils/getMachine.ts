@@ -8,6 +8,7 @@ import DummyState, { ACCEPT_STATE_NAME, AcceptState, REJECT_STATE_NAME, RejectSt
 import ScanState from "~/models/states/scan"
 import State from "~/models/states/state"
 import { getKeysInMap } from "./dictToList"
+import Tape2D from "~/models/memory/tape2d"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -90,6 +91,12 @@ function parseDataSection(lines : string[]) : {
                 break;
             case "TAPE": 
                 memoryUnit = new Tape(name);   
+                if (input == null){
+                    input = memoryUnit!
+                }
+                break;
+            case "2D_TAPE":
+                memoryUnit = new Tape2D(name)
                 if (input == null){
                     input = memoryUnit!
                 }

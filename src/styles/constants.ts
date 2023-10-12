@@ -16,3 +16,6 @@ export const BOUNDS = {
 }
 
 export const TARGET_TRANSITION_LENGTH = 300
+
+export const MEMORY_CELLWIDTH = 50
+export const MEMORY_CELLHEIGHT = 50

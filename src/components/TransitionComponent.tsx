@@ -1,5 +1,5 @@
 import State, { getAllTransitions } from "~/models/states/state";
-import Coordinate, { add, getDistance, mul, sub } from "./Coordinate";
+import Coordinate, { add, getDistance, mul, sub } from "../utils/Coordinate";
 import { Machine } from "~/models/machine";
 import { getValuesInMap } from "~/utils/dictToList";
 import "../styles/state.css"

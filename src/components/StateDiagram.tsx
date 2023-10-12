@@ -4,7 +4,7 @@ import State from "~/models/states/state";
 import { For, createEffect, createSignal } from "solid-js";
 import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
-import Coordinate from "./Coordinate";
+import Coordinate from "../utils/Coordinate";
 import getStateLayout from "~/utils/stateLayout";
 
 export default function StateDiagram(props :{

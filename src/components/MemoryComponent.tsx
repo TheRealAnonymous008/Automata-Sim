@@ -1,34 +1,56 @@
 import { Symbol } from "~/models/memory/memory";
 import "../styles/memory.css"
+import { getMaxLength, isOneDimensional } from "~/utils/arrayHelper";
+import { For } from "solid-js";
+import { MEMORY_CELLWIDTH, MEMORY_CELLHEIGHT } from "~/styles/constants";
+import Coordinate, { isEqual } from "../utils/Coordinate";
 
-const MEMORY_CELLWIDTH = 50
-const MEMORY_CELLHEIGHT = 50
   
-export default function MemoryComponent(props: { contents : Symbol[], head: number }) {
-return (
-    <div class="memory">
-      <svg width={props.contents.length * MEMORY_CELLWIDTH} height= {MEMORY_CELLHEIGHT}>
-        {props.contents.map((symbol, index) => (
-          <>
-            <rect
-              x={index * MEMORY_CELLWIDTH}
-              y="0"
-              width={MEMORY_CELLWIDTH}
-              height={MEMORY_CELLHEIGHT}
-              class={index === props.head ? "memory-cell-current" : "memory-cell"}
-            />
-            <text
-              x={index * MEMORY_CELLWIDTH + MEMORY_CELLWIDTH / 2}
-              y={MEMORY_CELLHEIGHT / 2 + 2}
-              text-anchor="middle" 
-              dominant-baseline="middle"
-              class="symbol"
-            >
-              {symbol}
-            </text>
-          </>
-        ))}
-      </svg>
-    </div>
-);
+export default function MemoryComponent(props: { contents : Symbol[] | Symbol[][], head: number | Coordinate }) {
+
+  let arr : Symbol[][] = []
+  let head : Coordinate = {x : 0, y: 0}
+
+  if (isOneDimensional(props.contents)){
+    arr = [props.contents as Symbol[]]
+  } else {
+    arr = props.contents as Symbol[][]
+  }
+
+  if (typeof(props.head) == "number"){
+    head.x = props.head
+    head.y = 0
+  } else {
+    head = props.head
+  }
+
+  return (
+      <div class="memory">
+        <svg width={getMaxLength(arr) * MEMORY_CELLWIDTH} height= {arr.length * MEMORY_CELLHEIGHT}>
+          {arr.map((row, rowIndex) =>
+            row.map((symbol, colIndex) => (
+              <>
+                <rect
+                  x={colIndex * MEMORY_CELLWIDTH}
+                  y={rowIndex * MEMORY_CELLHEIGHT}
+                  width={MEMORY_CELLWIDTH}
+                  height={MEMORY_CELLHEIGHT}
+                  class={isEqual(head, {x: colIndex ,y: rowIndex})? "memory-cell-current" : "memory-cell"}
+                />
+                <text
+                  x={colIndex * MEMORY_CELLWIDTH + MEMORY_CELLWIDTH / 2}
+                  y={rowIndex * MEMORY_CELLHEIGHT + MEMORY_CELLHEIGHT / 2 + 2}
+                  text-anchor="middle" 
+                  dominant-baseline="middle"
+                  class="symbol"
+                >
+                  {symbol}
+                </text>
+              </>
+            ))
+          )}
+        </svg>
+      </div>
+  );
 }
+

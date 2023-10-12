@@ -1,6 +1,6 @@
 import State from "~/models/states/state";
 import "../styles/state.css"
-import Coordinate from "./Coordinate";
+import Coordinate from "../utils/Coordinate";
 import { STATE_CIRCRADIUS, STATE_RECTOFFSET, STATE_RECTWIDTH, STATE_RECTHEIGHT } from "~/styles/constants";
 
 export default function StateComponent(props : {state : State, loc : Coordinate}){
