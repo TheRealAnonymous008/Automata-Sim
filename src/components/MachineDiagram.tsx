@@ -17,7 +17,7 @@ export default function MachineDiagram(props : {
     return (
         <>
             <Show when={machine() !== null}>
-                {/* <MemorySegment machine={machine()!}/> */}
+                <MemorySegment machine={machine()!}/>
                 <StateDiagram machine={machine()!}/>
             </Show>
         </>
