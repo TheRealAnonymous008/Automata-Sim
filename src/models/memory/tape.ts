@@ -54,4 +54,8 @@ export default class Tape implements Memory{
     getHead = () => {
         return this.head
     }
+
+    resetHead = () => {
+        this.head = 0
+    }
 }

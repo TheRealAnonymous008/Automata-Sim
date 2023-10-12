@@ -16,7 +16,8 @@ export function defaultState(name: string, command : string = "") : State{
         initial: false,
         behavior: () => null,
         transitions: new Map<Symbol, State[]>(),
-        mem: undefined
+        mem: undefined,
+        isActive: false
     }
 }
 

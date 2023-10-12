@@ -21,7 +21,8 @@ export default function getMachine(code : string) : Machine | null{
     return {
         memory : memory.memory,
         states: logic.states,
-        input : memory.input
+        input : memory.input,
+        initial : logic.initial
     }
 }
 
@@ -122,7 +123,7 @@ function parseDataSection(lines : string[]) : {
 function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Memory) : {
     states: StateList,
     alphabet : Symbol[],
-    initial: State | null
+    initial: State
  }
  {
     var states : StateList = new Map<string, State>()
@@ -204,6 +205,6 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
     return {
         states : states,
         alphabet: alphabet,
-        initial: initial
+        initial: initial as State
     }
  }

@@ -6,27 +6,22 @@ import MachineDiagram from "~/components/MachineDiagram";
 import { IMemoryComponent } from "~/components/MemoryComponent";
 import SpecificationInput from "~/components/SpecificationInput";
 import { Machine } from "~/models/machine";
-import Memory from "~/models/memory/memory";
-import Tape from "~/models/memory/tape";
-import State from "~/models/states/state";
-import deepCopyMachine from "~/utils/deepCopyMachine";
 import { getValuesInMap } from "~/utils/dictToList";
 import getMachine from "~/utils/getMachine";
 
 export default function Home() {
 
   const [machineSpec, setMachineSpec] = createSignal("")
-  const [machine, setMachine] = createStore<Machine>({
-    input: new Tape("input"), 
-    memory: new Map<string, Memory>(),
-    states: new Map<string, State>()
-  })
+  const [machine, setMachine] = createSignal<Machine | null>(null)
   const [states, setStates] = createSignal([])
   const [memory, setMemory] = createSignal<IMemoryComponent[]>([])
 
   const updateComponents = () => {
+    if (machine() === null)
+      return 
+
     const arr : IMemoryComponent[] = new Array()
-    getValuesInMap(machine.memory).forEach((val) => {
+    getValuesInMap(machine()!.memory).forEach((val) => {
       const contents : any[] = []
       val.contents.forEach((e) => contents.push(e))
       arr.push({
@@ -57,10 +52,10 @@ export default function Home() {
 
       <SpecificationInput specObserver={setMachineSpec}/>
       {
-        machine !== undefined &&
+        machine() &&
         <>
-          <InputBoard machine={machine} machineObserver={machineObserver}/>
-          <MachineDiagram machine={machine} memory={memory()}/>
+          <InputBoard machine={machine()!} machineObserver={machineObserver}/>
+          <MachineDiagram machine={machine()!} memory={memory()}/>
         </>
       }
     </main>

@@ -4,12 +4,12 @@ import State, { Transition } from "./states/state";
 export interface Machine {
     memory : MemoryList,
     states : StateList,
-    input: Memory
+    input: Memory,
+    initial: State
 }
 
 export type MemoryList = Map<string, Memory>
 export type StateList = Map<string, State>
-
 
 export function getAllTransitions(machine : Machine) : Transition[] {
     let T : Transition[] = []

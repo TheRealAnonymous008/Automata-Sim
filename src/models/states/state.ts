@@ -8,7 +8,8 @@ export default interface State {
     accept : boolean,
     initial : boolean,
     behavior: (() => Symbol) | 
-        ((input: Symbol) => void)
+        ((input: Symbol) => void),
+    isActive : boolean
 }
 
 export interface Transition {
