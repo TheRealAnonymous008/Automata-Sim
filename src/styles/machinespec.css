@@ -18,6 +18,7 @@
 
   .styled-button {
     background-color: #007bff;
+    margin-right: 15px;
     color: #fff;
     border: none;
     padding: 10px 20px;

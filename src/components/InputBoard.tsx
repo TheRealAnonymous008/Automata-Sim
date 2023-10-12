@@ -19,7 +19,9 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     symbols.forEach((val : string) => {
       machine()?.input.write(val)
     })
+
     props.machineObserver(machine()!)
+    reset()
   }
 
   const reset = () => {
