@@ -45,7 +45,6 @@ function tokenize(code : string){
         }
     }
 
-    logicStartIdx = dataStartIdx
     while (logicStartIdx < lines.length - 1){
         logicStartIdx += 1
         if (lines[logicStartIdx].toLowerCase() == ".logic"){
