@@ -1,45 +1,50 @@
 import Coordinate, { add, clampToBounds, getDistance, mul, sub } from "~/utils/Coordinate";
 import State from "~/models/states/state";
-import { BOUNDS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
+import { ATTRACTION_STRENGTH, BOUNDS, LAYOUT_ITERATIONS, REPULSION_STRENGTH, STATE_BOUNDS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
 import { shuffle } from "./shuffle";
-import { hasTransitions } from "~/models/states/stateHelpers";
+import { getAllNeighbors, getCommonNeighbors, hasTransitions } from "~/models/states/stateHelpers";
 
 export default function getStateLayout(viewWidth : number, viewHieght : number, states : State[]) : Map<State, Coordinate>{
     const map = new Map<State, Coordinate>()
     const graph = getGraph(states)
-    const K = Math.sqrt(1 / graph.nodes.length);
-    const N = graph.nodes.length
+
+    console.log(graph)
+
+    // define bounds
+    const topLeft : Coordinate = {x : BOUNDS.left, y : BOUNDS.top}
+    const bottomRight : Coordinate = {x : viewWidth - BOUNDS.right, y : viewHieght - BOUNDS.bottom}
 
     // Initialize all nodes' coords
     graph.nodes.forEach((node) => {
         node.coord = generateRandomCoord(viewWidth, viewHieght)
     })
 
-    // define bounds
-    const topLeft : Coordinate = {x : BOUNDS.left, y : BOUNDS.top}
-    const bottomRight : Coordinate = {x : viewWidth - BOUNDS.right, y : viewWidth - BOUNDS.bottom}
-
-    const avgLength = Math.max(getDistance(topLeft,  bottomRight) / (Math.sqrt(N)), TARGET_TRANSITION_LENGTH)
-
     // Run algorithm 
-    for(let i = 0; i < 100; ++i){
+    for(let i = 0; i < LAYOUT_ITERATIONS; ++i){
         // Shuffle to reduce bias.
         const E : Edge[] = shuffle(graph.edges)
 
         E.forEach((edge) => {
             const src = edge.src
             const dest = edge.dest
-            const distance = Math.max(0.1, getDistance(src.coord, dest.coord))
-            const offset = sub(edge.dest.coord, edge.src.coord)
 
-            const force = (distance - avgLength) * K * edge.weight;
-            const delta = mul(offset, force /distance)
+            const distance = Math.max(0.1, getDistance(src.coord, dest.coord) - 2 * STATE_BOUNDS)
+            const offset = sub(edge.dest.coord, edge.src.coord)
+            
+            const attractiveForce = (distance - TARGET_TRANSITION_LENGTH) * edge.weight* ATTRACTION_STRENGTH;
+            const repulsiveForce =  REPULSION_STRENGTH / (distance * distance)
+            
+            const delta = add(
+                mul(offset, attractiveForce / distance),
+                mul(offset, repulsiveForce / distance)
+            )
 
             src.coord = add(src.coord, delta)
-            dest.coord = add(dest.coord, mul(delta, -1))
+            dest.coord = add(dest.coord, delta)
 
             // Clamp src and dest
             src.coord = clampToBounds(src.coord, topLeft, bottomRight)
+            dest.coord = clampToBounds(dest.coord, topLeft, bottomRight)
         })
     }
 
@@ -87,20 +92,25 @@ function getGraph(states: State[]) : Graph{
 
     states.forEach((src, i) => {
         states.forEach((dest, j) => {
-            if (i < j){
-                if (hasTransitions(src, dest)) {
+            if (i != j){
+                const commonCount = getCommonNeighbors(src, dest).size
+                const totalCount = getAllNeighbors(src).size + getAllNeighbors(dest).size 
+
+                if (totalCount != 0) {
+                    const affinity = commonCount / (totalCount - commonCount)
                     edges.push({
                         src: nodes[i],
                         dest: nodes[j],
-                        weight: 1
+                        weight: affinity
                     })
                 } else {
                     edges.push({
                         src: nodes[i],
                         dest: nodes[j],
-                        weight: 0.5
+                        weight: 0
                     })
                 }
+
             }
         })
     })

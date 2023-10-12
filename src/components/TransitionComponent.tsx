@@ -5,7 +5,7 @@ import { getValuesInMap } from "~/utils/dictToList";
 import "../styles/state.css"
 import { For } from "solid-js";
 import { TRANSITION_ANCHOR_DISTANCE, TRANSITION_LOOP_DISTANCE, TRANSITION_LOOP_OFFSET } from "~/styles/constants";
-import { getAllTransitions } from "~/models/states/stateHelpers";
+import { getAllSymbols } from "~/models/states/stateHelpers";
 
 export default function TransitionComponent(props: {
     src : Coordinate,
@@ -83,7 +83,7 @@ export function getAllTransitionUIs(machine : Machine) : TransitionUIHelper[]{
     S.forEach((src, idx) => {
         S.forEach((dest, jdx) => {
             if (jdx >= idx) {
-                const tlist = getAllTransitions(src, dest)
+                const tlist = getAllSymbols(src, dest)
                 const forward = tlist.forward
                 const backward = tlist.backward
 
