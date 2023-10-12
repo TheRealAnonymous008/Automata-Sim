@@ -29,7 +29,7 @@ export default function MemoryComponent(props : IMemoryComponent) {
 
   return (
       <div class="memory">
-        <svg width={getMaxLength(arr()) * MEMORY_CELLWIDTH} height= {arr.length * MEMORY_CELLHEIGHT}>
+        <svg width={getMaxLength(arr()) * MEMORY_CELLWIDTH} height= {arr().length * MEMORY_CELLHEIGHT}>
           {arr().map((row, rowIndex) =>
             row.map((symbol, colIndex) => (
               <>
