@@ -23,10 +23,16 @@ export function sub(p1 : Coordinate, p2: Coordinate) : Coordinate{
     }
 }
 
-
 export function mul(p: Coordinate, s : number) : Coordinate{
     return {
         x: p.x * s,
         y: p.y * s
+    }
+}
+
+export function clampToBounds(p : Coordinate, tl: Coordinate, br : Coordinate) {
+    return {
+        x: Math.max(tl.x, Math.min(p.x, br.x)),
+        y: Math.max(tl.y, Math.min(p.y, br.y))
     }
 }

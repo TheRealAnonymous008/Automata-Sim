@@ -1,6 +1,7 @@
-import Coordinate, { add, getDistance, mul, sub } from "~/components/Coordinate";
+import Coordinate, { add, clampToBounds, getDistance, mul, sub } from "~/components/Coordinate";
 import State, { getAllTransitions, hasTransitions } from "~/models/states/state";
-import { EDGE_OFFSET, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
+import { BOUNDS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
+import { shuffle } from "./shuffle";
 
 export default function getStateLayout(viewWidth : number, viewHieght : number, states : State[]) : Map<State, Coordinate>{
     const map = new Map<State, Coordinate>()
@@ -12,19 +13,29 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
         node.coord = generateRandomCoord(viewWidth, viewHieght)
     })
 
+    // define bounds
+    const topLeft : Coordinate = {x : BOUNDS.left, y : BOUNDS.top}
+    const bottomRight : Coordinate = {x : viewWidth - BOUNDS.right, y : viewWidth - BOUNDS.bottom}
+
     // Run algorithm 
     for(let i = 0; i < 100; ++i){
-        graph.edges.forEach((edge) => {
+        // Shuffle to reduce bias.
+        const E : Edge[] = shuffle(graph.edges)
+
+        E.forEach((edge) => {
             const src = edge.src
             const dest = edge.dest
             const distance = Math.max(0.1, getDistance(src.coord, dest.coord))
             const offset = sub(edge.dest.coord, edge.src.coord)
 
-            const force = (distance - TARGET_TRANSITION_LENGTH) * K;
+            const force = (distance - TARGET_TRANSITION_LENGTH) * K * edge.weight;
             const delta = mul(offset, force /distance)
 
             src.coord = add(src.coord, delta)
             dest.coord = add(dest.coord, mul(delta, -1))
+
+            // Clamp src and dest
+            src.coord = clampToBounds(src.coord, topLeft, bottomRight)
         })
     }
 
@@ -38,8 +49,8 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
 
 function generateRandomCoord(mw : number, mh : number) : Coordinate{
     return {
-        x : (mw - 2 * EDGE_OFFSET) * Math.random() + EDGE_OFFSET,
-        y : (mh - 2 * EDGE_OFFSET) * Math.random() + EDGE_OFFSET
+        x : mw * Math.random(),
+        y : mh * Math.random()
     }
 }
 
@@ -55,7 +66,8 @@ interface Node {
 
 interface Edge {
     src : Node,
-    dest: Node
+    dest: Node, 
+    weight : number
 }
 
 function getGraph(states: State[]) : Graph{
@@ -75,7 +87,14 @@ function getGraph(states: State[]) : Graph{
                 if (hasTransitions(src, dest)) {
                     edges.push({
                         src: nodes[i],
-                        dest: nodes[j]
+                        dest: nodes[j],
+                        weight: 1
+                    })
+                } else {
+                    edges.push({
+                        src: nodes[i],
+                        dest: nodes[j],
+                        weight: 0.1
                     })
                 }
             }

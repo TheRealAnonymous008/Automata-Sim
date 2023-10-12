@@ -5,7 +5,6 @@ import { For, createEffect, createSignal } from "solid-js";
 import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
 import Coordinate from "./Coordinate";
-import { EDGE_OFFSET } from "~/styles/constants";
 import getStateLayout from "~/utils/stateLayout";
 
 export default function StateDiagram(props :{
