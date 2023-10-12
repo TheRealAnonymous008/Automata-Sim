@@ -1,5 +1,5 @@
 import State, { getAllTransitions } from "~/models/states/state";
-import Coordinate, { getDistance } from "./Coordinate";
+import Coordinate, { add, getDistance, mul, sub } from "./Coordinate";
 import { Machine } from "~/models/machine";
 import { getValuesInMap } from "~/utils/dictToList";
 import "../styles/state.css"
@@ -44,7 +44,7 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
             />
 
             <text dy={0} class ="transition-arrow">
-                <textPath href={`#${pathId}`} startOffset="50%" dominant-baseline="central">{">"}</textPath>
+                <textPath href={`#${pathId}`} startOffset="50%" dominant-baseline="central">{"<"}</textPath>
             </text>
 
             <For each={props.symbols}> 
@@ -115,13 +115,13 @@ function getPath(src: Coordinate, dest : Coordinate, curveType : CurveType) {
             return `M${dest.x} ${dest.y} L${src.x} ${src.y}`
         case CurveType.DOUBLE: {
             // Render as a quadratic bezier curve. The anchor point is perpendicular to the midpoint
-            const midpoint : Coordinate= { x: (src.x + dest.x) / 2, y: (src.y + dest.y) / 2}
-
+            const midpoint : Coordinate= mul(add(src, dest),0.5)
             const veclength = getDistance(dest, midpoint)
-            const vec : Coordinate = { x: (dest.x - midpoint.x) / veclength , y: (dest.y - midpoint.y) / veclength}
+            const vec : Coordinate = mul(sub(dest, midpoint), 1.0/veclength)
             const perpvec : Coordinate = { x: -vec.y , y: vec.x}
-        
-            const c : Coordinate = { x : midpoint.x + TRANSITION_ANCHOR_DISTANCE * perpvec.x, y : midpoint.y + TRANSITION_ANCHOR_DISTANCE * perpvec.y}
+            const perpoffset = mul(perpvec, TRANSITION_ANCHOR_DISTANCE)
+
+            const c : Coordinate = add(midpoint, perpoffset)
             return `M${dest.x} ${dest.y} Q${c.x} ${c.y}, ${src.x} ${src.y}`;
         }
         case CurveType.LOOP: {

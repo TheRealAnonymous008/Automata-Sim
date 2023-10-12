@@ -6,6 +6,7 @@ import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
 import Coordinate from "./Coordinate";
 import { EDGE_OFFSET } from "~/styles/constants";
+import getStateLayout from "~/utils/stateLayout";
 
 export default function StateDiagram(props :{
     machine : Machine
@@ -18,10 +19,7 @@ export default function StateDiagram(props :{
     const [transitionUIs, setTransitionUIs] = createSignal<TransitionUIHelper[]>([])
 
     createEffect(() => {
-        const map = new Map<State, Coordinate>()
-        getValuesInMap(props.machine.states).forEach((val, idx) => {
-            map.set(val, generateRandomCoord(cw, ch))
-        })
+        const map = getStateLayout(cw, ch, getValuesInMap(props.machine.states))
         setStateCoordMap(map)
 
         setTransitionUIs(getAllTransitionUIs(props.machine))
@@ -30,7 +28,7 @@ export default function StateDiagram(props :{
     return (
         <>
             <h2> State Diagram </h2>
-            <svg width={ch} height={ch}>
+            <svg width={cw} height={ch}>
                 {/* Plot transitions. Plot them first so that they are at the bottom */}
                 <For each={transitionUIs()}>
                     {
@@ -59,12 +57,3 @@ export default function StateDiagram(props :{
         </>
     )
 }   
-
-type StateCoordMap = Map<State, Coordinate>
-
-function generateRandomCoord(mw : number, mh : number) : Coordinate{
-    return {
-        x : (mw - 2 * EDGE_OFFSET) * Math.random() + EDGE_OFFSET,
-        y : (mh - 2 * EDGE_OFFSET) * Math.random() + EDGE_OFFSET
-    }
-}
