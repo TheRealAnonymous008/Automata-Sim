@@ -24,8 +24,6 @@ export default function MemoryComponent(props : IMemoryComponent) {
     } else {
       setHead(props.head)
     }  
-
-    console.log(props.contents)
   }, [props.contents])
 
 
