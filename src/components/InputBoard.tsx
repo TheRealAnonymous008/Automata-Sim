@@ -1,6 +1,7 @@
 import { Machine } from "~/models/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
+import simulate from "~/models/simulation"
 
 export default function InputBoard(props: {machine : Machine | undefined, machineObserver: (machine : Machine) => void}){
   const [inputString, setInputString] = createSignal("")
@@ -21,19 +22,34 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     props.machineObserver(machine()!)
   }
 
+  const runStep = () => {
+    if (machine()) {
+      simulate(machine()!)
+    }
+  }
+
   return (
     <>
         <h2> Input String </h2>
-        <input
-            type="text"
-            id="user-input"
-            value={inputString()}
-            onInput={(event) => {setInputString(event.target.value)}}
-            class="user-input"
-        />
-
+        <div class="input-container">
+          <input
+              type="text"
+              id="user-input"
+              value={inputString()}
+              onInput={(event) => {setInputString(event.target.value)}}
+              class="user-input"
+          />
+        </div>
         
-        <button onClick={handleSubmit} class="submit-button">Submit</button>
+        <span>
+          <button onClick={handleSubmit} class="styled-button">Submit</button>
+
+          <div class = "input-container">
+            <button class = "playboard-button styled-button" style = {``}onClick={runStep}>
+              Next
+            </button>
+          </div>
+        </span>
     </>
   )
 }

@@ -22,7 +22,7 @@ export default function SpecificationInput(props : {
                 class="styled-textarea"
             />
             
-            <button onClick={handleSubmit} class="submit-button">Submit</button>
+            <button onClick={handleSubmit} class="styled-button">Submit</button>
         </>
     )
 }

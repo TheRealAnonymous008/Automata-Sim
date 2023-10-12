@@ -1,6 +1,6 @@
 .input-container {
-    margin: 20px;
-    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
   
 label {
@@ -21,3 +21,12 @@ label {
 .user-input:focus {
     border-color: #007bff;
 }
+
+.styled-button.playboard-button {
+    background-color: #2fd190;
+    color: #fff;
+}
+
+.styled-button.playboard-button:hover {
+    background-color: #166b45;
+  }
