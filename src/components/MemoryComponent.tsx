@@ -1,13 +1,11 @@
-import { Symbol } from "~/models/memory/memory";
+import { IMemoryDetais, Symbol } from "~/models/memory/memory";
 import "../styles/memory.css"
 import { getMaxLength, isOneDimensional } from "~/utils/arrayHelper";
 import { For, createEffect, createSignal } from "solid-js";
 import { MEMORY_CELLWIDTH, MEMORY_CELLHEIGHT } from "~/styles/constants";
 import Coordinate, { isEqual } from "../utils/Coordinate";
 
-export interface IMemoryComponent { name: string, contents : Symbol[] | Symbol[][], head: number | Coordinate }
-
-export default function MemoryComponent(props : IMemoryComponent) {
+export default function MemoryComponent(props : IMemoryDetais) {
 
   const [arr, setArr] = createSignal<Symbol[][]>([]) 
   const [head, setHead] = createSignal<Coordinate>({x : 0, y : 0})

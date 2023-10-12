@@ -4,12 +4,11 @@ import getMachine from "~/utils/getMachine"
 import MemorySegment from "./MemorySegment"
 import StateDiagram from "./StateDiagram"
 import { getValuesInMap } from "~/utils/dictToList"
-import Memory from "~/models/memory/memory"
-import { IMemoryComponent } from "./MemoryComponent"
+import Memory, { IMemoryDetais } from "~/models/memory/memory"
 
 export default function MachineDiagram(props : {
     machine : Machine,
-    memory : IMemoryComponent[]
+    memory : IMemoryDetais[]
 }){
     const [memory, setMemory] = createSignal(props.memory)
 

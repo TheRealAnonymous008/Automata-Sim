@@ -1,12 +1,12 @@
 import { For, createEffect } from "solid-js"
 import { Machine, MemoryList } from "~/models/machine"
-import Memory from "~/models/memory/memory"
+import Memory, { IMemoryDetais } from "~/models/memory/memory"
 import { getValuesInMap } from "~/utils/dictToList"
-import MemoryComponent, { IMemoryComponent } from "./MemoryComponent"
+import MemoryComponent from "./MemoryComponent"
 import { createSignal } from "solid-js"
 
 export default function MemorySegment(props : {
-    memory : IMemoryComponent[]
+    memory : IMemoryDetais[]
 }){
     const [memory, setMemory] = createSignal(props.memory)
 
@@ -18,7 +18,7 @@ export default function MemorySegment(props : {
         <>
             <h2> Memory Segment </h2>
             <For each={memory()} fallback={<div>No items</div>}>
-                {(item : IMemoryComponent, index) => 
+                {(item : IMemoryDetais, index) => 
                     <div data-index={index()}>
                         <h4> {item.name} </h4>
                         <MemoryComponent name = {item.name} contents={item.contents} head={item.head}/>
