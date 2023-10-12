@@ -30,3 +30,11 @@
   fill: "black";
   text-anchor: "start"
 }
+
+
+.transition-arrow {
+  font-family: "Arial";
+  font-size: 30px; 
+  fill: "black";
+  text-anchor: "start"
+}

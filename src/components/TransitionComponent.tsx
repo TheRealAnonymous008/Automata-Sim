@@ -18,17 +18,6 @@ export default function TransitionComponent(props: {
 
     return (
         <>
-            <defs>
-                <marker 
-                    id={`arrowhead${props.idx}`} 
-                    markerWidth="10" 
-                    markerHeight="7" 
-                    refX={5 + STATE_CIRCRADIUS / 2.5}
-                    refY="3.5"
-                    orient="auto">
-                    <polygon points="0 0, 10 3.5, 0 7" />
-                </marker>
-            </defs>
             {
                 props.forward.length > 0 && 
                 <TransitionLine src={props.src} dest={props.dest} symbols={props.forward} id={`f${props.idx}`} ctype={ctype}/>
@@ -43,21 +32,21 @@ export default function TransitionComponent(props: {
 }
 
 function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Symbol[], id : string, ctype: CurveType}){
-    const midpoint : Coordinate =  {
-        x: (props.src.x + props.dest.x) / 2,
-        y: (props.src.y + props.dest.y) / 2
-    }
-
+    const pathId = `path${props.id}`
     return (
         <>
             <path
-                id={`path${props.id}`}
+                id={pathId}
                 d={getPath(props.src, props.dest, props.ctype)}
                 fill="transparent"
                 stroke="black"
                 stroke-width="3"
-                marker-end="url(#arrowhead)"
             />
+
+            <text dy={0} class ="transition-arrow">
+                <textPath href={`#${pathId}`} startOffset="50%" dominant-baseline="central">{">"}</textPath>
+            </text>
+
             <For each={props.symbols}> 
                 {(item : Symbol, index) => {
                     return (
@@ -67,7 +56,7 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
                             dominant-baseline="central" 
                             alignment-baseline="central"
                             text-anchor="middle" 
-                            href={`#path${props.id}`} 
+                            href={`#${pathId}`} 
                         >
                             {item.toString()}
                         </textPath>
