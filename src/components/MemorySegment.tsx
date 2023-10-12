@@ -7,11 +7,6 @@ import MemoryComponent from "./MemoryComponent"
 export default function MemorySegment(props : {
     machine : Machine
 }){
-
-    createEffect(() => {
-        console.log("Mem", props.machine)
-    }, [props.machine])
-
     return (
         <>
             <h2> Memory Segment </h2>

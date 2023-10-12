@@ -6,17 +6,24 @@ import { STATE_CIRCRADIUS } from "./StateComponent";
 import "../styles/state.css"
 import { For } from "solid-js";
 
+const ANCHOR_DISTANCE = 50
+const LOOP_DISTANCE = 150
+
 export default function TransitionComponent(props: {
     src : Coordinate,
     dest : Coordinate,
     forward: Symbol[],
-    backward: Symbol[]
+    backward: Symbol[],
+    idx : number
 }){
+    const ctype : CurveType = (props.src === props.dest) ? CurveType.LOOP :
+        (props.forward.length != 0 && props.backward.length != 0) ? CurveType.DOUBLE : CurveType.STRAIGHT
+
     return (
         <>
             <defs>
                 <marker 
-                    id="arrowhead" 
+                    id={`arrowhead${props.idx}`} 
                     markerWidth="10" 
                     markerHeight="7" 
                     refX={5 + STATE_CIRCRADIUS / 2.5}
@@ -27,18 +34,18 @@ export default function TransitionComponent(props: {
             </defs>
             {
                 props.forward.length > 0 && 
-                <TransitionLine src={props.src} dest={props.dest} symbols={props.forward}/>
+                <TransitionLine src={props.src} dest={props.dest} symbols={props.forward} id={`f${props.idx}`} ctype={ctype}/>
             }
 
             {
                 props.backward.length > 0 && 
-                <TransitionLine src={props.dest} dest={props.src} symbols={props.backward}/>
+                <TransitionLine src={props.dest} dest={props.src} symbols={props.backward} id={`b${props.idx}`} ctype={ctype}/>
             }
         </>
     )
 }
 
-function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Symbol[]}){
+function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Symbol[], id : string, ctype: CurveType}){
     const midpoint : Coordinate =  {
         x: (props.src.x + props.dest.x) / 2,
         y: (props.src.y + props.dest.y) / 2
@@ -46,25 +53,29 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
 
     return (
         <>
-            <line 
-                x1={props.src.x} 
-                y1={props.src.y} 
-                x2={props.dest.x} 
-                y2={props.dest.y} 
-                stroke="black" 
-                stroke-width="3" 
+            <path
+                id={`path${props.id}`}
+                d={getPath(props.src, props.dest, props.ctype)}
+                fill="transparent"
+                stroke="black"
+                stroke-width="3"
                 marker-end="url(#arrowhead)"
             />
-            <path
-                d={getPath(props.src, props.dest)}
-                fill="transparent"
-                stroke="green"
-                stroke-width="2"
-                marker-end="url(#middle-marker)"
-            />
             <For each={props.symbols}> 
-                {(item : Symbol) => {
-                    return <text x={midpoint.x} y={midpoint.y} class = "transition-text">{item.toString()}</text>
+                {(item : Symbol, index) => {
+                    return (
+                    <text dy={getTextOffset(props.ctype, index())} class = "transition-text">
+                        <textPath 
+                            startOffset="50%" 
+                            dominant-baseline="central" 
+                            alignment-baseline="middle"
+                            text-anchor="middle" 
+                            href={`#path${props.id}`} 
+                        >
+                            {item.toString()}
+                        </textPath>
+                    </text>
+                    )
                 }
             }</For>
     </>
@@ -104,19 +115,39 @@ export function getAllTransitionUIs(machine : Machine) : TransitionUIHelper[]{
     return TU
 }
 
-function getPath(src: Coordinate, dest : Coordinate) {
-    // Calculate control points for the Bezier curve
-    const c1 : Coordinate= {
-        x: src.x + (dest.x - src.x) * 0.25,
-        y: src.y + 1.0 / (dest.y - src.y)
-    }
-    const c2 : Coordinate= {
-        x: src.x + (dest.x - src.x) * 0.75,
-        y: src.y + 1.0 /(dest.y - src.y)
-    }
+enum CurveType {
+    STRAIGHT,
+    DOUBLE,
+    LOOP
+}
 
-    // Construct the path data string
-    const path = `M${src.x} ${src.y} C${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${dest.x} ${dest.y}`;
-  
-    return path;
-  }
+function getPath(src: Coordinate, dest : Coordinate, curveType : CurveType) {
+    switch(curveType) {
+        case CurveType.STRAIGHT: 
+            return `M${src.x} ${src.y} L${dest.x} ${dest.y}`
+        case CurveType.DOUBLE: {
+            // Render as a quadratic bezier curve. The anchor point is perpendicular to the midpoint
+            const midpoint : Coordinate= { x: (src.x + dest.x) / 2, y: (src.y + dest.y) / 2}
+
+            const veclength = getDistance(dest, midpoint)
+            const vec : Coordinate = { x: (dest.x - midpoint.x) / veclength , y: (dest.y - midpoint.y) / veclength}
+            const perpvec : Coordinate = { x: -vec.y , y: vec.x}
+        
+            const c : Coordinate = { x : midpoint.x + ANCHOR_DISTANCE * perpvec.x, y : midpoint.y + ANCHOR_DISTANCE * perpvec.y}
+            return `M${src.x} ${src.y} Q${c.x} ${c.y}, ${dest.x} ${dest.y}`;
+        }
+        case CurveType.LOOP: {
+            // Render as a quadratic bezier curve. The anchor points up
+            const c : Coordinate = { x : src.x, y: src.y - LOOP_DISTANCE}
+            return `M${src.x - STATE_CIRCRADIUS} ${src.y} Q${c.x} ${c.y}, ${dest.x + STATE_CIRCRADIUS} ${dest.y}`;
+        }
+    }
+}
+
+function getTextOffset(curveType : CurveType, index : number ){
+    switch(curveType){
+        case CurveType.STRAIGHT: return 10 * (1 + index)
+        case CurveType.DOUBLE: return 10 * (1 + index)
+        case CurveType.LOOP: return -10 * (1 + index)
+    }
+}

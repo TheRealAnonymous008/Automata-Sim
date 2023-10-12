@@ -34,12 +34,13 @@ export default function StateDiagram(props :{
                 {/* Plot transitions. Plot them first so that they are at the bottom */}
                 <For each={transitionUIs()}>
                     {
-                        (item : TransitionUIHelper) => {
+                        (item : TransitionUIHelper, index) => {
                             return <TransitionComponent 
                                 src={stateCoordMap().get(item.source)!}
                                 dest={stateCoordMap().get(item.dest)!}
                                 forward={item.forward}
                                 backward={item.backward}
+                                idx={index()}
                             />
                         }
                     }
