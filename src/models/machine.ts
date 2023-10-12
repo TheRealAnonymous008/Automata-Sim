@@ -1,4 +1,4 @@
-import Memory from "./memory/memory"
+import Memory, {Symbol} from "./memory/memory"
 import State, { Transition } from "./states/state";
 
 export interface Machine {
@@ -6,7 +6,8 @@ export interface Machine {
     states : StateList,
     input: Memory,
     initial: State,
-    current: State
+    currentState: State,
+    currentSymbol: Symbol
 }
 
 export type MemoryList = Map<string, Memory>

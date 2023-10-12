@@ -24,7 +24,8 @@ export default function getMachine(code : string) : Machine | null{
         states: logic.states,
         input : memory.input,
         initial : logic.initial,
-        current : logic.initial
+        currentState : logic.initial,
+        currentSymbol: null,
     }
 }
 

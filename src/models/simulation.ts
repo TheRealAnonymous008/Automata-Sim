@@ -9,6 +9,12 @@ export interface SimulationNode {
     next: SimulationNode[]
 }
 
+export function resetMachine(machine : Machine) {
+  machine.currentState = machine.initial
+  machine.currentSymbol = null
+  machine.input.resetHead!()
+}
+
 export function createSnapshot(machine : Machine) : SimulationNode{
     const arr : IMemoryDetais[] = new Array()
     getValuesInMap(machine.memory).forEach((val) => {
@@ -23,14 +29,15 @@ export function createSnapshot(machine : Machine) : SimulationNode{
 
     return {
         memory : arr,
-        state: machine.current, 
+        state: machine.currentState, 
         next: []
     }
 }
 
 export default function simulate(machine : Machine){
     // Start at the initial state. Make sure input tape is properly set
-    let current = machine.current
-    machine.input.resetHead!()
+    console.log("One step")
     
+    let current = machine.currentState
+    let newSymbol = current.behavior("a")
 }

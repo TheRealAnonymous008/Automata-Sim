@@ -1,7 +1,7 @@
 import { Machine } from "~/models/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
-import simulate from "~/models/simulation"
+import simulate, { resetMachine } from "~/models/simulation"
 
 export default function InputBoard(props: {machine : Machine | undefined, machineObserver: (machine : Machine) => void}){
   const [inputString, setInputString] = createSignal("")
@@ -22,9 +22,16 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     props.machineObserver(machine()!)
   }
 
+  const reset = () => {
+    if (machine()) {
+      resetMachine(machine()!)
+      props.machineObserver(machine()!)
+    }
+  }
   const runStep = () => {
     if (machine()) {
       simulate(machine()!)
+      props.machineObserver(machine()!)
     }
   }
 
@@ -47,6 +54,10 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
           <div class = "input-container">
             <button class = "playboard-button styled-button" style = {``}onClick={runStep}>
               Next
+            </button>
+
+            <button class = "playboard-button styled-button" style = {``}onClick={reset}>
+              Reset
             </button>
           </div>
         </span>
