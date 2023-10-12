@@ -8,6 +8,7 @@ import { Machine } from "~/models/machine";
 import Memory from "~/models/memory/memory";
 import Tape from "~/models/memory/tape";
 import State from "~/models/states/state";
+import deepCopyMachine from "~/utils/deepCopyMachine";
 import getMachine from "~/utils/getMachine";
 
 export default function Home() {
@@ -22,12 +23,12 @@ export default function Home() {
   createEffect(() => {
       const m = getMachine(machineSpec())
       if (m !== null) {
-        setMachine({...m})
+        setMachine(m)
       }
   }, [machineSpec()])
 
   const machineObserver = (m : Machine) => {
-    setMachine({...m})
+      setMachine(m)
   } 
 
   return (

@@ -1,11 +1,16 @@
+import Coordinate from "~/utils/Coordinate"
 import Memory, { Symbol } from "./memory"
 
 export default class Queue implements Memory{
     readonly name : string
-    readonly storage : Symbol[] = []
+    contents = []
 
     constructor(name : string){
         this.name = name
+    }
+
+    getHead = () => {
+        return 0
     }
 
     read  = () : Symbol => {
@@ -14,13 +19,5 @@ export default class Queue implements Memory{
 
     write = (a: Symbol) : void => {
         
-    }
-
-    contents = () => {
-        return ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'A', 'A', 'A', 'A']
-    }
-
-    getHead = () => {
-        return 0
     }
 }

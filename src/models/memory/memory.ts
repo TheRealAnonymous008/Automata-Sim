@@ -7,6 +7,6 @@ export default interface Memory {
     name : string,
     read: () => Symbol,
     write: (a : Symbol) => void,
-    contents : () => Symbol[] | Symbol[][],
+    contents : Symbol[] | Symbol[][],
     getHead : () => number | Coordinate
 }

@@ -7,6 +7,10 @@ import StateDiagram from "./StateDiagram"
 export default function MachineDiagram(props : {
     machine : Machine
 }){
+
+    createEffect(() => {
+        console.log("Hello")
+    }, [props.machine])
     return (
         <>
             <Show when={props.machine !== null}>
