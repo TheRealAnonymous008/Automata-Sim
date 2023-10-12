@@ -16,11 +16,11 @@ export const BOUNDS = {
     right: 2 * STATE_CIRCRADIUS
 }
 
-export const TARGET_TRANSITION_LENGTH = 300
+export const TARGET_TRANSITION_LENGTH = 200
 
 export const MEMORY_CELLWIDTH = 50
 export const MEMORY_CELLHEIGHT = 50
 
-export const ATTRACTION_STRENGTH = 0.01
-export const REPULSION_STRENGTH = 2
+export const ATTRACTION_STRENGTH = 0.2
+export const REPULSION_STRENGTH = 1
 export const LAYOUT_ITERATIONS = 10000

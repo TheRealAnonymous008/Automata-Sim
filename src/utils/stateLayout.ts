@@ -29,8 +29,8 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
             const distance = Math.max(0.1, getDistance(src.coord, dest.coord) - 2 * STATE_BOUNDS)
             const offset = sub(edge.dest.coord, edge.src.coord)
             
-            const attractiveForce = (distance - TARGET_TRANSITION_LENGTH) * edge.weight* ATTRACTION_STRENGTH;
-            const repulsiveForce =  REPULSION_STRENGTH / (distance * distance)
+            const attractiveForce = -(TARGET_TRANSITION_LENGTH - distance) * edge.weight * ATTRACTION_STRENGTH;
+            const repulsiveForce =  -REPULSION_STRENGTH / (distance * distance * graph.nodes.length)
             
             const delta = add(
                 mul(offset, attractiveForce / distance),
@@ -38,11 +38,7 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
             )
 
             src.coord = add(src.coord, delta)
-            dest.coord = add(dest.coord, delta)
-
-            // Clamp src and dest
             src.coord = clampToBounds(src.coord, topLeft, bottomRight)
-            dest.coord = clampToBounds(dest.coord, topLeft, bottomRight)
         })
     }
 
