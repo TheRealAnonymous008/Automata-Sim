@@ -7,7 +7,7 @@ import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
 import { getKeysInMap } from "./dictToList"
 import Tape2D from "~/models/memory/tape2d"
-import { acceptState, defaultState, makeStateInitial, rejectState } from "~/models/states/behaviors"
+import { acceptState, defaultState, makeStateInitial, rejectState, scanState } from "~/models/states/behaviors"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -144,7 +144,13 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
         let command = toks[1]
 
         // TODO: Initialize state here using a switch statement. For now we use a temporary scan state.
-        let state : State = defaultState(name)
+        let state : State = defaultState("")
+        if (command == "SCAN"){
+            state = scanState(name, memory.get(INPUT_TAPE_NAME) as Tape | Tape2D)
+        } else if (command == "PRINT") {
+            state = scanState(name, memory.get(OUTPUT_TAPE_NAME) as Tape)
+        }
+
         states.set(name, state)
 
         if (initial == null){

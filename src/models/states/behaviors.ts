@@ -1,5 +1,7 @@
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "./state";
-import { Symbol } from "../memory/memory";
+import Memory, { Symbol } from "../memory/memory";
+import Tape2D from "../memory/tape2d";
+import Tape from "../memory/tape";
 
 export function defaultState(name: string, command : string = "") : State{
     if (command == ""){
@@ -12,7 +14,7 @@ export function defaultState(name: string, command : string = "") : State{
         command: command,
         accept: false,
         initial: false,
-        behavior: (input : Symbol) => null,
+        behavior: () => null,
         transitions: new Map<Symbol, State[]>(),
         mem: undefined
     }
@@ -36,8 +38,24 @@ export function makeStateInitial(state : State): State {
     return state
 }
 
-export function scanState(name : string) : State {
-    const state = defaultState("", name)
+export function scanState(name : string, mem : Tape | Tape2D) : State {
+    const state = defaultState(name, "scan")
 
+    state.mem = mem
+    state.behavior = () => {
+        return mem.read()
+    }
+
+    return state
+}
+
+export function printState(name : string, mem : Tape) : State {
+    const state = defaultState(name, "print")
+
+    state.mem = mem
+    state.behavior = (s : Symbol) => {
+        mem.write(s)
+    }
+    
     return state
 }

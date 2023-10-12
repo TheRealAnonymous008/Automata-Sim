@@ -5,13 +5,16 @@ import MemorySegment from "./MemorySegment"
 import StateDiagram from "./StateDiagram"
 
 export default function MachineDiagram(props : {
-    machineSpec : string
+    machineSpec : string,
+    machineObserver? : (machine : Machine|null) => {}
 }){
     const [machine, setMachine] = createSignal<Machine|null>(null)
 
     createEffect(() => {
         setMachine(getMachine(props.machineSpec))
-        console.log(machine())
+        if (props.machineObserver) {
+            props.machineObserver(machine())
+        }
     }, [props.machineSpec])
 
     return (

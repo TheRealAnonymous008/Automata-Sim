@@ -1,7 +1,7 @@
 import { Symbol } from "~/models/memory/memory";
 import "../styles/memory.css"
 import { getMaxLength, isOneDimensional } from "~/utils/arrayHelper";
-import { For } from "solid-js";
+import { For, createEffect } from "solid-js";
 import { MEMORY_CELLWIDTH, MEMORY_CELLHEIGHT } from "~/styles/constants";
 import Coordinate, { isEqual } from "../utils/Coordinate";
 
@@ -10,6 +10,10 @@ export default function MemoryComponent(props: { contents : Symbol[] | Symbol[][
 
   let arr : Symbol[][] = []
   let head : Coordinate = {x : 0, y: 0}
+
+  createEffect(() => {
+    console.log("Goodbye")
+  }, [props.contents])
 
   if (isOneDimensional(props.contents)){
     arr = [props.contents as Symbol[]]

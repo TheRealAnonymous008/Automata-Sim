@@ -2,6 +2,8 @@ import Memory, { Symbol } from "./memory"
 
 export default class Queue implements Memory{
     readonly name : string
+    readonly storage : Symbol[] = []
+    updated : boolean = false
 
     constructor(name : string){
         this.name = name

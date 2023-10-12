@@ -7,7 +7,8 @@ export default interface State {
     command : string,
     accept : boolean,
     initial : boolean,
-    behavior: (input : Symbol) => Symbol
+    behavior: (() => Symbol) | 
+        ((input: Symbol) => void)
 }
 
 export interface Transition {

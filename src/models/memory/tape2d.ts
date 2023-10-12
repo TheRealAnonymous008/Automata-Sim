@@ -5,6 +5,8 @@ export const OUTPUT_TAPE_NAME = ""
 
 export default class Tape2D implements Memory{
     readonly name : string
+    updated : boolean = false
+
     constructor(name : string){
         this.name = name
     }
