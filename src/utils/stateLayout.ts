@@ -1,14 +1,12 @@
-import Coordinate, { add, clampToBounds, getDistance, mul, sub } from "~/utils/Coordinate";
+import Coordinate, { add, clampToBounds, getDistance, getNorm, mul, sub } from "~/utils/Coordinate";
 import State from "~/models/states/state";
 import { ATTRACTION_STRENGTH, BOUNDS, LAYOUT_ITERATIONS, REPULSION_STRENGTH, STATE_BOUNDS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
 import { shuffle } from "./shuffle";
-import { getAllNeighbors, getCommonNeighbors, hasTransitions } from "~/models/states/stateHelpers";
+import { getAllNeighbors, getCommonNeighbors } from "~/models/states/stateHelpers";
 
 export default function getStateLayout(viewWidth : number, viewHieght : number, states : State[]) : Map<State, Coordinate>{
     const map = new Map<State, Coordinate>()
     const graph = getGraph(states)
-
-    console.log(graph)
 
     // define bounds
     const topLeft : Coordinate = {x : BOUNDS.left, y : BOUNDS.top}
@@ -19,7 +17,7 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
         node.coord = generateRandomCoord(viewWidth, viewHieght)
     })
 
-    // Run algorithm 
+    // 
     for(let i = 0; i < LAYOUT_ITERATIONS; ++i){
         // Shuffle to reduce bias.
         const E : Edge[] = shuffle(graph.edges)
@@ -48,6 +46,9 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
         })
     }
 
+    // Run GEM
+    GEMLayout(graph, topLeft, bottomRight)
+
     // Finally return map
     graph.nodes.forEach((node) => {
         map.set(node.state, node.coord)
@@ -55,11 +56,69 @@ export default function getStateLayout(viewWidth : number, viewHieght : number, 
     return map
 }
 
+function GEMLayout(graph : Graph, tl: Coordinate, br: Coordinate){
+    // Run the algorithm
+    const nVertices = graph.nodes.length
+    const targetLength = TARGET_TRANSITION_LENGTH
+    let barycenter = {x : 0, y: 0}
 
-function generateRandomCoord(mw : number, mh : number) : Coordinate{
+    const vArray : Node[] = shuffle(graph.nodes)
+
+    for (let i = 0; i < LAYOUT_ITERATIONS; ++i){
+        // Choose vertex to update
+        const idx = i % nVertices
+        const vertex = vArray[idx]
+
+        let theta = getAllNeighbors(vertex.state).size + 1
+        
+        // Apply attractive force
+        let force: Coordinate = 
+            sub(mul(barycenter, 1/nVertices), vertex.coord)
+
+        force = mul(force, theta * ATTRACTION_STRENGTH)
+        // Random disturbance
+        force = add(force, generateRandomCoord(STATE_BOUNDS, STATE_BOUNDS, STATE_BOUNDS / 2, STATE_BOUNDS / 2))
+
+        // Exert forces from other nodes
+        vArray.forEach((other : Node) => {
+            if (other === vertex){
+                return
+            }
+
+            const delta = sub(vertex.coord, other.coord)
+            const distance = getDistance(other.coord, vertex.coord)
+            const optimalLength = targetLength * targetLength
+
+            // Apply repulsive force
+            force = add(force, mul(delta, distance / optimalLength))
+
+            // Add another attractive force
+            const total = getAllNeighbors(vertex.state).size + getAllNeighbors(other.state).size
+            const common = getCommonNeighbors(vertex.state, other.state).size
+            const affinity = (common + 1) / (total - common + 1)
+
+            if (! isNaN(affinity)){
+                force = sub(force, mul(delta, (distance * affinity)/ (optimalLength * theta)))
+            }
+        })
+
+        // Adjust force
+        const absp = getNorm(force)
+        force = mul(force, 0.1 / absp)
+
+        // Adjust position
+        vertex.coord = add(vertex.coord, force)
+        vertex.coord = clampToBounds(vertex.coord, tl, br)
+
+        // Update barycenter
+        barycenter = add(barycenter, force)
+    }
+}
+
+function generateRandomCoord(mw : number, mh : number, x : number = 0, y : number = 0) : Coordinate{
     return {
-        x : mw * Math.random(),
-        y : mh * Math.random()
+        x : mw * Math.random() - x,
+        y : mh * Math.random() - y
     }
 }
 
@@ -71,6 +130,7 @@ interface Graph {
 interface Node {
     state: State
     coord: Coordinate,
+    impulse: number 
 }
 
 interface Edge {
@@ -86,7 +146,8 @@ function getGraph(states: State[]) : Graph{
     states.forEach((state, index) => {
         nodes.push({
             coord: {x: 0, y: 0},
-            state: state
+            state: state,
+            impulse: 0
         })
     })
 

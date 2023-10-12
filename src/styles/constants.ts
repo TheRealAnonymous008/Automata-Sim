@@ -23,4 +23,4 @@ export const MEMORY_CELLHEIGHT = 50
 
 export const ATTRACTION_STRENGTH = 0.01
 export const REPULSION_STRENGTH = 2
-export const LAYOUT_ITERATIONS = 1000
+export const LAYOUT_ITERATIONS = 10000
