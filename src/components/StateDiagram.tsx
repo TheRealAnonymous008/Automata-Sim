@@ -49,6 +49,7 @@ export default function StateDiagram(props :{
                         <StateComponent 
                             state={item} 
                             loc = {stateCoordMap().get(item)!}
+                            isActive={item.isActive}
                         />
                     }
                 </For>  

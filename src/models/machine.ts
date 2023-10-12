@@ -31,3 +31,9 @@ export function getAllTransitions(machine : Machine) : Transition[] {
 
     return T
 }
+
+export function setCurrentState(machine : Machine, state : State){
+    machine.currentState.isActive = false
+    machine.currentState = state 
+    state.isActive  = true
+}

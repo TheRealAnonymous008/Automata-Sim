@@ -1,4 +1,4 @@
-import { Machine } from "./machine";
+import { Machine, setCurrentState } from "./machine";
 import Memory, { IMemoryDetais } from "./memory/memory";
 import State from "./states/state";
 import { getValuesInMap } from "~/utils/dictToList";
@@ -39,5 +39,7 @@ export default function simulate(machine : Machine){
     console.log("One step")
     
     let current = machine.currentState
+    setCurrentState(machine, current)
+
     let newSymbol = current.behavior("a")
 }

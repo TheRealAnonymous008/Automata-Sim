@@ -3,8 +3,7 @@ import "../styles/state.css"
 import Coordinate from "../utils/Coordinate";
 import { STATE_CIRCRADIUS, STATE_RECTOFFSET, STATE_RECTWIDTH, STATE_RECTHEIGHT } from "~/styles/constants";
 
-export default function StateComponent(props : {state : State, loc : Coordinate}){
-
+export default function StateComponent(props : {state : State, loc : Coordinate, isActive: boolean}){
     let state = props.state
     let loc = props.loc
 
@@ -22,7 +21,7 @@ export default function StateComponent(props : {state : State, loc : Coordinate}
           cx={loc.x} 
           cy={loc.y} 
           r={STATE_CIRCRADIUS} 
-          class="state-circle" 
+          class={props.isActive ? "state-circle highlighted" : "state-circle"} 
         />
         {
           state.accept && 
@@ -30,7 +29,7 @@ export default function StateComponent(props : {state : State, loc : Coordinate}
             cx={loc.x} 
             cy={loc.y} 
             r={STATE_CIRCRADIUS * 0.85} 
-            class="state-circle" 
+            class={props.isActive ? "state-circle highlighted" : "state-circle"} 
           />
         }
         

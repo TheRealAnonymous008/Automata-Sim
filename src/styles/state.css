@@ -12,6 +12,11 @@
   font-size: 18px;
 }
 
+.state-circle.highlighted {
+  fill: #4d349f;
+  stroke: #000; 
+  stroke-width: 4; 
+}
 
 /* Styling for the label text */
 .label-text {
