@@ -5,7 +5,8 @@ export interface Machine {
     memory : MemoryList,
     states : StateList,
     input: Memory,
-    initial: State
+    initial: State,
+    current: State
 }
 
 export type MemoryList = Map<string, Memory>

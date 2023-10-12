@@ -12,5 +12,6 @@ export default interface Memory {
     write: (a : Symbol) => void,
     flush: () => void
     contents : Symbol[] | Symbol[][],
-    getHead : () => number | Coordinate
+    getHead : () => number | Coordinate,
+    resetHead?: () => void 
 }

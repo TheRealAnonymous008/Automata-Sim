@@ -8,6 +8,7 @@ import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/sta
 import { getKeysInMap } from "./dictToList"
 import Tape2D from "~/models/memory/tape2d"
 import { acceptState, defaultState, makeStateInitial, rejectState, scanState } from "~/models/states/behaviors"
+import { log } from "console"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -22,7 +23,8 @@ export default function getMachine(code : string) : Machine | null{
         memory : memory.memory,
         states: logic.states,
         input : memory.input,
-        initial : logic.initial
+        initial : logic.initial,
+        current : logic.initial
     }
 }
 

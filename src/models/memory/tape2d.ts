@@ -31,4 +31,11 @@ export default class Tape2D implements Memory{
             y: 1
         }
     }
+    
+    resetHead = () => {
+        return {
+            x: 0,
+            y :0
+        }
+    }
 }

@@ -5,11 +5,11 @@ import { getValuesInMap } from "~/utils/dictToList";
 
 export interface SimulationNode {
     state : State,
-    memory : Memory[]
+    memory : IMemoryDetais[]
     next: SimulationNode[]
 }
 
-export function createSnapshot(machine : Machine) {
+export function createSnapshot(machine : Machine) : SimulationNode{
     const arr : IMemoryDetais[] = new Array()
     getValuesInMap(machine.memory).forEach((val) => {
       const contents : any[] = []
@@ -22,11 +22,15 @@ export function createSnapshot(machine : Machine) {
     })
 
     return {
-        memory : arr    
+        memory : arr,
+        state: machine.current, 
+        next: []
     }
 }
 
 export default function simulate(machine : Machine){
-    // Start at the initial state
+    // Start at the initial state. Make sure input tape is properly set
+    let current = machine.current
+    machine.input.resetHead!()
     
 }
