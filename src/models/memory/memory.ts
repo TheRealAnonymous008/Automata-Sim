@@ -1,6 +1,6 @@
 import Coordinate from "~/utils/Coordinate";
 
-export type Symbol = string 
+export type Symbol = string | null
 
 export default interface Memory {
     name : string,

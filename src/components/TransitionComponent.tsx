@@ -1,10 +1,11 @@
-import State, { getAllTransitions } from "~/models/states/state";
+import State from "~/models/states/state";
 import Coordinate, { add, getDistance, mul, sub } from "../utils/Coordinate";
 import { Machine } from "~/models/machine";
 import { getValuesInMap } from "~/utils/dictToList";
 import "../styles/state.css"
 import { For } from "solid-js";
-import { STATE_CIRCRADIUS, TRANSITION_ANCHOR_DISTANCE, TRANSITION_LOOP_DISTANCE, TRANSITION_LOOP_OFFSET } from "~/styles/constants";
+import { TRANSITION_ANCHOR_DISTANCE, TRANSITION_LOOP_DISTANCE, TRANSITION_LOOP_OFFSET } from "~/styles/constants";
+import { getAllTransitions } from "~/models/states/stateHelpers";
 
 export default function TransitionComponent(props: {
     src : Coordinate,

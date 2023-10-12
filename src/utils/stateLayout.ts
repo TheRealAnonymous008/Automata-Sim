@@ -1,7 +1,8 @@
 import Coordinate, { add, clampToBounds, getDistance, mul, sub } from "~/utils/Coordinate";
-import State, { getAllTransitions, hasTransitions } from "~/models/states/state";
+import State from "~/models/states/state";
 import { BOUNDS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
 import { shuffle } from "./shuffle";
+import { hasTransitions } from "~/models/states/stateHelpers";
 
 export default function getStateLayout(viewWidth : number, viewHieght : number, states : State[]) : Map<State, Coordinate>{
     const map = new Map<State, Coordinate>()

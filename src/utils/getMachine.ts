@@ -4,11 +4,10 @@ import Memory, { Symbol } from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
 import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
-import DummyState, { ACCEPT_STATE_NAME, AcceptState, REJECT_STATE_NAME, RejectState } from "~/models/states/dummy"
-import ScanState from "~/models/states/scan"
-import State from "~/models/states/state"
+import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
 import { getKeysInMap } from "./dictToList"
 import Tape2D from "~/models/memory/tape2d"
+import { acceptState, defaultState, rejectState } from "~/models/states/behaviors"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -132,8 +131,8 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
     var transitions : {start : string, symbol : Symbol, end : string}[] = []
 
     // Add special accept and reject state
-    states.set(ACCEPT_STATE_NAME, new AcceptState())
-    states.set(REJECT_STATE_NAME, new RejectState())
+    states.set(ACCEPT_STATE_NAME, acceptState())
+    states.set(REJECT_STATE_NAME, rejectState())
 
     // Identify all the states in the logic segment and set up transition parsing.
     for (let index = 0; index < lines.length; index++) {
@@ -145,7 +144,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
         let command = toks[1]
 
         // TODO: Initialize state here using a switch statement. For now we use a temporary scan state.
-        let state = new ScanState(name, inputTape)
+        let state : State = defaultState(name)
         states.set(name, state)
 
         if (initial == null){
@@ -191,7 +190,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
             trans.set(_sym, [dest])
         }
 
-        if(!(_sym in alphabet)){
+        if(!(_sym! in alphabet)){
             alphabet.push(_sym)
         }
     });
