@@ -1,4 +1,4 @@
-import { isAcceptState, isRejectState } from "../states/special";
+import { isAcceptState, isRejectState } from "../states/behaviors/special";
 import { SimulationNode } from "./snapshot";
 
 export enum MachineResult  {

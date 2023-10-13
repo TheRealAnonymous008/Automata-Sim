@@ -1,7 +1,7 @@
 import { Machine } from "~/models/machine/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
-import { isAcceptState, isRejectState } from "~/models/states/special"
+import { isAcceptState, isRejectState } from "~/models/states/behaviors/special"
 import { DELIMITER } from "~/models/memory/memory"
 import { MachineResult, getShortestDerivation } from "~/models/machine/derivation"
 import runMachine, { resetMachine } from "~/models/machine/simulation"

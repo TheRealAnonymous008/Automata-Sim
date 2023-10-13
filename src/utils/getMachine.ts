@@ -7,8 +7,9 @@ import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
 import { getKeysInMap } from "./dictToList"
 import Tape2D from "~/models/memory/tape2d"
-import { acceptState, defaultState, makeStateInitial, printState, rejectState, scanState } from "~/models/states/behaviors"
-import { log } from "console"
+import { scanLeftState, scanRightState, scanState } from "~/models/states/behaviors/scan"
+import { acceptState, rejectState, defaultState, makeStateInitial } from "~/models/states/behaviors/special"
+import { printState } from "~/models/states/behaviors/write"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -150,10 +151,19 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
         let command = toks[1]
         let tidx = 2
 
-        // TODO: Initialize state here using a switch statement. For now we use a temporary scan state.
         let state : State = defaultState("")
         if (command == "SCAN"){
-            state = scanState(name, inputTape)
+            // Get the next token and check it. It can either be <RIGHT>, <LEFT> or neither.
+            if (toks[tidx] == "RIGHT"){
+                state = scanRightState(name, inputTape)
+                ++tidx
+            } else if (toks[tidx] == "LEFT"){
+                state = scanLeftState(name, inputTape)
+                ++tidx
+            } else {
+                state = scanState(name, inputTape)
+            }
+
         } else if (command == "PRINT") {
             state = printState(name, memory.get(OUTPUT_TAPE_NAME)! as Tape)
         }

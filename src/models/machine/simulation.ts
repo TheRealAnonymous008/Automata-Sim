@@ -1,5 +1,5 @@
 import { Machine, setCurrentState } from "./machine";
-import { isAcceptState, isRejectState } from "../states/special";
+import { isAcceptState, isRejectState } from "../states/behaviors/special";
 import { SimulationNode, createSnapshot, loadSnapshot } from "./snapshot";
 import { evaluateNode, MachineResult } from "./derivation";
 import { loadToMachine } from "../memory/memory";
