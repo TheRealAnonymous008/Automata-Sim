@@ -38,15 +38,12 @@ export function writeState(name : string, mem : Stack | Queue) : State {
     state.mem = mem
     state.run = () : StateOutput[] => {
         const output : StateOutput[] = []
-        const memImage : IMemoryDetais = getDetails(state.mem!)
+        const memImage : IMemoryDetais = getDetails(mem)
 
         state.transitions.forEach((t, s) => {
-            loadToMemory(state.mem!, memImage)
-            state.mem!.write(s)
+            loadToMemory(mem, memImage)
+            mem.write(s)
 
-            if (t === undefined)
-                return    
-            
             t.forEach((val) => {
                 output.push({
                     state: val, 
@@ -54,7 +51,8 @@ export function writeState(name : string, mem : Stack | Queue) : State {
                 })
             })
         })
-
+        
+        loadToMemory(mem, memImage)
         return output
     }
     

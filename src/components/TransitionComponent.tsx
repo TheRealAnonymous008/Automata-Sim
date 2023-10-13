@@ -136,8 +136,8 @@ function getPath(src: Coordinate, dest : Coordinate, curveType : CurveType) {
 
 function getTextOffset(curveType : CurveType, index : number ){
     switch(curveType){
-        case CurveType.STRAIGHT: return -10 * (1 + index) -5
-        case CurveType.DOUBLE: return -10 * (1 + index) - 5
-        case CurveType.LOOP: return -10 * (1 + index)
+        case CurveType.STRAIGHT: return -20 * (1 + index) -5
+        case CurveType.DOUBLE: return -20 * (1 + index) - 5
+        case CurveType.LOOP: return -20 * (1 + index)
     }
 }
