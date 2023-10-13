@@ -17,8 +17,7 @@ export default interface State {
     command : string,
     accept : boolean,
     initial : boolean,
-    behavior: (() => Symbol) | 
-        ((input: Symbol) => void),
+    run: () => State[]
     isActive : boolean
 }
 

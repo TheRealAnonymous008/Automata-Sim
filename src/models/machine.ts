@@ -7,7 +7,6 @@ export interface Machine {
     input: Memory,
     initial: State,
     currentState: State,
-    currentSymbol: Symbol
 }
 
 export type MemoryList = Map<string, Memory>

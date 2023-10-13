@@ -14,7 +14,7 @@ export function defaultState(name: string, command : string = "") : State{
         command: command,
         accept: false,
         initial: false,
-        behavior: () => null,
+        run: () => [],
         transitions: new Map<Symbol, State[]>(),
         mem: undefined,
         isActive: false
@@ -43,8 +43,14 @@ export function scanState(name : string, mem : Tape | Tape2D) : State {
     const state = defaultState(name, "scan")
 
     state.mem = mem
-    state.behavior = () => {
-        return mem.read()
+    state.run = () => {
+        mem.right()
+        const s = mem.read()
+        const t = state.transitions.get(s)
+
+        if (t === undefined)
+            return []
+        return t
     }
 
     return state
@@ -54,8 +60,9 @@ export function printState(name : string, mem : Tape) : State {
     const state = defaultState(name, "print")
 
     state.mem = mem
-    state.behavior = (s : Symbol) => {
-        mem.write(s)
+    state.run = () => {
+        // mem.write(s)
+        return []
     }
     
     return state

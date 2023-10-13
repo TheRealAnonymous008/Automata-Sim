@@ -11,7 +11,7 @@ export interface SimulationNode {
 
 export function resetMachine(machine : Machine) {
   machine.currentState = machine.initial
-  machine.currentSymbol = null
+  setCurrentState(machine, machine.initial)
   machine.input.resetHead!()
 }
 
@@ -34,12 +34,15 @@ export function createSnapshot(machine : Machine) : SimulationNode{
     }
 }
 
-export default function simulate(machine : Machine){
+export default function step(machine : Machine){
     // Start at the initial state. Make sure input tape is properly set
     console.log("One step")
-    
-    let current = machine.currentState
-    setCurrentState(machine, current)
 
-    let newSymbol = current.behavior("a")
+    const next = machine.currentState.run()
+    createSnapshot(machine)
+
+    if (next.length != 0){
+      setCurrentState(machine, next[0])
+    }
+    
 }
