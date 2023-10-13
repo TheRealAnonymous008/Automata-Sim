@@ -1,4 +1,4 @@
-import { IMemoryDetais, getDetails, loadToMemory } from "~/models/memory/memory"
+import { DELIMITER, IMemoryDetais, getDetails, loadToMemory } from "~/models/memory/memory"
 import Tape from "~/models/memory/tape"
 import State, { StateOutput } from "../state"
 import { defaultState } from "./special"
@@ -9,15 +9,12 @@ export function printState(name : string, mem : Tape) : State {
     state.mem = mem
     state.run = () : StateOutput[] => {
         const output : StateOutput[] = []
-        const memImage : IMemoryDetais = getDetails(state.mem!)
+        const memImage : IMemoryDetais = getDetails(mem)
 
         state.transitions.forEach((t, s) => {
-            loadToMemory(state.mem!, memImage)
-            state.mem!.write(s)
+            loadToMemory(mem, memImage)
+            mem.write(s)
 
-            if (t === undefined)
-                return    
-            
             t.forEach((val) => {
                 output.push({
                     state: val, 
@@ -25,7 +22,8 @@ export function printState(name : string, mem : Tape) : State {
                 })
             })
         })
-
+        
+        loadToMemory(mem, memImage)
         return output
     }
     

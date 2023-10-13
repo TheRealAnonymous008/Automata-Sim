@@ -25,8 +25,13 @@ export default interface Memory {
 }
 
 export function getDetails(memory : Memory) : IMemoryDetais{
+    const contents : any[] = []
+    memory.contents.forEach((v) => {
+        contents.push(v)
+    })
+
     return {
-        contents: memory.contents,
+        contents: contents,
         head: memory.head,
         key: memory.key, 
         name: memory.name
@@ -37,7 +42,7 @@ export function loadToMachine(machine: Machine, payload: IMemoryDetais) {
     const memory = machine.memory.get(payload.key!)
 
     if (memory){
-        memory.contents = payload.contents
+        memory.contents = [...payload.contents] as Symbol[] | Symbol[][]
         memory.head = payload.head
     }
 }

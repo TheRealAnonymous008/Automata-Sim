@@ -164,7 +164,6 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
             } else {
                 state = scanState(name, inputTape)
             }
-
         } else if (command == "PRINT") {
             state = printState(name, memory.get(OUTPUT_TAPE_NAME)! as Tape)
         } else if (command.startsWith("READ")){

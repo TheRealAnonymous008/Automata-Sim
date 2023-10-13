@@ -31,3 +31,9 @@ B] WRITE(Q) (Y,C)
 C] WRITE(Q) (Z,D)
 D] READ(Q) (X,E)
 E] WRITE(Q) (A,accept)
+
+=== 
+NONDETERMINISTIC PRINT
+
+.LOGIC
+A] PRINT (X,accept) (Y,reject)
