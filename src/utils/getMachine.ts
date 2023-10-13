@@ -1,5 +1,5 @@
 import { Transition } from "solid-js/types/reactive/signal"
-import { Machine, MemoryList, StateList } from "~/models/machine"
+import { Machine, MemoryList, StateList } from "~/models/machine/machine"
 import Memory, { Symbol } from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"

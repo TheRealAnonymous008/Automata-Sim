@@ -1,18 +1,6 @@
 import { Machine, setCurrentState } from "./machine";
-import Memory, { IMemoryDetais } from "./memory/memory";
-import { isAcceptState, isRejectState } from "./states/special";
-import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "./states/state";
-import { getValuesInMap } from "~/utils/dictToList";
-
-export interface SimulationNode {
-    state : State,
-    memory : IMemoryDetais[]
-    next: SimulationNode[],
-    parent: SimulationNode | null,
-    accept: boolean,
-    depth: number,
-    visited : boolean
-}
+import { isAcceptState, isRejectState } from "../states/special";
+import { SimulationNode, createSnapshot, loadSnapshot } from "./snapshot";
 
 export function resetMachine(machine : Machine) {
   // Set all states as not current
@@ -25,39 +13,6 @@ export function resetMachine(machine : Machine) {
   machine.input.contents = contents
 }
 
-export function createSnapshot(machine : Machine) : SimulationNode{
-    const arr : IMemoryDetais[] = new Array()
-      machine.memory.forEach((val, key) => {
-      const contents : any[] = []
-      val.contents.forEach((e) => contents.push(e))
-      arr.push({
-        key: key,
-        contents: contents,
-        head: val.head, 
-        name: val.name
-      })
-    })
-
-    return {
-        memory : arr,
-        state: machine.currentState, 
-        next: [],
-        parent: null,
-        accept: false,
-        depth: 0,
-        visited: false
-    }
-}
-
-export function loadSnapshot(machine: Machine, snapshot: SimulationNode){
-  snapshot.memory.forEach((value) => {
-    const memory = machine.memory.get(value.key!)!
-    memory.contents = value.contents
-    memory.head = value.head
-  })
-
-  setCurrentState(machine, snapshot.state)
-}
 
 export default function runMachine(machine : Machine) : SimulationNode{
     let snapshot = createSnapshot(machine)
@@ -158,6 +113,6 @@ export function getShortestDerivation(node: SimulationNode) : SimulationNode {
     for (let i = 1; i < path.length; ++i){
       path[i].parent = path[i - 1]
     }
-    
+
     return path[0]
 }

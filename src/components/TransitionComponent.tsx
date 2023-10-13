@@ -1,6 +1,6 @@
 import State, { IStateDetails } from "~/models/states/state";
 import Coordinate, { add, getDistance, mul, sub } from "../utils/Coordinate";
-import { Machine } from "~/models/machine";
+import { Machine } from "~/models/machine/machine";
 import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import "../styles/state.css"
 import { For } from "solid-js";

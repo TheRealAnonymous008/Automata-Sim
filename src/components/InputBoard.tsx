@@ -1,9 +1,11 @@
-import { Machine } from "~/models/machine"
+import { Machine } from "~/models/machine/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
-import runMachine, { MachineResult, SimulationNode, createSnapshot, evaluateNode, getShortestDerivation, loadSnapshot, resetMachine } from "~/models/simulation"
 import { isAcceptState, isRejectState } from "~/models/states/special"
 import { DELIMITER } from "~/models/memory/memory"
+import { MachineResult, getShortestDerivation } from "~/models/machine/derivation"
+import runMachine, { resetMachine } from "~/models/machine/simulation"
+import { SimulationNode, loadSnapshot } from "~/models/machine/snapshot"
 
 export default function InputBoard(props: {machine : Machine | undefined, machineObserver: (machine : Machine) => void}){
   const [inputString, setInputString] = createSignal("")
@@ -53,7 +55,7 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
       } else {
         candidate = simCurrent()
       }
-      
+
       setSimCurrent(candidate)
       loadSnapshot(machine()!, simCurrent()!)
       

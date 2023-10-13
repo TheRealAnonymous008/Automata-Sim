@@ -1,5 +1,5 @@
-import Memory, {Symbol} from "./memory/memory"
-import State, { Transition } from "./states/state";
+import Memory, {Symbol} from "../memory/memory"
+import State, { Transition } from "../states/state";
 
 export interface Machine {
     memory : MemoryList,

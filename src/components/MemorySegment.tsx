@@ -1,5 +1,5 @@
 import { For, createEffect } from "solid-js"
-import { Machine, MemoryList } from "~/models/machine"
+import { Machine, MemoryList } from "~/models/machine/machine"
 import Memory, { IMemoryDetais } from "~/models/memory/memory"
 import { getValuesInMap } from "~/utils/dictToList"
 import MemoryComponent from "./MemoryComponent"

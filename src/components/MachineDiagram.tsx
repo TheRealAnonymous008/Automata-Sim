@@ -1,5 +1,5 @@
 import { Show, Switch, createEffect, createSignal } from "solid-js"
-import { Machine } from "~/models/machine"
+import { Machine } from "~/models/machine/machine"
 import getMachine from "~/utils/getMachine"
 import MemorySegment from "./MemorySegment"
 import StateDiagram from "./StateDiagram"

@@ -1,4 +1,4 @@
-import { Machine } from "~/models/machine";
+import { Machine } from "~/models/machine/machine";
 import StateComponent from "./StateComponent";
 import State, { IStateDetails } from "~/models/states/state";
 import { For, createEffect, createSignal } from "solid-js";
