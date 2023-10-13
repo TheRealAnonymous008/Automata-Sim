@@ -30,4 +30,9 @@ export default class Stack implements Memory{
         this.contents.push(a)
         this.head ++
     }
+
+    unwrite = () : void => {
+        this.contents.pop()
+        this.head--
+    }
 }

@@ -29,4 +29,8 @@ export default class Queue implements Memory{
     write = (a: Symbol) : void => {
         this.contents.unshift(a)
     }
+    
+    unwrite = () : void => {
+        this.contents.shift()
+    }
 }

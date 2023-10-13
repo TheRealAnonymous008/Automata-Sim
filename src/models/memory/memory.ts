@@ -40,15 +40,15 @@ export function getDetails(memory : Memory) : IMemoryDetais{
 
 export function loadToMachine(machine: Machine, payload: IMemoryDetais) {
     const memory = machine.memory.get(payload.key!)
-
-    if (memory){
-        memory.contents = [...payload.contents] as Symbol[] | Symbol[][]
-        memory.head = payload.head
-    }
+    loadToMemory(memory, payload)
 }
 
-export function loadToMemory(memory : Memory, payload: IMemoryDetais) {
+export function loadToMemory(memory : Memory|undefined, payload: IMemoryDetais) {
     if (memory){
+        const contents : any[] = []
+        payload.contents.forEach((v) => {
+            contents.push(v)
+        })
         memory.contents = payload.contents
         memory.head = payload.head
     }
