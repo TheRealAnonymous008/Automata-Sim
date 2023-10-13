@@ -3,6 +3,7 @@ import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
 import runMachine, { MachineResult, SimulationNode, createSnapshot, evaluateNode, evaluateTree, loadSnapshot, resetMachine } from "~/models/simulation"
 import { isAcceptState, isRejectState } from "~/models/states/special"
+import { DELIMITER } from "~/models/memory/memory"
 
 export default function InputBoard(props: {machine : Machine | undefined, machineObserver: (machine : Machine) => void}){
   const [inputString, setInputString] = createSignal("")
@@ -19,7 +20,7 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
 
   const handleSubmit = () => {
     machine()?.input.flush()
-    let symbols = inputString().split('')
+    let symbols = (DELIMITER +  inputString() + DELIMITER).split('')
     symbols.forEach((val : string) => {
       console.log(val)
       machine()?.input.write(val)
