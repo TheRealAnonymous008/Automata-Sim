@@ -27,20 +27,23 @@ export default function MemoryComponent(props : IMemoryDetais) {
 
   return (
       <div class="memory">
-        <svg width={getMaxLength(arr()) * MEMORY_CELLWIDTH} height= {arr().length * MEMORY_CELLHEIGHT}>
+        <svg width={screen.width} height= {arr().length * MEMORY_CELLHEIGHT}>
           {arr().map((row, rowIndex) =>
-            row.map((symbol, colIndex) => (
+            row.map((symbol, colIndex) =>  {
+              const col = colIndex - head().x + (screen.availWidth / MEMORY_CELLWIDTH * 0.25)
+              const row = rowIndex - head().y
+              return (
               <>
                 <rect
-                  x={colIndex * MEMORY_CELLWIDTH}
-                  y={rowIndex * MEMORY_CELLHEIGHT}
+                  x={col * MEMORY_CELLWIDTH}
+                  y={row * MEMORY_CELLHEIGHT}
                   width={MEMORY_CELLWIDTH}
                   height={MEMORY_CELLHEIGHT}
                   class={isEqual(head(), {x: colIndex ,y: rowIndex})? "memory-cell-current" : "memory-cell"}
                 />
                 <text
-                  x={colIndex * MEMORY_CELLWIDTH + MEMORY_CELLWIDTH / 2}
-                  y={rowIndex * MEMORY_CELLHEIGHT + MEMORY_CELLHEIGHT / 2 + 2}
+                  x={col * MEMORY_CELLWIDTH + MEMORY_CELLWIDTH / 2}
+                  y={row * MEMORY_CELLHEIGHT + MEMORY_CELLHEIGHT / 2 + 2}
                   text-anchor="middle" 
                   dominant-baseline="middle"
                   class="symbol"
@@ -48,7 +51,7 @@ export default function MemoryComponent(props : IMemoryDetais) {
                   {symbol}
                 </text>
               </>
-            ))
+            )})
           )}
         </svg>
       </div>

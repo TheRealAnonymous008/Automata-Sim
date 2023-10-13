@@ -56,7 +56,6 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
           candidate = simCurrent()!.next[0]
         else {
           loadSnapshot(machine()!, simCurrent()!)
-          machine()!.currentState.run()
           candidate = createSnapshot(machine()!)
         }
       }

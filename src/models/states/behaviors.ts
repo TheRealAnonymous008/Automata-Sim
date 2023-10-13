@@ -28,8 +28,6 @@ export function acceptState(input: Tape | Tape2D) : State{
     state.mem = input 
 
     state.run = () => {
-        input.right()
-        input.read()
         return []
     }
     return state
@@ -40,8 +38,6 @@ export function rejectState(input: Tape | Tape2D) : State{
     state.mem = input 
 
     state.run = () => {
-        input.right()
-        input.read()
         return []
     }
 

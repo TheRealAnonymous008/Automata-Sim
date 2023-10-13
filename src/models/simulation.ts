@@ -14,7 +14,6 @@ export interface SimulationNode {
 export function resetMachine(machine : Machine) {
   // Set all states as not current
   machine.states.forEach((val) => {val.isActive = false})
-  machine.currentState = machine.initial
   setCurrentState(machine, machine.initial)
   machine.input.resetHead!()
 
@@ -63,6 +62,8 @@ export default function runMachine(machine : Machine) : SimulationNode{
       snapshot.next.push(child)
       loadSnapshot(machine, snapshot)
     })
+
+ 
 
     return snapshot
 }
