@@ -17,7 +17,7 @@ export default function getMachine(code : string) : Machine | null{
     var sections = tokenize(code)
 
     var memory = parseDataSection(sections.data)
-    var logic = parseLogicSection(sections.logic, memory.memory, memory.input)
+    var logic = parseLogicSection(sections.logic, memory.memory, memory.memory.get(INPUT_TAPE_NAME) as Tape | Tape2D)
 
     return {
         memory : memory.memory,
@@ -25,7 +25,6 @@ export default function getMachine(code : string) : Machine | null{
         input : memory.input,
         initial : logic.initial,
         currentState : logic.initial,
-        currentSymbol: null,
     }
 }
 
@@ -123,7 +122,7 @@ function parseDataSection(lines : string[]) : {
     }
 }
 
-function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Memory) : {
+function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tape | Tape2D) : {
     states: StateList,
     alphabet : Symbol[],
     initial: State
@@ -135,8 +134,8 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
     var transitions : {start : string, symbol : Symbol, end : string}[] = []
 
     // Add special accept and reject state
-    states.set(ACCEPT_STATE_NAME, acceptState())
-    states.set(REJECT_STATE_NAME, rejectState())
+    states.set(ACCEPT_STATE_NAME, acceptState(inputTape))
+    states.set(REJECT_STATE_NAME, rejectState(inputTape))
 
     // Identify all the states in the logic segment and set up transition parsing.
     for (let index = 0; index < lines.length; index++) {
@@ -150,9 +149,9 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Mem
         // TODO: Initialize state here using a switch statement. For now we use a temporary scan state.
         let state : State = defaultState("")
         if (command == "SCAN"){
-            state = scanState(name, memory.get(INPUT_TAPE_NAME) as Tape | Tape2D)
+            state = scanState(name, inputTape)
         } else if (command == "PRINT") {
-            state = scanState(name, memory.get(OUTPUT_TAPE_NAME) as Tape)
+            state = scanState(name, inputTape)
         }
 
         states.set(name, state)

@@ -21,15 +21,28 @@ export function defaultState(name: string, command : string = "") : State{
     }
 }
 
-export function acceptState() : State{
+export function acceptState(input: Tape | Tape2D) : State{
     const state = defaultState("", ACCEPT_STATE_NAME)
     state.accept = true
+    state.mem = input 
 
+    state.run = () => {
+        input.right()
+        input.read()
+        return []
+    }
     return state
 }
 
-export function rejectState() : State{
+export function rejectState(input: Tape | Tape2D) : State{
     const state = defaultState("", REJECT_STATE_NAME)
+    state.mem = input 
+
+    state.run = () => {
+        input.right()
+        input.read()
+        return []
+    }
 
     return state
 }
@@ -46,10 +59,6 @@ export function scanState(name : string, mem : Tape | Tape2D) : State {
     state.run = () => {
         mem.right()
         const s = mem.read()
-        // If the end of the string was reached go one step left
-        if (s == DELIMITER){
-            mem.left()
-        }
 
         const t = state.transitions.get(s)
 

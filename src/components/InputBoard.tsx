@@ -1,12 +1,14 @@
 import { Machine } from "~/models/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
-import runMachine, { MachineResult, evaluateTree, resetMachine } from "~/models/simulation"
+import runMachine, { MachineResult, SimulationNode, evaluateNode, evaluateTree, loadSnapshot, resetMachine } from "~/models/simulation"
 
 export default function InputBoard(props: {machine : Machine | undefined, machineObserver: (machine : Machine) => void}){
   const [inputString, setInputString] = createSignal("")
   const [machine, setMachine] = createSignal<Machine>()
   const [verdict, setVerdict] = createSignal<MachineResult>(MachineResult.CONTINUE)
+  const [simTree, setSimTree] = createSignal<SimulationNode>()
+  const [simCurrent, setSimCurrent] = createSignal<SimulationNode>()
 
   createEffect(() => {
     if (props.machine) {
@@ -23,6 +25,11 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
 
     props.machineObserver(machine()!)
     reset()
+
+    setSimTree(runMachine(machine()!))
+    setSimCurrent(simTree())
+    setVerdict(evaluateTree(simTree()!))
+    props.machineObserver(machine()!)
   }
 
   const reset = () => {
@@ -32,10 +39,24 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     }
   }
   const runStep = () => {
-    if (machine()) {
-      const simTree =  runMachine(machine()!)
-      setVerdict(evaluateTree(simTree))
-      props.machineObserver(machine()!)
+    if (simTree()) {
+      var candidate = null
+      for(let n of simCurrent()!.next){
+        if (n.path == true) {
+          candidate = n
+          break
+        }
+      }
+
+      if (candidate == null && simCurrent()!.next.length != 0) {
+        candidate = simCurrent()!.next[0]
+      }
+
+      if (candidate !== null){
+        setSimCurrent(candidate)
+        loadSnapshot(machine()!, simCurrent()!)
+        props.machineObserver(machine()!)
+      }
     }
   }
 

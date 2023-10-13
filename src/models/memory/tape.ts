@@ -18,9 +18,15 @@ export default class Tape implements Memory{
     }
 
     read = () : Symbol => {
-        if (this.head < 0 || this.head >= this.contents.length){
+        if (this.head < 0){
+            this.right()
             return DELIMITER
         }
+        if (this.head >= this.contents.length){
+            this.left()
+            return DELIMITER
+        }
+        
         return this.contents[this.head]
     }
 

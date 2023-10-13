@@ -6,7 +6,8 @@ import { getValuesInMap } from "~/utils/dictToList";
 export interface SimulationNode {
     state : State,
     memory : IMemoryDetais[]
-    next: SimulationNode[]
+    next: SimulationNode[],
+    path?: boolean
 }
 
 export function resetMachine(machine : Machine) {
@@ -33,7 +34,8 @@ export function createSnapshot(machine : Machine) : SimulationNode{
     return {
         memory : arr,
         state: machine.currentState, 
-        next: []
+        next: [],
+        path: false
     }
 }
 
@@ -48,15 +50,13 @@ export function loadSnapshot(machine: Machine, snapshot: SimulationNode){
 }
 
 export default function runMachine(machine : Machine) : SimulationNode{
-    // Start at the initial state. Make sure input tape is properly set
-
-    const next = machine.currentState.run()
     let snapshot = createSnapshot(machine)
+    const next = machine.currentState.run()
     next.forEach((val) => {
       setCurrentState(machine, val)
       let child = runMachine(machine)
-      loadSnapshot(machine, snapshot)
       snapshot.next.push(child)
+      loadSnapshot(machine, snapshot)
     })
 
     return snapshot
@@ -86,12 +86,16 @@ export function evaluateTree(node: SimulationNode) : MachineResult {
     const res = evaluateNode(node)
 
     switch(res){
-      case MachineResult.ACCEPT: return MachineResult.ACCEPT
+      case MachineResult.ACCEPT: {
+        node.path = true
+        return MachineResult.ACCEPT
+      }
       case MachineResult.REJECT: return MachineResult.REJECT
       default: {
         for(let x of node.next){
           const childResult = evaluateTree(x)
           if (childResult === MachineResult.ACCEPT){
+            node.path = true
             return MachineResult.ACCEPT
           }
         }
