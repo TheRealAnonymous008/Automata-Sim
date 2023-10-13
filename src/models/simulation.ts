@@ -1,5 +1,6 @@
 import { Machine, setCurrentState } from "./machine";
 import Memory, { IMemoryDetais } from "./memory/memory";
+import { isAcceptState, isRejectState } from "./states/special";
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "./states/state";
 import { getValuesInMap } from "~/utils/dictToList";
 
@@ -70,10 +71,10 @@ export enum MachineResult  {
 }
 
 export function evaluateNode(node: SimulationNode){
-    if (node.state.accept == true && node.state.command == ACCEPT_STATE_NAME){
+    if (isAcceptState(node.state)){
       return MachineResult.ACCEPT
     }
-    if (node.state.accept == false && node.state.command == REJECT_STATE_NAME){
+    if (isRejectState(node.state)){
       return MachineResult.REJECT
     }
     if (node.state.accept == true) {
