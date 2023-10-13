@@ -1,5 +1,5 @@
-import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "./state";
-import Memory, { DELIMITER, Symbol } from "../memory/memory";
+import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME, StateOutput } from "./state";
+import Memory, { DELIMITER, IMemoryDetais, Symbol, getDetails, loadToMachine, loadToMemory } from "../memory/memory";
 import Tape2D from "../memory/tape2d";
 import Tape from "../memory/tape";
 import { getKeysInMap } from "~/utils/dictToList";
@@ -34,7 +34,7 @@ export function acceptState() : State{
 
 export function rejectState() : State{
     const state = defaultState("", REJECT_STATE_NAME)
-    
+
     state.run = () => {
         return []
     }
@@ -51,7 +51,7 @@ export function scanState(name : string, mem : Tape | Tape2D) : State {
     const state = defaultState(name, "scan")
 
     state.mem = mem
-    state.run = () => {
+    state.run = () : StateOutput[] => {
         mem.right()
         const s = mem.read()
 
@@ -59,7 +59,17 @@ export function scanState(name : string, mem : Tape | Tape2D) : State {
 
         if (t === undefined)
             return []
-        return t
+
+        const output : StateOutput[] = []
+        
+        t.forEach((val) => {
+            output.push({
+                state: val, 
+                memory: getDetails(mem)
+            })
+        })
+
+        return output
     }
 
     return state
@@ -71,15 +81,26 @@ export function printState(name : string, mem : Tape) : State {
     const state = defaultState(name, "print")
 
     state.mem = mem
-    state.run = () => {
-        const s = getKeysInMap(state.transitions)[0]
-        mem.write(s)
+    state.run = () : StateOutput[] => {
+        const output : StateOutput[] = []
+        const memImage : IMemoryDetais = getDetails(state.mem!)
 
-        const t = state.transitions.get(s)
+        state.transitions.forEach((t, s) => {
+            loadToMemory(state.mem!, memImage)
+            state.mem!.write(s)
 
-        if (t === undefined)
-            return []
-        return t
+            if (t === undefined)
+                return    
+            
+            t.forEach((val) => {
+                output.push({
+                    state: val, 
+                    memory: getDetails(mem)
+                })
+            })
+        })
+
+        return output
     }
     
     return state

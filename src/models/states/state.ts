@@ -1,5 +1,5 @@
 import Coordinate from "~/utils/Coordinate";
-import Memory, { Symbol } from "../memory/memory";
+import Memory, { IMemoryDetais, Symbol } from "../memory/memory";
 
 export interface IStateDetails {
     name : string,
@@ -17,7 +17,7 @@ export default interface State {
     command : string,
     accept : boolean,
     initial : boolean,
-    run: () => State[]
+    run: () => StateOutput[]
     isActive : boolean
 }
 
@@ -25,6 +25,11 @@ export interface Transition {
     start : State,
     symbol : Symbol,
     dest : State
+}
+
+export interface StateOutput {
+    state: State
+    memory: IMemoryDetais
 }
 
 export const ACCEPT_STATE_NAME = "accept"

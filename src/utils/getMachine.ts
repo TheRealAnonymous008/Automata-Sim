@@ -109,12 +109,12 @@ function parseDataSection(lines : string[]) : {
 
     // Assert input is not null. If it is, simply add a tape.
     if (input == null){
-        input = new Tape("Input Tape")
+        input = new Tape("Input Tape", INPUT_TAPE_NAME)
         memory.set(INPUT_TAPE_NAME, input)
     }
 
     // We insert a special tape called the output tape. 
-    memory.set(OUTPUT_TAPE_NAME, new Tape("Output Tape"))
+    memory.set(OUTPUT_TAPE_NAME, new Tape("Output Tape", OUTPUT_TAPE_NAME))
 
     return {
         memory : memory,

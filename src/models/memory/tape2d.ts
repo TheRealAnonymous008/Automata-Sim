@@ -7,10 +7,12 @@ export const OUTPUT_TAPE_NAME = ""
 export default class Tape2D implements Memory{
     readonly name : string
     head: Coordinate = {x: 0, y: 0}
+    key: string = ""
     contents = [['A', 'B', 'C', 'D', 'E', 'F'], ['G', 'H', 'I', 'A', 'A', 'A', 'A']]
 
-    constructor(name : string){
+    constructor(name : string, key: string = name){
         this.name = name
+        this.key = key
     }
 
     flush = () => {

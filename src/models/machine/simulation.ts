@@ -2,6 +2,7 @@ import { Machine, setCurrentState } from "./machine";
 import { isAcceptState, isRejectState } from "../states/special";
 import { SimulationNode, createSnapshot, loadSnapshot } from "./snapshot";
 import { evaluateNode, MachineResult } from "./derivation";
+import { loadToMachine } from "../memory/memory";
 
 export function resetMachine(machine : Machine) {
   // Set all states as not current
@@ -20,7 +21,9 @@ export default function runMachine(machine : Machine) : SimulationNode{
     const next = machine.currentState.run()
 
     next.forEach((val) => {
-      setCurrentState(machine, val)
+      setCurrentState(machine, val.state)
+      loadToMachine(machine, val.memory)
+      
       let child = runMachine(machine)
       child.parent = snapshot
       child.depth = child.parent.depth + 1

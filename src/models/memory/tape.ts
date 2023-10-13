@@ -7,8 +7,10 @@ export default class Tape implements Memory{
     readonly name : string
     contents : Symbol[] = []
     head: number = 0
+    key: string = ""
 
-    constructor(name : string){
+    constructor(name : string, key: string = name){
+        this.key = key
         this.name = name
     }
 
