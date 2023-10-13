@@ -1,4 +1,4 @@
-import Memory, { DELIMITER, EMPTY_STRING, Symbol } from "./memory"
+import Memory, { EMPTY_STRING, Symbol } from "./memory"
 
 export default class Stack implements Memory{
     readonly name : string

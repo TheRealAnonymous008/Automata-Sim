@@ -1,4 +1,3 @@
-import Coordinate from "~/utils/Coordinate"
 import Memory, { EMPTY_STRING, Symbol } from "./memory"
 
 export default class Queue implements Memory{

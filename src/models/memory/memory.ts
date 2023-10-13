@@ -9,9 +9,11 @@ export const EMPTY_STRING = ""
 export interface IMemoryDetais { 
     key?: string,
     name: string, 
-    contents : Symbol[] | Symbol[][], 
+    contents : MemoryContentsType, 
     head: number | Coordinate 
 }
+
+export type MemoryContentsType = Symbol[] | Map<number, Map< number, Symbol>> 
 
 export default interface Memory {
     key: string
@@ -20,7 +22,7 @@ export default interface Memory {
     read: () => Symbol,
     write: (a : Symbol) => void,
     flush: () => void
-    contents : Symbol[] | Symbol[][],
+    contents : MemoryContentsType,
     resetHead?: () => void 
 }
 

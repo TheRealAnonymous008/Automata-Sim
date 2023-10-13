@@ -1,9 +1,9 @@
-import State from "./state"
+import State, { TransitionSymbol } from "./state"
 import { Symbol } from "../memory/memory"
 
-export function getAllSymbols(src: State, dest: State) : {forward : Symbol[], backward: Symbol[]}{
-    const forward : Symbol[] = []
-    const backward : Symbol[] = []
+export function getAllSymbols(src: State, dest: State) : {forward : TransitionSymbol[], backward: TransitionSymbol[]}{
+    const forward : TransitionSymbol[] = []
+    const backward : TransitionSymbol[] = []
 
     for(let _sym of src.transitions.keys()){
         let T = src.transitions.get(_sym)!

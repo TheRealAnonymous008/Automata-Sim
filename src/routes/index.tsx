@@ -1,5 +1,4 @@
-import { createEffect, createSignal, useContext } from "solid-js";
-import { createStore } from "solid-js/store";
+import { createEffect, createSignal } from "solid-js";
 import { Title } from "solid-start";
 import InputBoard from "~/components/InputBoard";
 import MachineDiagram from "~/components/MachineDiagram";

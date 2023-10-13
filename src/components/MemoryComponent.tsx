@@ -1,7 +1,7 @@
 import { IMemoryDetais, Symbol } from "~/models/memory/memory";
 import "../styles/memory.css"
-import { getMaxLength, isOneDimensional } from "~/utils/arrayHelper";
-import { For, createEffect, createSignal } from "solid-js";
+import { flattenGridMap } from "~/utils/arrayHelper";
+import { createEffect, createSignal } from "solid-js";
 import { MEMORY_CELLWIDTH, MEMORY_CELLHEIGHT } from "~/styles/constants";
 import Coordinate, { isEqual } from "../utils/Coordinate";
 
@@ -11,16 +11,13 @@ export default function MemoryComponent(props : IMemoryDetais) {
   const [head, setHead] = createSignal<Coordinate>({x : 0, y : 0})
 
   createEffect(() => {
-    if (isOneDimensional(props.contents)){
+    if (typeof(props.head) == "number"){
+      // We're guaranteed this is 1D
+      setHead({x : props.head, y : 0})
       setArr([props.contents as Symbol[]])
     } else {
-      setArr(props.contents as Symbol[][])
-    }
-  
-    if (typeof(props.head) == "number"){
-      setHead({x : props.head, y : 0})
-    } else {
       setHead(props.head)
+      setArr(flattenGridMap(props.contents as Map<number, Map<number, Symbol>>))
     }  
   }, [props.contents])
 

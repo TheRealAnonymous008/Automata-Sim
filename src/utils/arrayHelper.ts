@@ -10,3 +10,7 @@ export function getMaxLength(arr: any[][]){
 
     return m
 }
+
+export function flattenGridMap<T>(grid : Map<number, Map<number, T>>) : T[][]{
+    return []
+}

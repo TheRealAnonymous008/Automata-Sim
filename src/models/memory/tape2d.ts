@@ -8,7 +8,7 @@ export default class Tape2D implements Memory{
     readonly name : string
     head: Coordinate = {x: 0, y: 0}
     key: string = ""
-    contents = [['A', 'B', 'C', 'D', 'E', 'F'], ['G', 'H', 'I', 'A', 'A', 'A', 'A']]
+    contents = new  Map<number, Map<number, Symbol>>()
 
     constructor(name : string, key: string = name){
         this.name = name
@@ -16,12 +16,12 @@ export default class Tape2D implements Memory{
     }
 
     flush = () => {
-        this.contents = [['A', 'B', 'C', 'D', 'E', 'F'], ['G', 'H', 'I', 'A', 'A', 'A', 'A']]
+        this.contents.clear()
     }
 
 
     read  = () => {
-        return "X"
+        return ""
     }
 
     write = (a: Symbol) => {
@@ -34,6 +34,14 @@ export default class Tape2D implements Memory{
 
     right = () => {
         this.head.x++
+    }
+
+    up = () => {
+        this.head.y--
+    }
+
+    down = () => {
+        this.head.y ++ 
     }
 
     getHead = () => {
