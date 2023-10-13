@@ -61,7 +61,6 @@ export default function Home() {
       }
 
       
-    console.log(machine())
   }, [machineSpec()])
 
   const machineObserver = (m : Machine) => {

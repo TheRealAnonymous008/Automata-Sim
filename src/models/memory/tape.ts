@@ -30,8 +30,10 @@ export default class Tape implements Memory{
         return this.contents[this.head]
     }
 
+    // Use Write explicitly for writing with padding
     write = (a: Symbol) => {
         let i = this.head 
+        
         if (i < 0) {
             while(i < 0){
                 this.contents.unshift(DELIMITER)
@@ -49,6 +51,7 @@ export default class Tape implements Memory{
         this.right()
     }
 
+    // Use replace for replacing without moving
     replace = (a: Symbol) : Symbol => {
         if (this.head < 0 || this.head >= this.contents.length)
             return EMPTY_STRING

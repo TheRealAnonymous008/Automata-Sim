@@ -12,6 +12,7 @@ q0] SCAN (0,q1), (1,q2),
 q1] SCAN (0,q0), (1,q2)
 q2] SCAN (0,q0), (1,q1), (#,accept)
 =================================
+
 PRINTER: 
 
 .LOGIC 
@@ -19,6 +20,14 @@ q3] PRINT (s,q4)
 q4] PRINT (t,q5)
 q5] SCAN (0,accept)
 
+====
+
+NONDETERMINISTIC PRINTER
+
+.LOGIC 
+q3] PRINT (s,q4) (x,accept)
+q4] PRINT (t,q5)
+q5] SCAN (0,accept)
 
 ==== 
 QUEUE:

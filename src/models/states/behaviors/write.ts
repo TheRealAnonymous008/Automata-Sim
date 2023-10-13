@@ -11,8 +11,9 @@ export function printState(name : string, mem : Tape) : State {
         const output : StateOutput[] = []
         const memImage : IMemoryDetais = getDetails(mem)
 
+        const contents = mem.contents
+        const head = mem.head
         state.transitions.forEach((t, s) => {
-            loadToMemory(mem, memImage)
             mem.write(s as Symbol)
 
             t.forEach((val) => {
@@ -21,9 +22,11 @@ export function printState(name : string, mem : Tape) : State {
                     memory: getDetails(mem)
                 })
             })
+            
+            mem.contents = contents
+            mem.head = head
         })
         
-        loadToMemory(mem, memImage)
         return output
     }
     
