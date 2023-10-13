@@ -8,8 +8,10 @@ export interface SimulationNode {
     state : State,
     memory : IMemoryDetais[]
     next: SimulationNode[],
-    parent: SimulationNode | null
-    path: boolean
+    parent: SimulationNode | null,
+    accept: boolean,
+    depth: number,
+    visited : boolean
 }
 
 export function resetMachine(machine : Machine) {
@@ -40,8 +42,10 @@ export function createSnapshot(machine : Machine) : SimulationNode{
         memory : arr,
         state: machine.currentState, 
         next: [],
-        path: false,
-        parent: null
+        parent: null,
+        accept: false,
+        depth: 0,
+        visited: false
     }
 }
 
@@ -63,11 +67,18 @@ export default function runMachine(machine : Machine) : SimulationNode{
       setCurrentState(machine, val)
       let child = runMachine(machine)
       child.parent = snapshot
+      child.depth = child.parent.depth + 1
       snapshot.next.push(child)
+
+      snapshot.accept = snapshot.accept || child.accept
       loadSnapshot(machine, snapshot)
     })
 
-    
+    var evaluation = evaluateNode(snapshot)
+    if (next.length === 0 && evaluation == MachineResult.ACCEPT){
+      snapshot.accept = true
+    }
+
     return snapshot
 }
 
@@ -75,7 +86,6 @@ export enum MachineResult  {
   ACCEPT = 0,
   REJECT = 1,
   CONTINUE = 2,
-  SOFT_ACCEPT = 3
 }
 
 export function evaluateNode(node: SimulationNode){
@@ -85,30 +95,69 @@ export function evaluateNode(node: SimulationNode){
     if (isRejectState(node.state)){
       return MachineResult.REJECT
     }
-    if (node.state.accept == true) {
-      return MachineResult.SOFT_ACCEPT
-    }
     return MachineResult.CONTINUE
 } 
 
-export function evaluateTree(node: SimulationNode) : MachineResult {
-    const res = evaluateNode(node)
+export function getShortestDerivation(node: SimulationNode) : SimulationNode {
+    const queue: SimulationNode[] = [node];
+    node.visited = true;
+    let derivation: SimulationNode | null = null
+    let shortestLeaf: SimulationNode | null = null
 
-    switch(res){
-      case MachineResult.ACCEPT: {
-        node.path = true
-        return MachineResult.ACCEPT
+    while (queue.length > 0) {
+      const currentNode = queue.shift()!;
+      const res = evaluateNode(currentNode)
+
+      if (res == MachineResult.ACCEPT) {
+        derivation = currentNode
+        break
       }
-      case MachineResult.REJECT: return MachineResult.REJECT
-      default: {
-        for(let x of node.next){
-          const childResult = evaluateTree(x)
-          if (childResult === MachineResult.ACCEPT){
-            node.path = true
-            return MachineResult.ACCEPT
-          }
+      
+      if (currentNode.next.length === 0 && shortestLeaf === null){
+        shortestLeaf = currentNode
+      }
+
+      for (const nextNode of currentNode.next) {
+        if (!nextNode.visited) {
+          queue.push(nextNode);
+          nextNode.visited = true;
         }
-        return MachineResult.REJECT
       }
     }
+
+    let target = null 
+
+    // If a derivation exists, use that instead
+    if (derivation !== null) {
+      target = derivation
+    }
+
+    // Perform a traversal to the shortest leaf instead
+    else {
+      target = shortestLeaf
+    } 
+
+    // Now get a path starting from the node down to the target.
+    const path: SimulationNode[] = [];
+    let currentNode: SimulationNode | null = target;
+
+    while (currentNode) {
+      const copy = {...currentNode}
+      copy.next = []
+      copy.parent = null
+
+      path.unshift(copy);
+      currentNode = currentNode.parent;
+    }
+
+    // Finally, connect the nodes and output a copy of the path. 
+    for (let i = 0; i < path.length - 1; ++i){
+      path[i].next = [path[i + 1]]
+    }
+
+    for (let i = 1; i < path.length; ++i){
+      path[i].parent = path[i - 1]
+    }
+    
+    return path[0]
 }

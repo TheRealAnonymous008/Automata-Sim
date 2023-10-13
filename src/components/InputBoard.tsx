@@ -1,7 +1,7 @@
 import { Machine } from "~/models/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
-import runMachine, { MachineResult, SimulationNode, createSnapshot, evaluateNode, evaluateTree, loadSnapshot, resetMachine } from "~/models/simulation"
+import runMachine, { MachineResult, SimulationNode, createSnapshot, evaluateNode, getShortestDerivation, loadSnapshot, resetMachine } from "~/models/simulation"
 import { isAcceptState, isRejectState } from "~/models/states/special"
 import { DELIMITER } from "~/models/memory/memory"
 
@@ -28,9 +28,13 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     props.machineObserver(machine()!)
     reset()
 
-    setSimTree(runMachine(machine()!))
+    // Run the sim tree
+    const completeSimTree = runMachine(machine()!)
+    setSimTree(getShortestDerivation(completeSimTree))
     setSimCurrent(simTree())
-    setVerdict(evaluateTree(simTree()!))
+
+    const verdict = simTree()?.accept
+    setVerdict(verdict ? MachineResult.ACCEPT : MachineResult.REJECT)
     props.machineObserver(machine()!)
   }
 
@@ -43,23 +47,13 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
   }
   const runStep = () => {
     if (simTree()) {
-      var candidate = null
-      for(let n of simCurrent()!.next){
-        if (n.path == true) {
-          candidate = n
-          break
-        }
+      var candidate = null 
+      if (simCurrent()!.next.length != 0){
+        candidate = simCurrent()!.next[0]
+      } else {
+        candidate = simCurrent()
       }
       
-      if (candidate == null ) {
-        if (simCurrent()!.next.length != 0)
-          candidate = simCurrent()!.next[0]
-        else {
-          loadSnapshot(machine()!, simCurrent()!)
-          candidate = createSnapshot(machine()!)
-        }
-      }
-
       setSimCurrent(candidate)
       loadSnapshot(machine()!, simCurrent()!)
       
@@ -72,7 +66,6 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
       case MachineResult.ACCEPT: return "accept"
       case MachineResult.REJECT: return "reject"
       case MachineResult.CONTINUE: return ""
-      case MachineResult.SOFT_ACCEPT: return "soft-accept"
     }
   }
 
