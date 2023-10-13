@@ -4,13 +4,15 @@ import Memory, { Symbol } from "~/models/memory/memory"
 import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
 import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
-import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
+import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME, TransitionSymbol } from "~/models/states/state"
 import { getKeysInMap } from "./dictToList"
 import Tape2D from "~/models/memory/tape2d"
 import { scanLeftState, scanRightState, scanState } from "~/models/states/behaviors/scan"
 import { acceptState, rejectState, defaultState, makeStateInitial } from "~/models/states/behaviors/special"
 import { printState } from "~/models/states/behaviors/write"
-import { readState, rightState, writeState } from "~/models/states/behaviors/memrw"
+import { leftState, readState, rightState, writeState } from "~/models/states/behaviors/memrw"
+import { Console } from "console"
+import { machine } from "os"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -133,7 +135,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
     var states : StateList = new Map<string, State>()
     var alphabet : Symbol[] = []
     var initial : State | null = null
-    var transitions : {start : string, symbol : Symbol, end : string}[] = []
+    var transitions : {start : string, symbol : TransitionSymbol, end : string}[] = []
 
     // Add special accept and reject state
     states.set(ACCEPT_STATE_NAME, acceptState())
@@ -199,6 +201,17 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
             } else {
                 throw("Error. Trying to perform RIGHT on a memory object that is not a tape")
             }
+        } else if (command.startsWith("LEFT")){
+            const memname = command.replace("LEFT", "").replace('(', '').replace(')', '')
+            const memoryObject = memory.get(memname)
+
+            if (memoryObject === undefined){
+                throw ("Error. Undefined memory object used")
+            } else if (memoryObject instanceof Tape || memoryObject instanceof Tape2D) {
+                state = leftState(name, memoryObject)
+            } else {
+                throw("Error. Trying to perform LEFT on a memory object that is not a tape")
+            }
         } 
 
         states.set(name, state)
@@ -215,7 +228,13 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
                 continue
             }
             var tp = str.split(',');
-            const sym : Symbol = tp[0] as Symbol
+            let tps = tp[0].split("/")
+            let sym : TransitionSymbol = tp[0]
+
+            if (tps.length === 2){
+                sym = [tps[0], tps[1]]
+            }
+
             let dest = tp[1]
             
             if (dest.toLowerCase() == ACCEPT_STATE_NAME.toLowerCase()){
@@ -250,9 +269,9 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
             trans.set(_sym, [dest])
         }
 
-        if(!(_sym! in alphabet)){
-            alphabet.push(_sym)
-        }
+        // if(!(_sym! in alphabet)){
+        //     alphabet.push(_sym)
+        // }
     });
 
     return {

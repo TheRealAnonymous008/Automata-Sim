@@ -1,4 +1,4 @@
-import Memory, { Symbol, DELIMITER } from "./memory"
+import Memory, { Symbol, DELIMITER, EMPTY_STRING } from "./memory"
 
 export const INPUT_TAPE_NAME = "$"
 export const OUTPUT_TAPE_NAME = ""
@@ -47,6 +47,16 @@ export default class Tape implements Memory{
 
         this.contents[this.head] = a
         this.right()
+    }
+
+    replace = (a: Symbol) : Symbol => {
+        if (this.head < 0 || this.head >= this.contents.length)
+            return EMPTY_STRING
+
+        const b = this.contents[this.head]
+        this.contents[this.head] = a
+
+        return b
     }
 
     left = () => {

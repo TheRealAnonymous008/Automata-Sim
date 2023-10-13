@@ -59,6 +59,9 @@ export default function Home() {
 
         updateComponents()
       }
+
+      
+    console.log(machine())
   }, [machineSpec()])
 
   const machineObserver = (m : Machine) => {

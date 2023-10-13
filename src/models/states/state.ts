@@ -41,7 +41,9 @@ export function getTransitionStr(sym : TransitionSymbol) {
     if (sym == null)
         return ""
     if (typeof(sym) == "object"){
-        return sym![0] + "/" + sym![1]
+        if(sym![0] !== sym![1])
+            return sym![0] + "/" + sym![1]
+        return sym[0]
     } 
     return sym
 }

@@ -1,5 +1,5 @@
 import Coordinate from "~/utils/Coordinate"
-import Memory, { Symbol } from "./memory"
+import Memory, { EMPTY_STRING, Symbol } from "./memory"
 
 export const INPUT_TAPE_NAME = "$"
 export const OUTPUT_TAPE_NAME = ""
@@ -50,4 +50,9 @@ export default class Tape2D implements Memory{
             y :0
         }
     }
+
+    replace = (a: Symbol) : Symbol=> {
+        return EMPTY_STRING
+    }
+
 }

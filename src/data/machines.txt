@@ -48,3 +48,12 @@ A] WRITE(S) (X,B) (Y,B)
 B] WRITE(S) (X,C) (Y,C)
 C] READ(S) (Y,D)
 D] READ(S) (X,accept)
+
+===
+BASIC TURING
+
+.DATA
+TAPE T1
+.LOGIC
+A] RIGHT(T1) (0/X,B), (Y/Y,A), (1/1,reject)
+B] RIGHT(T1) (0/0,B), (Y/Y,B), (1/Y,accept)
