@@ -16,14 +16,15 @@ export function resetMachine(machine : Machine) {
 
 
 export default function runMachine(machine : Machine) : SimulationNode{
-  const next = machine.currentState.run()
-  let snapshot = createSnapshot(machine)
+    let snapshot = createSnapshot(machine)
+    const next = machine.currentState.run()
 
     next.forEach((val) => {
       setCurrentState(machine, val)
       let child = runMachine(machine)
       child.parent = snapshot
       child.depth = child.parent.depth + 1
+
       snapshot.next.push(child)
 
       snapshot.accept = snapshot.accept || child.accept

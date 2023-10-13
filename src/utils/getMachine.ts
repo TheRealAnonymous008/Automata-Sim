@@ -134,8 +134,8 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
     var transitions : {start : string, symbol : Symbol, end : string}[] = []
 
     // Add special accept and reject state
-    states.set(ACCEPT_STATE_NAME, acceptState(inputTape))
-    states.set(REJECT_STATE_NAME, rejectState(inputTape))
+    states.set(ACCEPT_STATE_NAME, acceptState())
+    states.set(REJECT_STATE_NAME, rejectState())
 
     // Identify all the states in the logic segment and set up transition parsing.
     for (let index = 0; index < lines.length; index++) {

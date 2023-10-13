@@ -26,10 +26,8 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     symbols.forEach((val : string) => {
       machine()?.input.write(val)
     })
-
-    props.machineObserver(machine()!)
+    
     reset()
-
     // Run the sim tree
     const completeSimTree = runMachine(machine()!)
     setSimTree(getShortestDerivation(completeSimTree))
@@ -37,7 +35,10 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
 
     const verdict = simTree()?.accept
     setVerdict(verdict ? MachineResult.ACCEPT : MachineResult.REJECT)
-    props.machineObserver(machine()!)
+
+    reset()
+
+    console.log(completeSimTree)
   }
 
   const reset = () => {

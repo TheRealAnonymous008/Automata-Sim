@@ -22,10 +22,9 @@ export function defaultState(name: string, command : string = "") : State{
     }
 }
 
-export function acceptState(input: Tape | Tape2D) : State{
+export function acceptState() : State{
     const state = defaultState("", ACCEPT_STATE_NAME)
     state.accept = true
-    state.mem = input 
 
     state.run = () => {
         return []
@@ -33,10 +32,9 @@ export function acceptState(input: Tape | Tape2D) : State{
     return state
 }
 
-export function rejectState(input: Tape | Tape2D) : State{
+export function rejectState() : State{
     const state = defaultState("", REJECT_STATE_NAME)
-    state.mem = input 
-
+    
     state.run = () => {
         return []
     }
