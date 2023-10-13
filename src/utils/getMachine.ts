@@ -10,7 +10,7 @@ import Tape2D from "~/models/memory/tape2d"
 import { scanLeftState, scanRightState, scanState } from "~/models/states/behaviors/scan"
 import { acceptState, rejectState, defaultState, makeStateInitial } from "~/models/states/behaviors/special"
 import { printState } from "~/models/states/behaviors/write"
-import { readState, writeState } from "~/models/states/behaviors/memrw"
+import { readState, rightState, writeState } from "~/models/states/behaviors/memrw"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -188,7 +188,18 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
             } else {
                 throw("Error. Trying to perform WRITE on a memory object that is neither a stack nor a queue")
             }
-        }
+        } else if (command.startsWith("RIGHT")){
+            const memname = command.replace("RIGHT", "").replace('(', '').replace(')', '')
+            const memoryObject = memory.get(memname)
+
+            if (memoryObject === undefined){
+                throw ("Error. Undefined memory object used")
+            } else if (memoryObject instanceof Tape || memoryObject instanceof Tape2D) {
+                state = rightState(name, memoryObject)
+            } else {
+                throw("Error. Trying to perform RIGHT on a memory object that is not a tape")
+            }
+        } 
 
         states.set(name, state)
 

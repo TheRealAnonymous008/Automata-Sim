@@ -12,7 +12,7 @@ export interface IStateDetails {
 
 export default interface State {
     name : string,
-    transitions : Map<Symbol, State[]>,
+    transitions : Map<TransitionSymbol, State[]>,
     mem? : Memory,
     command : string,
     accept : boolean,
@@ -21,9 +21,11 @@ export default interface State {
     isActive : boolean
 }
 
+export type TransitionSymbol = Symbol | [Symbol, Symbol] 
+
 export interface Transition {
     start : State,
-    symbol : Symbol,
+    symbol : TransitionSymbol,
     dest : State
 }
 
@@ -35,3 +37,11 @@ export interface StateOutput {
 export const ACCEPT_STATE_NAME = "accept"
 export const REJECT_STATE_NAME = "reject"
 
+export function getTransitionStr(sym : TransitionSymbol) {
+    if (sym == null)
+        return ""
+    if (typeof(sym) == "object"){
+        return sym![0] + "/" + sym![1]
+    } 
+    return sym
+}

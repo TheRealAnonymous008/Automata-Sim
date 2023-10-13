@@ -1,4 +1,4 @@
-import State, { IStateDetails } from "~/models/states/state";
+import State, { IStateDetails, TransitionSymbol, getTransitionStr } from "~/models/states/state";
 import Coordinate, { add, getDistance, mul, sub } from "../utils/Coordinate";
 import { Machine } from "~/models/machine/machine";
 import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
@@ -10,8 +10,8 @@ import { getAllSymbols } from "~/models/states/stateHelpers";
 export default function TransitionComponent(props: {
     src : Coordinate,
     dest : Coordinate,
-    forward: Symbol[],
-    backward: Symbol[],
+    forward: TransitionSymbol[],
+    backward: TransitionSymbol[],
     idx : number
 }){
     const ctype : CurveType = (props.src === props.dest) ? CurveType.LOOP :
@@ -32,7 +32,7 @@ export default function TransitionComponent(props: {
     )
 }
 
-function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Symbol[], id : string, ctype: CurveType}){
+function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : TransitionSymbol[], id : string, ctype: CurveType}){
     const pathId = `path${props.id}`
     return (
         <>
@@ -50,7 +50,7 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
             </text>
 
             <For each={props.symbols}> 
-                {(item : Symbol, index) => {
+                {(item : TransitionSymbol, index) => {
                     return (
                     <text dy={getTextOffset(props.ctype, index())} class = "transition-text">
                         <textPath 
@@ -60,7 +60,7 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
                             text-anchor="middle" 
                             href={`#${pathId}`} 
                         >
-                            {item.toString()}
+                            {getTransitionStr(item)}
                         </textPath>
                     </text>
                     )
@@ -71,8 +71,8 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
 }
 
 export type TransitionUIHelper = {
-    forward : Symbol[],
-    backward : Symbol[],
+    forward : TransitionSymbol[],
+    backward : TransitionSymbol[],
     sourceloc : Coordinate,
     destloc: Coordinate,
 }
@@ -92,8 +92,8 @@ export function getAllTransitionUIs(coordMap: Map<State, Coordinate>) : Transiti
                     TU.push({
                         sourceloc: coordMap.get(src)!,
                         destloc: coordMap.get(dest)!, 
-                        backward: backward as unknown as Symbol[],
-                        forward: forward as unknown as Symbol[]
+                        backward: backward as unknown as TransitionSymbol[],
+                        forward: forward as unknown as TransitionSymbol[]
                     })
                 }
             }  
