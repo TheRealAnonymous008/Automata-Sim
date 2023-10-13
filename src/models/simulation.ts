@@ -8,7 +8,8 @@ export interface SimulationNode {
     state : State,
     memory : IMemoryDetais[]
     next: SimulationNode[],
-    path?: boolean
+    parent: SimulationNode | null
+    path: boolean
 }
 
 export function resetMachine(machine : Machine) {
@@ -39,7 +40,8 @@ export function createSnapshot(machine : Machine) : SimulationNode{
         memory : arr,
         state: machine.currentState, 
         next: [],
-        path: false
+        path: false,
+        parent: null
     }
 }
 
@@ -56,15 +58,16 @@ export function loadSnapshot(machine: Machine, snapshot: SimulationNode){
 export default function runMachine(machine : Machine) : SimulationNode{
     let snapshot = createSnapshot(machine)
     const next = machine.currentState.run()
+
     next.forEach((val) => {
       setCurrentState(machine, val)
       let child = runMachine(machine)
+      child.parent = snapshot
       snapshot.next.push(child)
       loadSnapshot(machine, snapshot)
     })
 
- 
-
+    
     return snapshot
 }
 
