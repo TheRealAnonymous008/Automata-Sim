@@ -142,6 +142,9 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
         const element = lines[index];
         const toks = element.split(' ')
 
+        // Trim each element
+        toks.forEach((val) => val.trim())
+
         // Perform parsing here using the tokens
         let name = toks[0].slice(0, -1)
         let command = toks[1]
@@ -164,7 +167,11 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
 
         // Each subsequent tok after command is of the form (,)
         for (let j = tidx; j < toks.length; j++) {
-            const tp = toks[j].replace('(', '').replace(')', '').split(',');
+            var str = toks[j].trim().replace('(', '').replace(')', '')
+            if (str.length === 0){
+                continue
+            }
+            var tp = str.split(',');
             const sym : Symbol = tp[0] as Symbol
             let dest = tp[1]
             
