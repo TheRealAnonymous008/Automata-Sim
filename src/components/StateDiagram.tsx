@@ -1,40 +1,29 @@
 import { Machine } from "~/models/machine";
 import StateComponent from "./StateComponent";
-import State from "~/models/states/state";
+import State, { IStateDetails } from "~/models/states/state";
 import { For, createEffect, createSignal } from "solid-js";
 import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
 import Coordinate from "../utils/Coordinate";
 import getStateLayout from "~/utils/stateLayout";
+import { DIAGRAM_HEIGHT, DIAGRAM_WIDTH } from "~/styles/constants";
 
 export default function StateDiagram(props :{
-    machine : Machine
+    machine : Machine,
+    transitions: TransitionUIHelper[]
+    states: IStateDetails[]
 }){
-    let cw = 1000
-    let ch = 1000
-
-    // Layout the states
-    const [stateCoordMap, setStateCoordMap] = createSignal(new Map<State, Coordinate>())
-    const [transitionUIs, setTransitionUIs] = createSignal<TransitionUIHelper[]>([])
-
-    createEffect(() => {
-        const map = getStateLayout(cw, ch, getValuesInMap(props.machine.states))
-        setStateCoordMap(map)
-
-        setTransitionUIs(getAllTransitionUIs(props.machine))
-    }, [props.machine])
-
     return (
         <>
             <h2> State Diagram </h2>
-            <svg width={cw} height={ch}>
+            <svg width={DIAGRAM_WIDTH} height={DIAGRAM_HEIGHT}>
                 {/* Plot transitions. Plot them first so that they are at the bottom */}
-                <For each={transitionUIs()}>
+                <For each={props.transitions}>
                     {
                         (item : TransitionUIHelper, index) => {
                             return <TransitionComponent 
-                                src={stateCoordMap().get(item.source)!}
-                                dest={stateCoordMap().get(item.dest)!}
+                                src={item.sourceloc}
+                                dest={item.destloc}
                                 forward={item.forward}
                                 backward={item.backward}
                                 idx={index()}
@@ -44,12 +33,15 @@ export default function StateDiagram(props :{
                 </For>
 
                 {/* Plot states */}
-                <For each={getKeysInMap(stateCoordMap())}>
-                    {(item : State, index) => 
+                <For each={props.states}>
+                    {(item : IStateDetails, index) => 
                         <StateComponent 
-                            state={item} 
-                            loc = {stateCoordMap().get(item)!}
+                            accept = {item.accept}
+                            command= {item.command}
+                            initial= {item.initial}
                             isActive={item.isActive}
+                            loc={item.loc}
+                            name={item.name}
                         />
                     }
                 </For>  

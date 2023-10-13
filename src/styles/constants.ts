@@ -24,3 +24,6 @@ export const MEMORY_CELLHEIGHT = 50
 export const ATTRACTION_STRENGTH = 0.2
 export const REPULSION_STRENGTH = 1
 export const LAYOUT_ITERATIONS = 10000
+
+export const DIAGRAM_WIDTH = 1000
+export const DIAGRAM_HEIGHT = 1000

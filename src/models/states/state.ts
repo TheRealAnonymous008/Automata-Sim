@@ -1,4 +1,14 @@
+import Coordinate from "~/utils/Coordinate";
 import Memory, { Symbol } from "../memory/memory";
+
+export interface IStateDetails {
+    name : string,
+    accept: boolean,
+    command: string,
+    initial: boolean,
+    isActive: boolean,
+    loc: Coordinate,
+}
 
 export default interface State {
     name : string,

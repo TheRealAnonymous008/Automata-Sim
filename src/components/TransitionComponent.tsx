@@ -1,7 +1,7 @@
-import State from "~/models/states/state";
+import State, { IStateDetails } from "~/models/states/state";
 import Coordinate, { add, getDistance, mul, sub } from "../utils/Coordinate";
 import { Machine } from "~/models/machine";
-import { getValuesInMap } from "~/utils/dictToList";
+import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import "../styles/state.css"
 import { For } from "solid-js";
 import { TRANSITION_ANCHOR_DISTANCE, TRANSITION_LOOP_DISTANCE, TRANSITION_LOOP_OFFSET } from "~/styles/constants";
@@ -73,12 +73,12 @@ function TransitionLine(props : {src: Coordinate, dest: Coordinate, symbols : Sy
 export type TransitionUIHelper = {
     forward : Symbol[],
     backward : Symbol[],
-    source : State,
-    dest: State,
+    sourceloc : Coordinate,
+    destloc: Coordinate,
 }
 
-export function getAllTransitionUIs(machine : Machine) : TransitionUIHelper[]{
-    const S = getValuesInMap(machine.states)
+export function getAllTransitionUIs(coordMap: Map<State, Coordinate>) : TransitionUIHelper[]{
+    const S = getKeysInMap(coordMap)
     const TU : TransitionUIHelper[] = []
 
     S.forEach((src, idx) => {
@@ -90,8 +90,8 @@ export function getAllTransitionUIs(machine : Machine) : TransitionUIHelper[]{
 
                 if (forward.length > 0 || backward.length > 0) {
                     TU.push({
-                        source: src,
-                        dest: dest, 
+                        sourceloc: coordMap.get(src)!,
+                        destloc: coordMap.get(dest)!, 
                         backward: backward as unknown as Symbol[],
                         forward: forward as unknown as Symbol[]
                     })

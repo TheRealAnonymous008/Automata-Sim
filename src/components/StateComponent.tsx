@@ -1,57 +1,54 @@
-import State from "~/models/states/state";
+import State, { IStateDetails } from "~/models/states/state";
 import "../styles/state.css"
 import Coordinate from "../utils/Coordinate";
 import { STATE_CIRCRADIUS, STATE_RECTOFFSET, STATE_RECTWIDTH, STATE_RECTHEIGHT } from "~/styles/constants";
 
-export default function StateComponent(props : {state : State, loc : Coordinate, isActive: boolean}){
-    let state = props.state
-    let loc = props.loc
-
+export default function StateComponent(props :IStateDetails){
     return (
       <>
         {
-          state.initial &&
+          props.initial &&
           <path 
-            d={getTrianglePath(loc)} 
+            d={getTrianglePath(props.loc)} 
             fill="#333" 
           />
         }
 
         <circle 
-          cx={loc.x} 
-          cy={loc.y} 
+          cx={props.loc.x} 
+          cy={props.loc.y} 
           r={STATE_CIRCRADIUS} 
           class={props.isActive ? "state-circle highlighted" : "state-circle"} 
         />
         {
-          state.accept && 
+          props.accept && 
           <circle 
-            cx={loc.x} 
-            cy={loc.y} 
+            cx={props.loc.x} 
+            cy={props.loc.y} 
             r={STATE_CIRCRADIUS * 0.85} 
             class={props.isActive ? "state-circle highlighted" : "state-circle"} 
           />
         }
         
         <text 
-          x={loc.x} 
-          y={loc.y} 
+          x={props.loc.x} 
+          y={props.loc.y} 
           text-anchor="middle" 
           dominant-baseline="middle" 
           class="state-text">
-            {state.command}
+            {props.command}
         </text>
 
         {
-          state.name.length > 0 && 
+          props.name.length > 0 && 
           <>
             <text 
-              x={loc.x + STATE_RECTOFFSET.x + STATE_RECTWIDTH / 2} 
-              y= {loc.y + STATE_RECTOFFSET.y + STATE_RECTHEIGHT / 2} 
+              x={props.loc.x + STATE_RECTOFFSET.x + STATE_RECTWIDTH / 2} 
+              y= {props.loc.y + STATE_RECTOFFSET.y + STATE_RECTHEIGHT / 2} 
               text-anchor="middle" 
               dominant-baseline="middle" 
               class="label-text">
-                {state.name}
+                {props.name}
             </text>
           </>
         }
