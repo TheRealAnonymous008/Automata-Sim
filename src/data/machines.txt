@@ -45,4 +45,6 @@ NONDETERMINISIC WRITE
 STACK S
 .LOGIC
 A] WRITE(S) (X,B) (Y,B)
-B] READ(S) (Y,accept)
+B] WRITE(S) (X,C) (Y,C)
+C] READ(S) (Y,D)
+D] READ(S) (X,accept)

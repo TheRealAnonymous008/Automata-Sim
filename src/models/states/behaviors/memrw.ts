@@ -63,22 +63,33 @@ export function rightState(name : string, mem : Tape | Tape2D) : State {
 
     state.mem = mem
     state.run = () : StateOutput[] => {
-        const s = mem.read()
-
-        const t = state.transitions.get(s)
-
-        if (t === undefined)
-            return []
-
         const output : StateOutput[] = []
+        const memImage : IMemoryDetais = getDetails(mem)
         
-        t.forEach((val) => {
-            output.push({
-                state: val, 
-                memory: getDetails(mem)
-            })
-        })
+        state.transitions.forEach((v, k) => {
+            const [rs, ws] = k as [Symbol, Symbol]
+            
+            // Perform read
+            mem.right()
+            const sym = mem.read()
 
+            if (rs === sym) {
+                // Perofrm write
+                loadToMemory(mem, memImage)
+                mem.write(ws)
+                v.forEach((val) => {
+                    output.push({
+                        state: val, 
+                        memory: getDetails(mem)
+                    })
+                })
+                
+            } else {
+                // Undo read
+                mem.left()
+            }
+
+        })
         return output
     }
 
