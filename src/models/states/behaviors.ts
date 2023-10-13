@@ -2,6 +2,7 @@ import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "./state";
 import Memory, { DELIMITER, Symbol } from "../memory/memory";
 import Tape2D from "../memory/tape2d";
 import Tape from "../memory/tape";
+import { getKeysInMap } from "~/utils/dictToList";
 
 export function defaultState(name: string, command : string = "") : State{
     if (command == ""){
@@ -70,13 +71,21 @@ export function scanState(name : string, mem : Tape | Tape2D) : State {
     return state
 }
 
+// Note: We assume that we print only the first symbol to be passed. 
+// Otherwise we have undefined behavior
 export function printState(name : string, mem : Tape) : State {
     const state = defaultState(name, "print")
 
     state.mem = mem
     state.run = () => {
-        // mem.write(s)
-        return []
+        const s = getKeysInMap(state.transitions)[0]
+        mem.write(s)
+
+        const t = state.transitions.get(s)
+        
+        if (t === undefined)
+            return []
+        return t
     }
     
     return state

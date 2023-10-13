@@ -7,7 +7,7 @@ import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "~/models/states/state"
 import { getKeysInMap } from "./dictToList"
 import Tape2D from "~/models/memory/tape2d"
-import { acceptState, defaultState, makeStateInitial, rejectState, scanState } from "~/models/states/behaviors"
+import { acceptState, defaultState, makeStateInitial, printState, rejectState, scanState } from "~/models/states/behaviors"
 import { log } from "console"
 
 export default function getMachine(code : string) : Machine | null{
@@ -145,13 +145,14 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
         // Perform parsing here using the tokens
         let name = toks[0].slice(0, -1)
         let command = toks[1]
+        let tidx = 2
 
         // TODO: Initialize state here using a switch statement. For now we use a temporary scan state.
         let state : State = defaultState("")
         if (command == "SCAN"){
             state = scanState(name, inputTape)
         } else if (command == "PRINT") {
-            state = scanState(name, inputTape)
+            state = printState(name, memory.get(OUTPUT_TAPE_NAME)! as Tape)
         }
 
         states.set(name, state)
@@ -162,7 +163,7 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
         }
 
         // Each subsequent tok after command is of the form (,)
-        for (let j = 2; j < toks.length; j++) {
+        for (let j = tidx; j < toks.length; j++) {
             const tp = toks[j].replace('(', '').replace(')', '').split(',');
             const sym : Symbol = tp[0] as Symbol
             let dest = tp[1]
