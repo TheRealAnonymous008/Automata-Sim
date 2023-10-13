@@ -1,12 +1,12 @@
 import Coordinate from "~/utils/Coordinate"
-import Memory, { Symbol } from "./memory"
+import Memory, { EMPTY_STRING, Symbol } from "./memory"
 
 export default class Queue implements Memory{
     readonly name : string
     readonly head = 0
     key: string = ""
-    
-    contents = []
+
+    contents : Symbol[] = []
 
     constructor(name : string, key: string = name){
         this.name = name
@@ -18,10 +18,15 @@ export default class Queue implements Memory{
     }
 
     read  = () : Symbol => {
-        return "X"
+        const a = this.contents.shift()
+        if (a == undefined){
+            return EMPTY_STRING
+        }
+
+        return a
     }
 
     write = (a: Symbol) : void => {
-        
+        this.contents.unshift(a)
     }
 }

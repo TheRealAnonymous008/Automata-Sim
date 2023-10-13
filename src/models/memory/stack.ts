@@ -1,4 +1,4 @@
-import Memory, { Symbol } from "./memory"
+import Memory, { DELIMITER, EMPTY_STRING, Symbol } from "./memory"
 
 export default class Stack implements Memory{
     readonly name : string
@@ -16,10 +16,18 @@ export default class Stack implements Memory{
     }
 
     read  = () : Symbol => {
-        return "X"
+        const a = this.contents.pop()
+        if (a === undefined){
+            return EMPTY_STRING
+        }
+        
+        this.head --
+        return a
+
     }
 
     write = (a: Symbol) : void => {
-        
+        this.contents.push(a)
+        this.head ++
     }
 }

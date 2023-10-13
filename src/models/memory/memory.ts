@@ -3,6 +3,7 @@ import { Machine } from "../machine/machine";
 
 export type Symbol = string | null
 export const DELIMITER = "#"
+export const EMPTY_STRING = ""
 
 
 export interface IMemoryDetais { 

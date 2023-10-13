@@ -10,6 +10,7 @@ import Tape2D from "~/models/memory/tape2d"
 import { scanLeftState, scanRightState, scanState } from "~/models/states/behaviors/scan"
 import { acceptState, rejectState, defaultState, makeStateInitial } from "~/models/states/behaviors/special"
 import { printState } from "~/models/states/behaviors/write"
+import { readState, writeState } from "~/models/states/behaviors/memrw"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -166,6 +167,28 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
 
         } else if (command == "PRINT") {
             state = printState(name, memory.get(OUTPUT_TAPE_NAME)! as Tape)
+        } else if (command.startsWith("READ")){
+            const memname = command.replace("READ", "").replace('(', '').replace(')', '')
+            const memoryObject = memory.get(memname)
+
+            if (memoryObject === undefined){
+                throw ("Error. Undefined memory object used")
+            } else if (memoryObject instanceof Stack || memoryObject instanceof Queue) {
+                state = readState(name, memoryObject)
+            } else {
+                throw("Error. Trying to perform READ on a memory object that is neither a stack nor a queue")
+            }
+        } else if (command.startsWith("WRITE")){
+            const memname = command.replace("WRITE", "").replace('(', '').replace(')', '')
+            const memoryObject = memory.get(memname)
+
+            if (memoryObject === undefined){
+                throw ("Error. Undefined memory object used")
+            } else if (memoryObject instanceof Stack || memoryObject instanceof Queue) {
+                state = writeState(name, memoryObject)
+            } else {
+                throw("Error. Trying to perform WRITE on a memory object that is neither a stack nor a queue")
+            }
         }
 
         states.set(name, state)
