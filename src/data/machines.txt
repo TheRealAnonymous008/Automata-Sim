@@ -19,3 +19,15 @@ q3] PRINT (s,q4)
 q4] PRINT (t,q5)
 q5] SCAN (0,accept)
 
+
+==== 
+QUEUE:
+
+.DATA
+QUEUE Q
+.LOGIC
+A] WRITE(Q) (X,B)
+B] WRITE(Q) (Y,C)
+C] WRITE(Q) (Z,D)
+D] READ(Q) (X,E)
+E] WRITE(Q) (A,accept)

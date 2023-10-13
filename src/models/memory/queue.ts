@@ -18,7 +18,7 @@ export default class Queue implements Memory{
     }
 
     read  = () : Symbol => {
-        const a = this.contents.shift()
+        const a = this.contents.pop()
         if (a == undefined){
             return EMPTY_STRING
         }
