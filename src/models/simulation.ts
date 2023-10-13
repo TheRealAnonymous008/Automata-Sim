@@ -17,6 +17,10 @@ export function resetMachine(machine : Machine) {
   machine.currentState = machine.initial
   setCurrentState(machine, machine.initial)
   machine.input.resetHead!()
+
+  const contents = machine.input.contents
+  machine.memory.forEach((mem) => mem.flush())
+  machine.input.contents = contents
 }
 
 export function createSnapshot(machine : Machine) : SimulationNode{

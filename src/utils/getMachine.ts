@@ -43,14 +43,14 @@ function tokenize(code : string){
 
     while (dataStartIdx < lines.length - 1){
         dataStartIdx += 1
-        if (lines[dataStartIdx].toLowerCase() == ".data"){
+        if (lines[dataStartIdx].toLowerCase().trim() == ".data"){
             break
         }
     }
 
     while (logicStartIdx < lines.length - 1){
         logicStartIdx += 1
-        if (lines[logicStartIdx].toLowerCase() == ".logic"){
+        if (lines[logicStartIdx].toLowerCase().trim() == ".logic"){
             break
         }
     }

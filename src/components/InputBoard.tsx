@@ -37,6 +37,7 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     if (machine()) {
       resetMachine(machine()!)
       props.machineObserver(machine()!)
+      setSimCurrent(simTree())
     }
   }
   const runStep = () => {
