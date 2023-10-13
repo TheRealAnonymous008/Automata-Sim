@@ -22,7 +22,6 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     machine()?.input.flush()
     let symbols = (DELIMITER +  inputString() + DELIMITER).split('')
     symbols.forEach((val : string) => {
-      console.log(val)
       machine()?.input.write(val)
     })
 
