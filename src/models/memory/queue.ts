@@ -3,6 +3,7 @@ import Memory, { Symbol } from "./memory"
 
 export default class Queue implements Memory{
     readonly name : string
+    readonly head = 0
     contents = []
 
     constructor(name : string){
@@ -11,10 +12,6 @@ export default class Queue implements Memory{
 
     flush = () => {
         this.contents = []
-    }
-
-    getHead = () => {
-        return 0
     }
 
     read  = () : Symbol => {

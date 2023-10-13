@@ -30,3 +30,32 @@ label {
 .styled-button.playboard-button:hover {
     background-color: #166b45;
   }
+
+/* Accept Style */
+.accept {
+    background-color: #4caf50; /* Green */
+    color: #fff;
+    border: 1px solid #388e3c;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  /* Reject Style */
+  .reject {
+    background-color: #f44336; /* Red */
+    color: #fff;
+    border: 1px solid #d32f2f;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  /* Soft-Accept Style */
+  .soft-accept {
+    background-color: #ff9800; /* Orange */
+    color: #fff;
+    border: 1px solid #f57c00;
+    padding: 10px;
+    border-radius: 4px;
+  }
+  
+  

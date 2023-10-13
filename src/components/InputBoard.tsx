@@ -1,11 +1,12 @@
 import { Machine } from "~/models/machine"
 import "../styles/input.css"
 import { createEffect, createSignal } from "solid-js"
-import step, { resetMachine } from "~/models/simulation"
+import runMachine, { MachineResult, evaluateTree, resetMachine } from "~/models/simulation"
 
 export default function InputBoard(props: {machine : Machine | undefined, machineObserver: (machine : Machine) => void}){
   const [inputString, setInputString] = createSignal("")
   const [machine, setMachine] = createSignal<Machine>()
+  const [verdict, setVerdict] = createSignal<MachineResult>(MachineResult.CONTINUE)
 
   createEffect(() => {
     if (props.machine) {
@@ -32,8 +33,18 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
   }
   const runStep = () => {
     if (machine()) {
-      step(machine()!)
+      const simTree =  runMachine(machine()!)
+      setVerdict(evaluateTree(simTree))
       props.machineObserver(machine()!)
+    }
+  }
+
+  const getVerdictStyle = () => {
+    switch(verdict()){
+      case MachineResult.ACCEPT: return "accept"
+      case MachineResult.REJECT: return "reject"
+      case MachineResult.CONTINUE: return ""
+      case MachineResult.SOFT_ACCEPT: return "soft-accept"
     }
   }
 
@@ -46,7 +57,7 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
               id="user-input"
               value={inputString()}
               onInput={(event) => {setInputString(event.target.value)}}
-              class="user-input"
+              class={"user-input " + getVerdictStyle()}
           />
         </div>
         

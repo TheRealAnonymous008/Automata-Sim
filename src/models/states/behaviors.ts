@@ -1,5 +1,5 @@
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "./state";
-import Memory, { Symbol } from "../memory/memory";
+import Memory, { DELIMITER, Symbol } from "../memory/memory";
 import Tape2D from "../memory/tape2d";
 import Tape from "../memory/tape";
 
@@ -46,6 +46,11 @@ export function scanState(name : string, mem : Tape | Tape2D) : State {
     state.run = () => {
         mem.right()
         const s = mem.read()
+        // If the end of the string was reached go one step left
+        if (s == DELIMITER){
+            mem.left()
+        }
+
         const t = state.transitions.get(s)
 
         if (t === undefined)

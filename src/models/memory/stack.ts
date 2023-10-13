@@ -2,6 +2,7 @@ import Memory, { Symbol } from "./memory"
 
 export default class Stack implements Memory{
     readonly name : string
+    head = -1
     contents : Symbol[] = []
 
     constructor(name : string){
@@ -18,9 +19,5 @@ export default class Stack implements Memory{
 
     write = (a: Symbol) : void => {
         
-    }
-
-    getHead = () => {
-        return this.contents.length - 1
     }
 }
