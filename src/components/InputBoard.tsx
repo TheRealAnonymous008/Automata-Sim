@@ -21,6 +21,7 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     machine()?.input.flush()
     let symbols = inputString().split('')
     symbols.forEach((val : string) => {
+      console.log(val)
       machine()?.input.write(val)
     })
 
@@ -50,19 +51,18 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
         }
       }
       
-      if (candidate == null && simCurrent()!.next.length != 0) {
-        candidate = simCurrent()!.next[0]
+      if (candidate == null ) {
+        if (simCurrent()!.next.length != 0)
+          candidate = simCurrent()!.next[0]
+        else {
+          loadSnapshot(machine()!, simCurrent()!)
+          machine()!.currentState.run()
+          candidate = createSnapshot(machine()!)
+        }
       }
 
-      if (candidate !== null){
-        setSimCurrent(candidate)
-        loadSnapshot(machine()!, simCurrent()!)
-      }
-        // Check if it is the last input string in the case of special states
-      if (isAcceptState(machine()!.currentState) || isRejectState(machine()!.currentState)){
-        machine()!.currentState.run()
-        setSimCurrent(createSnapshot(machine()!))
-      }
+      setSimCurrent(candidate)
+      loadSnapshot(machine()!, simCurrent()!)
       
       props.machineObserver(machine()!)
     }

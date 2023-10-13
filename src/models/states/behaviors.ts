@@ -82,7 +82,7 @@ export function printState(name : string, mem : Tape) : State {
         mem.write(s)
 
         const t = state.transitions.get(s)
-        
+
         if (t === undefined)
             return []
         return t
