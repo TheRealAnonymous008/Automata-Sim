@@ -10,7 +10,7 @@ import Tape2D from "~/models/memory/tape2d"
 import { scanLeftState, scanRightState, scanState } from "~/models/states/behaviors/scan"
 import { acceptState, rejectState, defaultState, makeStateInitial } from "~/models/states/behaviors/special"
 import { printState } from "~/models/states/behaviors/write"
-import { leftState, readState, rightState, writeState } from "~/models/states/behaviors/memrw"
+import { downState, leftState, readState, rightState, upState, writeState } from "~/models/states/behaviors/memrw"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -210,7 +210,29 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
             } else {
                 throw("Error. Trying to perform LEFT on a memory object that is not a tape")
             }
-        } 
+        } else if (command.startsWith("DOWN")){
+            const memname = command.replace("DOWN", "").replace('(', '').replace(')', '')
+            const memoryObject = memory.get(memname)
+
+            if (memoryObject === undefined){
+                throw ("Error. Undefined memory object used")
+            } else if (memoryObject instanceof Tape2D) {
+                state = downState(name, memoryObject)
+            } else {
+                throw("Error. Trying to perform DOWN on a memory object that is not a 2DTape")
+            }
+        } else if (command.startsWith("UP")){
+            const memname = command.replace("UP", "").replace('(', '').replace(')', '')
+            const memoryObject = memory.get(memname)
+
+            if (memoryObject === undefined){
+                throw ("Error. Undefined memory object used")
+            } else if (memoryObject instanceof Tape2D) {
+                state = upState(name, memoryObject)
+            } else {
+                throw("Error. Trying to perform UP on a memory object that is not a 2DTape")
+            }
+        }
 
         states.set(name, state)
 

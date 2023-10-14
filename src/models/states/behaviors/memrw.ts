@@ -100,7 +100,7 @@ export function rightState(name : string, mem : Tape | Tape2D) : State {
 
 
 export function leftState(name : string, mem : Tape | Tape2D) : State {
-    const state = defaultState(name, "R")
+    const state = defaultState(name, "L")
 
     state.mem = mem
     state.run = () : StateOutput[] => {
@@ -131,6 +131,86 @@ export function leftState(name : string, mem : Tape | Tape2D) : State {
             }
 
             mem.right()
+
+        })
+        return output
+    }
+
+    return state
+}
+
+export function downState(name : string, mem : Tape2D) : State {
+    const state = defaultState(name, "D")
+
+    state.mem = mem
+    state.run = () : StateOutput[] => {
+        const output : StateOutput[] = []
+        state.transitions.forEach((v, k) => {
+            const [rs, ws] = k as [Symbol, Symbol]
+            
+            // Perform read
+            mem.down()
+            const sym = mem.read()
+
+            if (rs === sym ) {
+                // Perofrm write
+                const memImage : IMemoryDetais = getDetails(mem)
+                if (rs !== ws) {
+                    loadToMemory(mem, memImage)
+                    mem.replace(ws)
+                } 
+                
+                v.forEach((val) => {
+                    output.push({
+                        state: val, 
+                        memory: getDetails(mem)
+                    })
+                })
+                
+                mem.replace(rs)
+            }
+
+            mem.up()
+
+        })
+        return output
+    }
+
+    return state
+}
+
+export function upState(name : string, mem : Tape2D) : State {
+    const state = defaultState(name, "U")
+
+    state.mem = mem
+    state.run = () : StateOutput[] => {
+        const output : StateOutput[] = []
+        state.transitions.forEach((v, k) => {
+            const [rs, ws] = k as [Symbol, Symbol]
+            
+            // Perform read
+            mem.up()
+            const sym = mem.read()
+
+            if (rs === sym ) {
+                // Perofrm write
+                const memImage : IMemoryDetais = getDetails(mem)
+                if (rs !== ws) {
+                    loadToMemory(mem, memImage)
+                    mem.replace(ws)
+                } 
+                
+                v.forEach((val) => {
+                    output.push({
+                        state: val, 
+                        memory: getDetails(mem)
+                    })
+                })
+                
+                mem.replace(rs)
+            }
+
+            mem.down()
 
         })
         return output
