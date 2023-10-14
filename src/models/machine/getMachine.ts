@@ -144,6 +144,9 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
         const element = lines[index];
         const toks = element.split(' ')
 
+        if (toks.length < 2)
+            continue
+
         // Trim each element
         toks.forEach((val) => val.trim())
 
