@@ -79,3 +79,7 @@ export function getGridMapBounds<T>(grid : GridMap<T>) : {
         br: br!
     }
 }
+
+export function isEqualSets<T>(a: Set<T>, b: Set<T>) : boolean{
+    return a.size === b.size && [...a].every(value => b.has(value))
+}

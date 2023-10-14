@@ -6,8 +6,8 @@ import { STATE_CIRCRADIUS, STATE_RECTOFFSET, STATE_RECTWIDTH, STATE_RECTHEIGHT }
 export default function StateComponent(props : {details: IStateDetails, highlight: boolean}){
     const getClass= () => {
       let className = "state-circle "
-      className += (props.details.isActive ? " highlighted" : "")
       className += (props.highlight && props.details.isND ? " nondeterministic": "")
+      className += (props.details.isActive ? " highlighted" : "")
 
       return className
     }

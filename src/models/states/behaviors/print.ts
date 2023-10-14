@@ -1,10 +1,10 @@
-import { IMemoryDetais, Symbol, getDetails, loadToMemory } from "~/models/memory/memory"
+import { IMemoryDetais, Symbol, getDetails } from "~/models/memory/memory"
 import Tape from "~/models/memory/tape"
-import State, { StateOutput } from "../state"
+import State, { StateOutput, StateType } from "../state"
 import { defaultState } from "./special"
 
 export function printState(name : string, mem : Tape) : State {
-    const state = defaultState(name, "print")
+    const state = defaultState(name, "print", StateType.WRITE)
 
     state.mem = mem
     state.run = () : StateOutput[] => {

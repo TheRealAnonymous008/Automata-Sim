@@ -1,13 +1,13 @@
 import Memory, { IMemoryDetais, Symbol, getDetails, loadToMemory } from "~/models/memory/memory"
 import Tape from "~/models/memory/tape"
-import State, { StateOutput } from "../state"
+import State, { StateOutput, StateType } from "../state"
 import { defaultState } from "./special"
 import Stack from "~/models/memory/stack"
 import Queue from "~/models/memory/queue"
 import Tape2D from "~/models/memory/tape2d"
 
 export function readState(name : string, mem : Stack | Queue) : State {
-    const state = defaultState(name, "R")
+    const state = defaultState(name, "R", StateType.READ)
 
     state.mem = mem
     state.run = () : StateOutput[] => {
@@ -34,7 +34,7 @@ export function readState(name : string, mem : Stack | Queue) : State {
 }
 
 export function writeState(name : string, mem : Stack | Queue) : State {
-    const state = defaultState(name, "W")
+    const state = defaultState(name, "W", StateType.WRITE)
 
     state.mem = mem
     state.run = () : StateOutput[] => {
@@ -59,7 +59,7 @@ export function writeState(name : string, mem : Stack | Queue) : State {
 }
 
 export function rightState(name : string, mem : Tape | Tape2D) : State {
-    const state = defaultState(name, "R")
+    const state = defaultState(name, "R", StateType.READ_WRITE)
 
     state.mem = mem
     state.run = () : StateOutput[] => {
@@ -100,7 +100,7 @@ export function rightState(name : string, mem : Tape | Tape2D) : State {
 
 
 export function leftState(name : string, mem : Tape | Tape2D) : State {
-    const state = defaultState(name, "L")
+    const state = defaultState(name, "L", StateType.READ_WRITE)
 
     state.mem = mem
     state.run = () : StateOutput[] => {
@@ -140,7 +140,7 @@ export function leftState(name : string, mem : Tape | Tape2D) : State {
 }
 
 export function downState(name : string, mem : Tape2D) : State {
-    const state = defaultState(name, "D")
+    const state = defaultState(name, "D", StateType.READ_WRITE)
 
     state.mem = mem
     state.run = () : StateOutput[] => {
@@ -180,7 +180,7 @@ export function downState(name : string, mem : Tape2D) : State {
 }
 
 export function upState(name : string, mem : Tape2D) : State {
-    const state = defaultState(name, "U")
+    const state = defaultState(name, "U", StateType.READ_WRITE)
 
     state.mem = mem
     state.run = () : StateOutput[] => {

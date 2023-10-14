@@ -1,5 +1,5 @@
 import { Symbol } from "../../memory/memory";
-import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME } from "../state";
+import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME, StateType } from "../state";
 
 export function isAcceptState(state: State){
     return state.accept == true && state.command == ACCEPT_STATE_NAME
@@ -14,7 +14,7 @@ export function makeStateInitial(state : State): State {
     return state
 }
 
-export function defaultState(name: string, command : string = "") : State{
+export function defaultState(name: string, command : string = "", type = StateType.READ) : State{
     if (command == ""){
         command = name 
         name = ""
@@ -27,6 +27,8 @@ export function defaultState(name: string, command : string = "") : State{
         initial: false,
         run: () => [],
         transitions: new Map<Symbol, State[]>(),
+        isND: false,
+        type: type,
         mem: undefined,
         isActive: false
     }

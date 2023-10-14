@@ -20,7 +20,14 @@ export default interface State {
     initial : boolean,
     run: () => StateOutput[]
     isActive : boolean,
-    isND: boolean
+    isND: boolean,
+    type: StateType
+}
+
+export enum StateType {
+    READ, 
+    WRITE, 
+    READ_WRITE
 }
 
 export type TransitionSymbol = Symbol | [Symbol, Symbol] 
