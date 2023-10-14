@@ -30,7 +30,7 @@ export default function Home() {
       return 
 
     const skeleton = createSnapshot(machine()!)
-
+    
     // Update the states
     const arr : IStateDetails[]= []
     machine()!.states.forEach(element => {
@@ -58,8 +58,6 @@ export default function Home() {
 
         updateComponents()
       }
-
-      
   }, [machineSpec()])
 
   const machineObserver = (m : Machine) => {
@@ -69,7 +67,7 @@ export default function Home() {
 
   return (
     <main>
-      <Title>Not JFlap</Title>
+      <Title>Not J-Flap</Title>
 
       <SpecificationInput specObserver={setMachineSpec}/>
       {

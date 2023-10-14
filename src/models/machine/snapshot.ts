@@ -1,4 +1,4 @@
-import { IMemoryDetais } from "../memory/memory"
+import { IMemoryDetais, getDetails } from "../memory/memory"
 import State from "../states/state"
 import { Machine, setCurrentState } from "./machine"
 
@@ -15,14 +15,7 @@ export interface SimulationNode {
 export function createSnapshot(machine : Machine) : SimulationNode{
     const arr : IMemoryDetais[] = new Array()
       machine.memory.forEach((val, key) => {
-      const contents : any[] = []
-      val.contents.forEach((e) => contents.push(e))
-      arr.push({
-        key: key,
-        contents: contents,
-        head: val.head, 
-        name: val.name
-      })
+      arr.push(getDetails(val))
     })
 
     return {

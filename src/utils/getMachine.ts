@@ -11,8 +11,6 @@ import { scanLeftState, scanRightState, scanState } from "~/models/states/behavi
 import { acceptState, rejectState, defaultState, makeStateInitial } from "~/models/states/behaviors/special"
 import { printState } from "~/models/states/behaviors/write"
 import { leftState, readState, rightState, writeState } from "~/models/states/behaviors/memrw"
-import { Console } from "console"
-import { machine } from "os"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){

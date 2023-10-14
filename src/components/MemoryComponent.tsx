@@ -1,6 +1,6 @@
-import { IMemoryDetais, Symbol } from "~/models/memory/memory";
+import { EMPTY_STRING, IMemoryDetais, Symbol } from "~/models/memory/memory";
 import "../styles/memory.css"
-import { flattenGridMap } from "~/utils/arrayHelper";
+import { GridMap, flattenGridMap } from "~/utils/arrayHelper";
 import { createEffect, createSignal } from "solid-js";
 import { MEMORY_CELLWIDTH, MEMORY_CELLHEIGHT } from "~/styles/constants";
 import Coordinate, { isEqual } from "../utils/Coordinate";
@@ -16,8 +16,8 @@ export default function MemoryComponent(props : IMemoryDetais) {
       setHead({x : props.head, y : 0})
       setArr([props.contents as Symbol[]])
     } else {
+      setArr(flattenGridMap(props.contents as GridMap<Symbol>, EMPTY_STRING))  
       setHead(props.head)
-      setArr(flattenGridMap(props.contents as Map<number, Map<number, Symbol>>))
     }  
   }, [props.contents])
 

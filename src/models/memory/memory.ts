@@ -1,5 +1,7 @@
 import Coordinate from "~/utils/Coordinate";
 import { Machine } from "../machine/machine";
+import { GridMap, flattenGridMap } from "~/utils/arrayHelper";
+import Tape2D from "./tape2d";
 
 export type Symbol = string | null
 export const DELIMITER = "#"
@@ -13,7 +15,7 @@ export interface IMemoryDetais {
     head: number | Coordinate 
 }
 
-export type MemoryContentsType = Symbol[] | Map<number, Map< number, Symbol>> 
+export type MemoryContentsType = Symbol[] | GridMap<Symbol>
 
 export default interface Memory {
     key: string
@@ -27,10 +29,25 @@ export default interface Memory {
 }
 
 export function getDetails(memory : Memory) : IMemoryDetais{
-    const contents : any[] = []
-    memory.contents.forEach((v) => {
-        contents.push(v)
-    })
+    var contents : MemoryContentsType 
+
+    if (memory instanceof Tape2D){
+        var tmp : GridMap<Symbol> = new Map<number, Map<number, Symbol>>()
+        memory.contents.forEach((R, row) =>{
+            const trow = new Map<number, Symbol>()
+            R.forEach((sym, col) => {
+                trow.set(col, sym)
+            })
+            tmp.set(row, trow)
+        })
+        contents = tmp
+    } else {
+        var qmp : Symbol[] = []
+        memory.contents.forEach((v) => {
+            qmp.push(v as Symbol)
+        })
+        contents = qmp
+    }
 
     return {
         contents: contents,
