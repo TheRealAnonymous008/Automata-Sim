@@ -27,3 +27,4 @@ export const LAYOUT_ITERATIONS = 10000
 
 export const DIAGRAM_WIDTH = 1000
 export const DIAGRAM_HEIGHT = 1000
+export const MEMORY_MAX_ROWS = 8

@@ -36,7 +36,7 @@ export function flattenGridMap<T>(grid : GridMap<T>, defaultItem: T) : T[][]{
     // Then map each element on the grid
     grid.forEach((row, r) => {
         row.forEach((x, c) => {
-            arr[r][c] = x
+            arr[r - bounds.tl.y!][c - bounds.tl.x!] = x
         })
     })
 

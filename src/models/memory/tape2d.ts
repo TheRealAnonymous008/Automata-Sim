@@ -28,6 +28,7 @@ export default class Tape2D implements Memory{
         if (this.isInBounds()){
             return this.contents.get(this.head.y)!.get(this.head.x)!
         }
+        this.replace(DELIMITER)
         return DELIMITER
     }
 
