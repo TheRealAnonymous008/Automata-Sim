@@ -48,6 +48,15 @@ Commands in the LOGIC section include:
 
 Note that the format of the transitions should be (<TRANSITION_SYMBOL>,<STATE>). For RIGHT / LEFT / UP / DOWN, the transition symbol is of the form <READ_SYMBOL>/<WRITE_SYMBOL> 
 
+## 3  Controls 
+Enter the machine specifications with the above code.
+
+Then enter an input string in the appropriate field. Once entered, the box will highlight green if the machine accepts and red if it rejects (warning: be sure not to cause an infinite loop).
+
+Playback options are provided to step forward, backward, or reset the machine to its initial configuration.
+
+There is also an option to highlight nondeterministic states (found below the state diagram). Click this button to toggle between highlighting and not highlighting
+
 # Building
 
 Solid apps are built with _adapters_, which optimise your project for deployment to different environments.
