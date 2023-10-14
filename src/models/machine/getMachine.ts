@@ -33,7 +33,6 @@ export default function getMachine(code : string) : Machine | null{
 
     finalizeAlphabets(machine)
     getNondeterminism(machine)
-    console.log(machine)
     return machine
 }
 
