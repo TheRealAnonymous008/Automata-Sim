@@ -15,7 +15,6 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
 
   createEffect(() => {
     if (props.machine) {
-      console.log(props.machine)
         setMachine(props.machine)
     }
   }, [props.machine])
