@@ -97,7 +97,25 @@ E] UP(T1) (#/1,F)
 F] UP(T1) (#/1,G)
 G] UP(T1) (#/1,H)
 H] RIGHT(T1) (#/1,I)
-I] RIGHT(T1) (#/0,J)
+I] RIGHT(T1) (#/0,J) (1/1,E)
 J] DOWN(T1) (#/#,K)
-K] DOWN(T1) (0/#,L)
+K] DOWN(T1) (0/#,L) (#/1,L)
+L] LEFT(T1) (#/#,A)
+
+===
+
+.DATA
+2D_TAPE T1
+.LOGIC
+A] RIGHT(T1) (#/0,B) (1/#,E)
+B] DOWN(T1) (#/0,C) (0/#,C)
+C] LEFT(T1) (#/1,D) (1/#,C)
+D] LEFT(T1) (#/1,E)
+E] UP(T1) (#/1,F)
+F] UP(T1) (#/1,G) (1/0,F) (0/1,F), (#/#,accept)
+G] UP(T1) (#/1,H)
+H] RIGHT(T1) (#/1,I)
+I] RIGHT(T1) (#/0,J) (1/1,E)
+J] DOWN(T1) (#/#,K)
+K] DOWN(T1) (0/#,L) (#/1,L)
 L] LEFT(T1) (#/#,A)

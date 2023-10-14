@@ -16,15 +16,21 @@ export function resetMachine(machine : Machine) {
 }
 
 
-export default function runMachine(machine : Machine) : SimulationNode{
+const MAX_STACK_SIZE = 1000
+
+export default function runMachine(machine : Machine, depth: number = 0) : SimulationNode{
     let snapshot = createSnapshot(machine)
+
+    if (depth >= MAX_STACK_SIZE)
+      return snapshot
+
     const next = machine.currentState.run()
 
     next.forEach((val) => {
       setCurrentState(machine, val.state)
       loadToMachine(machine, val.memory)
       
-      let child = runMachine(machine)
+      let child = runMachine(machine, depth + 1)
       child.parent = snapshot
       child.depth = child.parent.depth + 1
       snapshot.next.push(child)
