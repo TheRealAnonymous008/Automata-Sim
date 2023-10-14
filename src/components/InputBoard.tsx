@@ -63,6 +63,22 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
     }
   }
 
+  const previousStep = () => {
+    if (simTree()) {
+      var candidate = null 
+      if (simCurrent()!.parent != null){
+        candidate = simCurrent()!.parent!
+      } else {
+        candidate = simCurrent()
+      }
+
+      setSimCurrent(candidate)
+      loadSnapshot(machine()!, simCurrent()!)
+      
+      props.machineObserver(machine()!)
+    }
+  }
+
   const getVerdictStyle = () => {
     switch(verdict()){
       case MachineResult.ACCEPT: return "accept"
@@ -90,6 +106,10 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
           <div class = "input-container">
             <button class = "playboard-button styled-button" style = {``}onClick={runStep}>
               Next
+            </button>
+
+            <button class = "playboard-button styled-button" style = {``}onClick={previousStep}>
+              Previous
             </button>
 
             <button class = "playboard-button styled-button" style = {``}onClick={reset}>
