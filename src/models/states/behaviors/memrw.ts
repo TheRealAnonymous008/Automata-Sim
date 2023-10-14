@@ -12,7 +12,7 @@ export function readState(name : string, mem : Stack | Queue) : State {
     state.mem = mem
     state.run = () : StateOutput[] => {
         const s = mem.read()
-
+        
         const t = state.transitions.get(s)
 
         if (t === undefined)

@@ -1,7 +1,6 @@
 import Coordinate from "~/utils/Coordinate";
 import { Machine } from "../machine/machine";
-import { GridMap, flattenGridMap } from "~/utils/arrayHelper";
-import Tape2D from "./tape2d";
+import { GridMap } from "~/utils/arrayHelper";
 
 export type Symbol = string | null
 export const DELIMITER = "#"
@@ -21,7 +20,8 @@ export default interface Memory {
     key: string
     name : string,
     head : number | Coordinate,
-    alphabet : Symbol[],
+    inputAlphabet : Set<Symbol>,
+    outputAlphabet: Set<Symbol>,
     read: () => Symbol,
     write: (a : Symbol) => void,
     flush: () => void

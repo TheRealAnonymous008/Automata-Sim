@@ -5,7 +5,8 @@ export default class Queue implements Memory{
     readonly head = 0
     key: string = ""
 
-    alphabet: Symbol[] = []
+    inputAlphabet: Set<Symbol> = new Set<Symbol>()
+    outputAlphabet: Set<Symbol> = new Set<Symbol>()
     contents : Symbol[] = []
 
     constructor(name : string, key: string = name){
@@ -20,7 +21,7 @@ export default class Queue implements Memory{
     read  = () : Symbol => {
         const a = this.contents.pop()
         if (a == undefined){
-            return EMPTY_STRING
+            return null
         }
 
         return a

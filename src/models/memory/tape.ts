@@ -9,7 +9,8 @@ export default class Tape implements Memory{
     head: number = 0
     key: string = ""
     
-    alphabet: Symbol[] = []
+    inputAlphabet: Set<Symbol> = new Set<Symbol>()
+    outputAlphabet: Set<Symbol> = new Set<Symbol>()
 
     constructor(name : string, key: string = name){
         this.key = key
