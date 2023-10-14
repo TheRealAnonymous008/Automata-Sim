@@ -31,7 +31,7 @@ export default class Tape2D implements Memory{
     }
 
     write = (a: Symbol) => {
-        if (!this.isInBounds()) {
+        if (this.isInBounds()) {
             this.replace(a)
         }
         else {
