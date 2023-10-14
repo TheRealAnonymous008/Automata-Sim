@@ -30,10 +30,10 @@ export default interface Memory {
 
 export function getDetails(memory : Memory) : IMemoryDetais{
     var contents : MemoryContentsType = structuredClone(memory.contents)
-
+    var head = structuredClone(memory.head)
     return {
         contents: contents,
-        head: memory.head,
+        head: head,
         key: memory.key, 
         name: memory.name
     }
