@@ -1,6 +1,6 @@
 import { Show, Switch, createEffect, createSignal } from "solid-js"
 import { Machine } from "~/models/machine/machine"
-import getMachine from "~/utils/getMachine"
+import getMachine from "~/models/machine/getMachine"
 import MemorySegment from "./MemorySegment"
 import StateDiagram from "./StateDiagram"
 import { getValuesInMap } from "~/utils/dictToList"
@@ -15,10 +15,15 @@ export default function MachineDiagram(props : {
     transitions: TransitionUIHelper[]
 }){
     const [memory, setMemory] = createSignal(props.memory)
+    const [highlightND, setHighlightND] = createSignal(false)
 
     createEffect(() => {
         setMemory(props.memory)
     }, [props.memory])
+
+    const highlight = () => {
+        setHighlightND(!highlightND())
+    }
 
     return (
         <>
@@ -28,7 +33,14 @@ export default function MachineDiagram(props : {
                     machine={props.machine!}
                     states={props.states}
                     transitions={props.transitions}
+                    highlightND={highlightND()}
                 />
+
+            <div class = "input-container">
+                <button class = "playboard-button styled-button" style = {``}onClick={highlight}>
+                Highlight non-determinism
+                </button>
+            </div>
             </Show>
         </>
     )

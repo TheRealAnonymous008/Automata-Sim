@@ -11,6 +11,8 @@ export default class Tape2D implements Memory{
     key: string = ""
     contents : GridMap<Symbol> = new  Map<number, Map<number, Symbol>>()
 
+    alphabet: Symbol[] = []
+
     constructor(name : string, key: string = name){
         this.name = name
         this.key = key

@@ -7,11 +7,11 @@ import { TransitionUIHelper, getAllTransitionUIs } from "~/components/Transition
 import { Machine } from "~/models/machine/machine";
 import { createSnapshot } from "~/models/machine/snapshot";
 import { IMemoryDetais } from "~/models/memory/memory";
-import State, { IStateDetails } from "~/models/states/state";
+import State, { IStateDetails, getStateDetails } from "~/models/states/state";
 import { DIAGRAM_HEIGHT, DIAGRAM_WIDTH } from "~/styles/constants";
 import Coordinate from "~/utils/Coordinate";
 import { getValuesInMap } from "~/utils/dictToList";
-import getMachine from "~/utils/getMachine";
+import getMachine from "~/models/machine/getMachine";
 import getStateLayout from "~/utils/stateLayout";
 
 export default function Home() {
@@ -34,14 +34,7 @@ export default function Home() {
     // Update the states
     const arr : IStateDetails[]= []
     machine()!.states.forEach(element => {
-      arr.push({
-        name: element.name,
-        accept: element.accept,
-        command: element.command,
-        initial: element.initial,
-        isActive: element.isActive,
-        loc: stateCoordMap().get(element)!
-      })
+      arr.push(getStateDetails(element, stateCoordMap()))
     });
 
     setMemory(skeleton.memory)

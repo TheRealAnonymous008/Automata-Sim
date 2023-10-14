@@ -8,6 +8,8 @@ export default class Tape implements Memory{
     contents : Symbol[] = []
     head: number = 0
     key: string = ""
+    
+    alphabet: Symbol[] = []
 
     constructor(name : string, key: string = name){
         this.key = key

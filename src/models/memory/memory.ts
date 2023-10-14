@@ -21,6 +21,7 @@ export default interface Memory {
     key: string
     name : string,
     head : number | Coordinate,
+    alphabet : Symbol[],
     read: () => Symbol,
     write: (a : Symbol) => void,
     flush: () => void

@@ -8,6 +8,7 @@ export interface IStateDetails {
     initial: boolean,
     isActive: boolean,
     loc: Coordinate,
+    isND: boolean
 }
 
 export default interface State {
@@ -18,7 +19,8 @@ export default interface State {
     accept : boolean,
     initial : boolean,
     run: () => StateOutput[]
-    isActive : boolean
+    isActive : boolean,
+    isND: boolean
 }
 
 export type TransitionSymbol = Symbol | [Symbol, Symbol] 
@@ -46,4 +48,16 @@ export function getTransitionStr(sym : TransitionSymbol) {
         return sym[0]
     } 
     return sym
+}
+
+export function getStateDetails(element: State, coordMap: Map<State, Coordinate>){
+    return {
+        name: element.name,
+        accept: element.accept,
+        command: element.command,
+        initial: element.initial,
+        isActive: element.isActive,
+        loc: coordMap.get(element)!,
+        isND: element.isND
+    }
 }

@@ -18,6 +18,12 @@
   stroke-width: 4; 
 }
 
+.state-circle.nondeterministic {
+  fill: #9f346b;
+  stroke: #000; 
+  stroke-width: 4; 
+}
+
 /* Styling for the label text */
 .label-text {
   stroke: white;

@@ -11,7 +11,8 @@ import { DIAGRAM_HEIGHT, DIAGRAM_WIDTH } from "~/styles/constants";
 export default function StateDiagram(props :{
     machine : Machine,
     transitions: TransitionUIHelper[]
-    states: IStateDetails[]
+    states: IStateDetails[],
+    highlightND: boolean
 }){
     return (
         <>
@@ -36,12 +37,8 @@ export default function StateDiagram(props :{
                 <For each={props.states}>
                     {(item : IStateDetails, index) => 
                         <StateComponent 
-                            accept = {item.accept}
-                            command= {item.command}
-                            initial= {item.initial}
-                            isActive={item.isActive}
-                            loc={item.loc}
-                            name={item.name}
+                            details= {item}
+                            highlight={props.highlightND}
                         />
                     }
                 </For>  

@@ -5,6 +5,7 @@ export default class Queue implements Memory{
     readonly head = 0
     key: string = ""
 
+    alphabet: Symbol[] = []
     contents : Symbol[] = []
 
     constructor(name : string, key: string = name){

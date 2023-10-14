@@ -3,52 +3,59 @@ import "../styles/state.css"
 import Coordinate from "../utils/Coordinate";
 import { STATE_CIRCRADIUS, STATE_RECTOFFSET, STATE_RECTWIDTH, STATE_RECTHEIGHT } from "~/styles/constants";
 
-export default function StateComponent(props :IStateDetails){
+export default function StateComponent(props : {details: IStateDetails, highlight: boolean}){
+    const getClass= () => {
+      let className = "state-circle "
+      className += (props.details.isActive ? " highlighted" : "")
+      className += (props.highlight && props.details.isND ? " nondeterministic": "")
+
+      return className
+    }
     return (
       <>
         {
-          props.initial &&
+          props.details.initial &&
           <path 
-            d={getTrianglePath(props.loc)} 
+            d={getTrianglePath(props.details.loc)} 
             fill="#333" 
           />
         }
 
         <circle 
-          cx={props.loc.x} 
-          cy={props.loc.y} 
+          cx={props.details.loc.x} 
+          cy={props.details.loc.y} 
           r={STATE_CIRCRADIUS} 
-          class={props.isActive ? "state-circle highlighted" : "state-circle"} 
+          class={getClass()} 
         />
         {
-          props.accept && 
+          props.details.accept && 
           <circle 
-            cx={props.loc.x} 
-            cy={props.loc.y} 
+            cx={props.details.loc.x} 
+            cy={props.details.loc.y} 
             r={STATE_CIRCRADIUS * 0.85} 
-            class={props.isActive ? "state-circle highlighted" : "state-circle"} 
+            class={getClass()} 
           />
         }
         
         <text 
-          x={props.loc.x} 
-          y={props.loc.y} 
+          x={props.details.loc.x} 
+          y={props.details.loc.y} 
           text-anchor="middle" 
           dominant-baseline="middle" 
           class="state-text">
-            {props.command}
+            {props.details.command}
         </text>
 
         {
-          props.name.length > 0 && 
+          props.details.name.length > 0 && 
           <>
             <text 
-              x={props.loc.x + STATE_RECTOFFSET.x + STATE_RECTWIDTH / 2} 
-              y= {props.loc.y + STATE_RECTOFFSET.y + STATE_RECTHEIGHT / 2} 
+              x={props.details.loc.x + STATE_RECTOFFSET.x + STATE_RECTWIDTH / 2} 
+              y= {props.details.loc.y + STATE_RECTOFFSET.y + STATE_RECTHEIGHT / 2} 
               text-anchor="middle" 
               dominant-baseline="middle" 
               class="label-text">
-                {props.name}
+                {props.details.name}
             </text>
           </>
         }

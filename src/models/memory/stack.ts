@@ -4,6 +4,8 @@ export default class Stack implements Memory{
     readonly name : string
     key: string = ""
     head = -1
+    
+    alphabet: Symbol[] = []
     contents : Symbol[] = []
     
     constructor(name : string, key: string = name){

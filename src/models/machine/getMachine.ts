@@ -5,12 +5,14 @@ import Queue from "~/models/memory/queue"
 import Stack from "~/models/memory/stack"
 import Tape, { INPUT_TAPE_NAME, OUTPUT_TAPE_NAME } from "~/models/memory/tape"
 import State, { ACCEPT_STATE_NAME, REJECT_STATE_NAME, TransitionSymbol } from "~/models/states/state"
-import { getKeysInMap } from "./dictToList"
+import { getKeysInMap } from "../../utils/dictToList"
 import Tape2D from "~/models/memory/tape2d"
 import { scanLeftState, scanRightState, scanState } from "~/models/states/behaviors/scan"
 import { acceptState, rejectState, defaultState, makeStateInitial } from "~/models/states/behaviors/special"
 import { printState } from "~/models/states/behaviors/write"
 import { downState, leftState, readState, rightState, upState, writeState } from "~/models/states/behaviors/memrw"
+import { getNondeterminism } from "~/models/states/nondeterminism"
+import finalizeAlphabets from "~/models/memory/alphabet"
 
 export default function getMachine(code : string) : Machine | null{
     if (code == ""){
@@ -21,13 +23,18 @@ export default function getMachine(code : string) : Machine | null{
     var memory = parseDataSection(sections.data)
     var logic = parseLogicSection(sections.logic, memory.memory, memory.memory.get(INPUT_TAPE_NAME) as Tape | Tape2D)
 
-    return {
+    const machine : Machine = {
         memory : memory.memory,
         states: logic.states,
         input : memory.input,
         initial : logic.initial,
         currentState : logic.initial,
     }
+
+    finalizeAlphabets(machine)
+    getNondeterminism(machine)
+    console.log(machine)
+    return machine
 }
 
 function tokenize(code : string){
@@ -71,10 +78,7 @@ function tokenize(code : string){
     }
 }
 
-function parseDataSection(lines : string[]) : {
-    memory : MemoryList,
-    input : Memory
-}
+function parseDataSection(lines : string[]) : {memory : MemoryList,input : Memory}
 {
     var memory : MemoryList = new Map<string, Memory>()
     var input : Memory | null = null
@@ -124,11 +128,7 @@ function parseDataSection(lines : string[]) : {
     }
 }
 
-function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tape | Tape2D) : {
-    states: StateList,
-    alphabet : Symbol[],
-    initial: State
- }
+function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tape | Tape2D) : {states: StateList, initial: State }
  {
     var states : StateList = new Map<string, State>()
     var alphabet : Symbol[] = []
@@ -288,15 +288,10 @@ function parseLogicSection(lines : string[], memory: MemoryList, inputTape : Tap
         else {
             trans.set(_sym, [dest])
         }
-
-        // if(!(_sym! in alphabet)){
-        //     alphabet.push(_sym)
-        // }
     });
 
     return {
         states : states,
-        alphabet: alphabet,
         initial: initial as State
     }
  }
