@@ -15,6 +15,7 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
 
   createEffect(() => {
     if (props.machine) {
+      console.log(props.machine)
         setMachine(props.machine)
     }
   }, [props.machine])
@@ -28,7 +29,6 @@ export default function InputBoard(props: {machine : Machine | undefined, machin
 
     const verdict = simTree()?.accept
     setVerdict(verdict ? MachineResult.ACCEPT : MachineResult.REJECT)
-
     reset()
   }
 

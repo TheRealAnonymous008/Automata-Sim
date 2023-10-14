@@ -13,6 +13,7 @@ export default class Tape2D implements Memory{
 
     constructor(name : string, key: string = name){
         this.name = name
+        this.key = key
         this.flush()
     }
 
@@ -59,7 +60,7 @@ export default class Tape2D implements Memory{
     }
 
     replace = (a: Symbol) : Symbol=> {
-        if (!this.isInBounds){
+        if (!this.isInBounds()){
             if (this.contents.has(this.head.y) === false){
                 this.contents.set(this.head.y, new Map<number, Symbol>())
             }
