@@ -75,4 +75,7 @@ B] RIGHT(T1) (0/0,B), (Y/Y,B), (1/Y,accept)
 2D_TAPE T1
 .LOGIC
 A] RIGHT(T1) (#/0,B)
-B] DOWN(T1) (#/1,accept)
+B] DOWN(T1) (#/0,C)
+C] UP(T1) (#/1,D)
+D] LEFT(T1) (#/1,E)
+E] UP(T1) (#/1,accept)

@@ -24,11 +24,11 @@ export default function MemoryComponent(props : IMemoryDetais) {
 
   return (
       <div class="memory">
-        <svg width={screen.width} height= {arr().length * MEMORY_CELLHEIGHT}>
+        <svg width={screen.width} height= {Math.min(arr().length, 8) * MEMORY_CELLHEIGHT}>
           {arr().map((row, rowIndex) =>
             row.map((symbol, colIndex) =>  {
               const col = colIndex - head().x + (screen.availWidth / MEMORY_CELLWIDTH * 0.25)
-              const row = rowIndex - head().y
+              const row = rowIndex - head().y + (Math.min(arr().length, 8) - 1)
               return (
               <>
                 <rect
