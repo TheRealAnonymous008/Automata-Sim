@@ -36,7 +36,7 @@ export default function MemoryComponent(props : IMemoryDetais) {
           {arr().map((row, rowIndex) =>
             row.map((symbol, colIndex) =>  {
               const col = colIndex - head().x + (screen.availWidth / MEMORY_CELLWIDTH * 0.25)
-              var row = rowIndex - head().y + MEMORY_MAX_ROWS / 4
+              var row = rowIndex - head().y + (isRow() ? 0 : MEMORY_MAX_ROWS / 4)
 
               return (
               <>
