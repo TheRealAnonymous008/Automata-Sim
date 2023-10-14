@@ -12,14 +12,14 @@
   font-size: 18px;
 }
 
-.state-circle.nondeterministic {
-  fill: #9f346b;
+.state-circle.highlighted {
+  fill: #4d349f;
   stroke: #000; 
   stroke-width: 4; 
 }
 
-.state-circle.highlighted {
-  fill: #4d349f;
+.state-circle.nondeterministic {
+  fill: #9f346b;
   stroke: #000; 
   stroke-width: 4; 
 }
