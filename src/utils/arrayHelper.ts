@@ -1,4 +1,4 @@
-import Coordinate, { NullableCoordinate, sub } from "./Coordinate";
+import Coordinate, { NullableCoordinate, isNull, sub } from "./Coordinate";
 import { getKeysInMap } from "./dictToList";
 
 export function isOneDimensional(arr : any[]){
@@ -20,32 +20,25 @@ export function flattenGridMap<T>(grid : GridMap<T>, defaultItem: T) : T[][]{
     const arr : T[][] = []
 
     const bounds = getGridMapBounds(grid)
-    if (bounds.tl.y === null || bounds.br.y === null){
-        return arr
+    if (isNull(bounds.br) || isNull(bounds.tl)){
+        return [[]]
     }
 
-    for(let i = bounds.tl.y ; i <= bounds.br.y; ++i){
+    // First create the grid
+    for(let i = bounds.tl.y! ; i <= bounds.br.y!; ++i){
         const row : T[] = []
-
-        if (bounds.tl.x === null || bounds.br.x === null) {
-            arr.push(row)
-            continue
-        }
-
-        for (let j = bounds.tl.x; j <= bounds.br.x; ++j){
-            const gridRow = grid.get(i)
-            if (gridRow === null){
-                row.push(defaultItem)
-            }
-            
-            const item = grid.get(i)!.get(j)
-            if (item)
-                row.push(item!)
-            else 
-                row.push(defaultItem)
+        for (let j = bounds.tl.x!; j <= bounds.br.x!; ++j){
+            row.push(defaultItem)
         }
         arr.push(row)
     }
+
+    // Then map each element on the grid
+    grid.forEach((row, r) => {
+        row.forEach((x, c) => {
+            arr[r][c] = x
+        })
+    })
 
     return arr
 }

@@ -29,25 +29,7 @@ export default interface Memory {
 }
 
 export function getDetails(memory : Memory) : IMemoryDetais{
-    var contents : MemoryContentsType 
-
-    if (memory instanceof Tape2D){
-        var tmp : GridMap<Symbol> = new Map<number, Map<number, Symbol>>()
-        memory.contents.forEach((R, row) =>{
-            const trow = new Map<number, Symbol>()
-            R.forEach((sym, col) => {
-                trow.set(col, sym)
-            })
-            tmp.set(row, trow)
-        })
-        contents = tmp
-    } else {
-        var qmp : Symbol[] = []
-        memory.contents.forEach((v) => {
-            qmp.push(v as Symbol)
-        })
-        contents = qmp
-    }
+    var contents : MemoryContentsType = structuredClone(memory.contents)
 
     return {
         contents: contents,

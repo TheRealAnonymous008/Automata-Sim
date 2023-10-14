@@ -31,18 +31,7 @@ export default class Tape2D implements Memory{
     }
 
     write = (a: Symbol) => {
-        if (this.isInBounds()) {
-            this.replace(a)
-        }
-        else {
-            if (this.contents.has(this.head.y) === false){
-                this.contents.set(this.head.y, new Map<number, Symbol>())
-            }
-            if (this.contents.get(this.head.y)!.has(this.head.x) === false){
-                this.contents.get(this.head.y)!.set(this.head.x, a)
-            }
-        }
-        
+        this.replace(a)        
         this.right()
     }
 
@@ -70,13 +59,20 @@ export default class Tape2D implements Memory{
     }
 
     replace = (a: Symbol) : Symbol=> {
-        if (!this.isInBounds()){
-            return EMPTY_STRING
-        }
+        if (!this.isInBounds){
+            if (this.contents.has(this.head.y) === false){
+                this.contents.set(this.head.y, new Map<number, Symbol>())
+            }
+            if (this.contents.get(this.head.y)!.has(this.head.x) === false){
+                this.contents.get(this.head.y)!.set(this.head.x, a)
+            }
 
-        const sym = this.contents.get(this.head.y)!.get(this.head.x)!
-        this.contents.get(this.head.y)!.set(this.head.x, a)
-        return sym
+            return DELIMITER
+        } else {
+            const sym = this.contents.get(this.head.y)!.get(this.head.x)!
+            this.contents.get(this.head.y)!.set(this.head.x, a)
+            return sym
+        }
     }
 
     isInBounds = () => {

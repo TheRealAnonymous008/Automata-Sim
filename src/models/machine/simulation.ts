@@ -9,7 +9,8 @@ export function resetMachine(machine : Machine) {
   setCurrentState(machine, machine.initial)
   machine.input.resetHead!()
 
-  const contents = machine.input.contents
+  const contents = structuredClone(machine.input.contents)
+
   machine.memory.forEach((mem) => mem.flush())
   machine.input.contents = contents
 }
