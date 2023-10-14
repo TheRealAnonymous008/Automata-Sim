@@ -1,4 +1,4 @@
-import { EMPTY_STRING, IMemoryDetais, Symbol } from "~/models/memory/memory";
+import { DELIMITER, EMPTY_STRING, IMemoryDetais, Symbol } from "~/models/memory/memory";
 import "../styles/memory.css"
 import { GridMap, flattenGridMap, getGridMapBounds, isOneDimensional } from "~/utils/arrayHelper";
 import { createEffect, createSignal } from "solid-js";
@@ -18,7 +18,7 @@ export default function MemoryComponent(props : IMemoryDetais) {
       setArr([props.contents as Symbol[]])
       setIsRow(true)
     } else {
-      setArr(flattenGridMap(props.contents as GridMap<Symbol>, EMPTY_STRING))  
+      setArr(flattenGridMap(props.contents as GridMap<Symbol>, DELIMITER))  
       const bounds = getGridMapBounds(props.contents as GridMap<Symbol>)
       const offset : Coordinate = {
         x: bounds.tl.x ? bounds.tl.x : 0,
