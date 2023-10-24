@@ -68,8 +68,8 @@ export function rightState(name : string, mem : Tape | Tape2D) : State {
             const [rs, ws] = k as [Symbol, Symbol]
             
             // Perform read
-            const sym = mem.read()
             mem.right()
+            const sym = mem.read()
 
             if (rs === sym ) {
                 // Perofrm write
@@ -149,8 +149,8 @@ export function downState(name : string, mem : Tape2D) : State {
             const [rs, ws] = k as [Symbol, Symbol]
             
             // Perform read
-            const sym = mem.read()
             mem.down()
+            const sym = mem.read()
 
             if (rs === sym ) {
                 // Perofrm write

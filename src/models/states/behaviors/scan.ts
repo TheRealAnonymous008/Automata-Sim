@@ -9,8 +9,8 @@ export function scanState(name : string, mem : Tape | Tape2D) : State {
 
     state.mem = mem
     state.run = () : StateOutput[] => {
-        const s = mem.read()
         mem.right()
+        const s = mem.read()
 
         const t = state.transitions.get(s)
 
