@@ -16,6 +16,7 @@ export default class Stack implements Memory{
     
     flush = () => {
         this.contents = []
+        this.head = -1
     }
 
     read  = () : Symbol => {
