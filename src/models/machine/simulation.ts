@@ -21,8 +21,10 @@ const MAX_STACK_SIZE = 1000
 export default function runMachine(machine : Machine, depth: number = 0) : SimulationNode{
     let snapshot = createSnapshot(machine)
 
-    if (depth >= MAX_STACK_SIZE)
+    if (depth >= MAX_STACK_SIZE) {
+      snapshot.accept = false
       return snapshot
+    }
 
     const next = machine.currentState.run()
 
