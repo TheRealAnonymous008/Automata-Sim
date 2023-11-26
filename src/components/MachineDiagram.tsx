@@ -12,7 +12,9 @@ export default function MachineDiagram(props : {
     machine : Machine,
     memory : IMemoryDetais[],
     states: IStateDetails[],
-    transitions: TransitionUIHelper[]
+    transitions: TransitionUIHelper[],
+    width: number,
+    height: number
 }){
     const [memory, setMemory] = createSignal(props.memory)
     const [highlightND, setHighlightND] = createSignal(false)
@@ -34,6 +36,8 @@ export default function MachineDiagram(props : {
                     states={props.states}
                     transitions={props.transitions}
                     highlightND={highlightND()}
+                    width={props.width}
+                    height={props.height}
                 />
 
             <div class = "input-container">

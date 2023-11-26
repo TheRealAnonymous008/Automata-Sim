@@ -1,6 +1,6 @@
 import Coordinate, { add, clampToBounds, getDistance, getNorm, mul, sub } from "~/utils/Coordinate";
 import State from "~/models/states/state";
-import { ATTRACTION_STRENGTH, BOUNDS, LAYOUT_ITERATIONS, REPULSION_STRENGTH, STATE_BOUNDS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
+import { ATTRACTION_STRENGTH, BOUNDS, LAYOUT_ITERATIONS, REPULSION_STRENGTH, STATE_BOUNDS, STATE_CIRCRADIUS, TARGET_TRANSITION_LENGTH } from "~/styles/constants";
 import { shuffle } from "./shuffle";
 import { getAllNeighbors, getCommonNeighbors } from "~/models/states/stateHelpers";
 
@@ -86,7 +86,7 @@ function GEMLayout(graph : Graph, tl: Coordinate, br: Coordinate){
             }
 
             const delta = sub(vertex.coord, other.coord)
-            const distance = getDistance(other.coord, vertex.coord)
+            const distance = getDistance(other.coord, vertex.coord) - 2 * STATE_CIRCRADIUS
             const optimalLength = targetLength * targetLength
 
             // Apply repulsive force

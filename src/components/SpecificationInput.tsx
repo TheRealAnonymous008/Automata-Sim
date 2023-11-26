@@ -3,7 +3,7 @@ import "~/styles/machinespec.css"
   
 
 export default function SpecificationInput(props : {
-    specObserver : (str: string) => {}
+    specObserver : (str: string) => void
 }) {
     const [machineSpec, setMachineSpec] = createSignal("");
 

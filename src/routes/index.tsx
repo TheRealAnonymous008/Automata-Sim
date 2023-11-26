@@ -8,7 +8,7 @@ import { Machine } from "~/models/machine/machine";
 import { createSnapshot } from "~/models/machine/snapshot";
 import { IMemoryDetais } from "~/models/memory/memory";
 import State, { IStateDetails, getStateDetails } from "~/models/states/state";
-import { DIAGRAM_HEIGHT, DIAGRAM_WIDTH } from "~/styles/constants";
+import { DIAGRAM_HEIGHT, DIAGRAM_SCALE_CONSTANT, DIAGRAM_WIDTH, STATE_CIRCRADIUS } from "~/styles/constants";
 import Coordinate from "~/utils/Coordinate";
 import { getValuesInMap } from "~/utils/dictToList";
 import getMachine from "~/models/machine/getMachine";
@@ -24,6 +24,28 @@ export default function Home() {
   const [memory, setMemory] = createSignal<IMemoryDetais[]>([])
   const [stateCoordMap, setStateCoordMap] = createSignal(new Map<State, Coordinate>())
   const [transitionUIs, setTransitionUIs] = createSignal<TransitionUIHelper[]>([])
+
+  const [width, setWidth] = createSignal(DIAGRAM_WIDTH)
+  const [height, setHeight] = createSignal(DIAGRAM_HEIGHT)
+  
+  const applyLayout = (m : Machine) => {
+    const size = m.states.size * STATE_CIRCRADIUS * DIAGRAM_SCALE_CONSTANT
+
+    setWidth(Math.max(DIAGRAM_WIDTH, size))
+    setHeight(Math.max(DIAGRAM_HEIGHT, size))
+
+    const map = getStateLayout(width(), height(), getValuesInMap(machine()!.states))
+    setStateCoordMap(map)
+    setTransitionUIs(getAllTransitionUIs(stateCoordMap()))
+  }
+
+  const machineSpecObserver = (spec : string) => {
+    setMachineSpec(spec)
+    if (machine() !== null){
+      applyLayout(machine()!!)
+      updateComponents()
+    }
+  }
 
   const updateComponents = () => {
     if (machine() === null)
@@ -45,10 +67,7 @@ export default function Home() {
       const m = getMachine(machineSpec())
       if (m !== null) {
         setMachine(m)
-        const map = getStateLayout(DIAGRAM_WIDTH, DIAGRAM_HEIGHT, getValuesInMap(machine()!.states))
-        setStateCoordMap(map)
-        setTransitionUIs(getAllTransitionUIs(stateCoordMap()))
-
+        applyLayout(m)
         updateComponents()
       }
   }, [machineSpec()])
@@ -62,12 +81,19 @@ export default function Home() {
     <main>
       <Title>Not J-Flap</Title>
 
-      <SpecificationInput specObserver={setMachineSpec}/>
+      <SpecificationInput specObserver={machineSpecObserver}/>
       {
         machine() &&
         <>
           <InputBoard machine={machine()!} machineObserver={machineObserver}/>
-          <MachineDiagram machine={machine()!} memory={memory()} states={states()} transitions={transitionUIs()}/>
+          <MachineDiagram 
+            machine={machine()!} 
+            memory={memory()} 
+            states={states()} 
+            transitions={transitionUIs()}
+            width={width()}
+            height={height()}
+          />
         </>
       }
     </main>

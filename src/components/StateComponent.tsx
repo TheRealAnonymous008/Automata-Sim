@@ -13,7 +13,7 @@ export default function StateComponent(props : {details: IStateDetails, highligh
   }
 
     return (
-      <g cursor="move">
+      <g>
         {
           props.details.initial &&
           <path 

@@ -6,18 +6,20 @@ import { getKeysInMap, getValuesInMap } from "~/utils/dictToList";
 import TransitionComponent, { TransitionUIHelper, getAllTransitionUIs } from "./TransitionComponent";
 import Coordinate from "../utils/Coordinate";
 import getStateLayout from "~/utils/stateLayout";
-import { DIAGRAM_HEIGHT, DIAGRAM_WIDTH } from "~/styles/constants";
+import { DIAGRAM_HEIGHT, DIAGRAM_WIDTH, STATE_CIRCRADIUS } from "~/styles/constants";
 
 export default function StateDiagram(props :{
     machine : Machine,
     transitions: TransitionUIHelper[]
     states: IStateDetails[],
-    highlightND: boolean
+    highlightND: boolean,
+    width: number,
+    height: number 
 }){
     return (
         <>
             <h2> State Diagram </h2>
-            <svg width={DIAGRAM_WIDTH} height={DIAGRAM_HEIGHT}>
+            <svg width={props.width} height={props.height}>
                 {/* Plot transitions. Plot them first so that they are at the bottom */}
                 <For each={props.transitions}>
                     {
