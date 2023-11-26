@@ -4,15 +4,22 @@ import Coordinate from "../utils/Coordinate";
 import { STATE_CIRCRADIUS, STATE_RECTOFFSET, STATE_RECTWIDTH, STATE_RECTHEIGHT } from "~/styles/constants";
 
 export default function StateComponent(props : {details: IStateDetails, highlight: boolean}){
-    const getClass= () => {
-      let className = "state-circle "
-      className += (props.highlight && props.details.isND ? " nondeterministic": "")
-      className += (props.details.isActive ? " highlighted" : "")
+  const getClass= () => {
+    let className = "state-circle "
+    className += (props.highlight && props.details.isND ? " nondeterministic": "")
+    className += (props.details.isActive ? " highlighted" : "")
 
-      return className
-    }
+    return className
+  }
+
+  const onDrag = (event : DragEvent) => {
+    console.log("Hello World")
+    props.details.loc.x = event.clientX
+    props.details.loc.y = event.clientY
+  }
+
     return (
-      <>
+      <g cursor="move" ondragstart={onDrag}>
         {
           props.details.initial &&
           <path 
@@ -59,7 +66,7 @@ export default function StateComponent(props : {details: IStateDetails, highligh
             </text>
           </>
         }
-      </>
+      </g>
     );
 }
 
