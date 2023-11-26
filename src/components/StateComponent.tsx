@@ -12,14 +12,8 @@ export default function StateComponent(props : {details: IStateDetails, highligh
     return className
   }
 
-  const onDrag = (event : DragEvent) => {
-    console.log("Hello World")
-    props.details.loc.x = event.clientX
-    props.details.loc.y = event.clientY
-  }
-
     return (
-      <g cursor="move" ondragstart={onDrag}>
+      <g cursor="move">
         {
           props.details.initial &&
           <path 
